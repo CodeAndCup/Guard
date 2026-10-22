@@ -30,6 +30,7 @@ permissions:
       guard.ss: true
       guard.modlist: true
       guard.chatlock: true
+      guard.staffchat: true
   guard.mod:
     description: "Recommanded permission for a moderator"
     children:
@@ -46,6 +47,7 @@ permissions:
       guard.modlist: true
       guard.chatlock: true
       guard.xray: true
+      guard.staffchat: true
   guard.helper:
     description: "Recommanded permission for a helper"
     children:
@@ -88,6 +90,8 @@ permissions:
     description: "Access to modlist commands"
   guard.chatlock:
     description: "Access to chatlock commands"
+  guard.staffchat:
+    description: "Access to staff chat commands"
   guard.xray:
     description: "Access to XRay look up commands / panel"
   guard.lookup:

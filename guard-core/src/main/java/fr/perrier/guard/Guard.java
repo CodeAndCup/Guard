@@ -129,6 +129,7 @@ public class Guard extends JavaPlugin {
         commandHandler.registerCommands(Vanish.class);
         commandHandler.registerCommands(Xray.class);
         commandHandler.registerCommands(LookUp.class);
+        commandHandler.registerCommands(StaffChat.class);
     }
 
     public void loadListener() {
@@ -139,6 +140,7 @@ public class Guard extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CpsListener(),this);
         getServer().getPluginManager().registerEvents(new ChatColorListener(),this);
         getServer().getPluginManager().registerEvents(new ChatLockListener(),this);
+        getServer().getPluginManager().registerEvents(new StaffChatListener(),this);
         getServer().getPluginManager().registerEvents(new XrayManager(),this);
 
         getServer().getPluginManager().registerEvents(new ItemList(),this);

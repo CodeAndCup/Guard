@@ -63,6 +63,10 @@ items:
 #   If nothting or just [CHAT] is put this will send the message in the chat.
 #
 commands:
+    staffchat:
+      enabled: "&aStaff chat activé."
+      disabled: "&cStaff chat désactivé."
+      format: "&8[{server_name}] &b{staff} &f: {message}"
   freeze:
     missargs: "&c/freeze <player>"
     activated: "&9%target% a été freeze."

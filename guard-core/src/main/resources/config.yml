@@ -35,6 +35,7 @@ database:
 #
 network:
   enable: true
+  server-name: "Serveur" # nom affiché dans le staffchat / les alertes inter-serveurs
 #
 #▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 #
@@ -61,6 +62,9 @@ commands:
   vanish:
     active: true
     name: ["vanish","mod","v","guard:vanish"]
+  staffchat:
+    active: true
+    name: ["staffchat","sc","guard:staffchat"]
   teleport:
     active: true
     name: ["tp","teleport","guard:tp"]
