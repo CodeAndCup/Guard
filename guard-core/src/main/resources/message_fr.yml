@@ -176,6 +176,32 @@ menu:
       lore:
         - "&fX-Ray, LookUp, Paramètres."
         - "&8> &eCliquez-ici."
+  reports:
+    title: "#0E6F7D&lReports"
+    empty: "&fAucun report en attente."
+    accepted: "&aReport #%id% accepté."
+    rejected: "&cReport #%id% rejeté."
+    item:
+      name: "#2EE6D6&l#%id% %reported%"
+      lore:
+        - "#0E6F7D#%id% %status%"
+        - "&fDe: %reporter%"
+        - "&fRaison: %reason%"
+        - "&fServeur: %server%"
+        - "&fLe: %date%"
+        - ""
+        - "&8> &eCliquez-ici pour traiter."
+    detail:
+      title: "#0E6F7D&lReport &f> #2EE6D6%reported%"
+      accept:
+        name: "#2EE6D6&lAccepter"
+        lore:
+          - "&fTp au joueur signalé"
+          - "&fet résout en accepté."
+      reject:
+        name: "&c&lRejeter"
+        lore:
+          - "&fRésout en rejeté."
   freeze:
     title: "#0E6F7D&lFreeze"
     lore:
