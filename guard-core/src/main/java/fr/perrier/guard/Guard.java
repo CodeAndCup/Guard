@@ -13,6 +13,7 @@ import fr.perrier.guard.manager.listener.commands.*;
 import fr.perrier.guard.manager.listener.hotbar.*;
 import fr.perrier.guard.manager.xray.XrayManager;
 import fr.perrier.guard.sql.*;
+import fr.perrier.guard.utils.lang.LangMigrator;
 import fr.perrier.guard.commands.*;
 import fr.perrier.guard.manager.commands.*;
 import fr.perrier.guard.manager.commands.ChatColor;
@@ -181,5 +182,25 @@ public class Guard extends JavaPlugin {
             saveResource("message_" + getDefaultConfig().getString("language") + ".yml", false);
         }
         setLangConfig(YamlConfiguration.loadConfiguration(getLangConfigFile()));
+        // migration : les clés nouvelles des mises à jour n'existent pas dans un fichier lang ancien installé
+        int added = LangMigrator.fill(getLangConfigFile(), langDefaultsFromJar());
+        if (added > 0) {
+            getLogger().info("Guard: lang +" + added + " clés ajoutées (" + getDefaultConfig().getString("language") + ")");
+            setLangConfig(YamlConfiguration.loadConfiguration(getLangConfigFile()));
+        }
+    }
+
+    /** Defaults du jar (resource embarquée) aplatis en clés pointées → valeurs. */
+    private java.util.Map<String, String> langDefaultsFromJar() {
+        java.util.Map<String, String> map = new java.util.LinkedHashMap<>();
+        java.io.InputStreamReader reader = new java.io.InputStreamReader(
+                getResource("message_" + getDefaultConfig().getString("language") + ".yml"), java.nio.charset.StandardCharsets.UTF_8);
+        YamlConfiguration jar = YamlConfiguration.loadConfiguration(reader);
+        for (String key : jar.getKeys(true)) {
+            if (!(jar.get(key) instanceof org.bukkit.configuration.ConfigurationSection)) {
+                map.put(key, String.valueOf(jar.get(key)));
+            }
+        }
+        return map;
     }
 }

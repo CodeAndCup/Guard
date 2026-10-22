@@ -25,7 +25,7 @@
 #
 # Main configuration message
 #
-prefix: "&3&lGuard &8» "
+prefix: "#0E6F7D&lGuard &8» "
 no_perm: "&cYou don't have permission."
 playernotfound: "&cPlayer not found."
 reloaded: "&aConfiguration have been reloaded successfully"
@@ -38,14 +38,14 @@ commanddisable: "&cSorry but this command is disable."
 items:
   vanish_on: "&a&lVanish %v%"
   vanish_off: "&c&lVanish %x%"
-  freeze: "&b&lFreeze"
+  freeze: "#2EE6D6&lFreeze"
   cps: "&7&lCPS"
   random_tp: "&6&lRandom TP"
   ss_book: "&c&lSS Book"
   parameters: "&4&lParameters"
-  teleporter: "&b&lTeleporter"
+  teleporter: "#2EE6D6&lTeleporter"
   knockback: "&2&lKnockBack"
-  chat_color: "&b&lChatColor"
+  chat_color: "#2EE6D6&lChatColor"
   no_clip: "&7&lNoClip"
   inventory_view: "&6&lInventory View"
   go_page_1: "&ePage 1 &8&l<"
@@ -66,33 +66,33 @@ commands:
     staffchat:
       enabled: "&aStaff chat enabled."
       disabled: "&cStaff chat disabled."
-      format: "&8[{server_name}] &b{staff} &f: {message}"
+      format: "&8[{server_name}] #2EE6D6{staff} &f: {message}"
     report:
-      usage: "&c/report &b<player> <reason>"
+      usage: "&c/report #2EE6D6<player> <reason>"
       sent: "&aReport #%id% sent. A moderator will handle it."
       cooldown: "&cWait %seconds% s before another report."
-      flash: "&b[Report] &f%text%"
-      xray-flash: "&b[Guard] &f%text%"
-      cross-freeze: "&b[Guard] &c%text% got frozen on another server."
+      flash: "#2EE6D6[Report] &f%text%"
+      xray-flash: "#2EE6D6[Guard] &f%text%"
+      cross-freeze: "#2EE6D6[Guard] &c%text% got frozen on another server."
   freeze:
     missargs: "&c/freeze <player>"
-    activated: "&9%target% was frozen."
-    desactivated: "&9%target% was unfreeze."
+    activated: "#17A1B2%target% was frozen."
+    desactivated: "#17A1B2%target% was unfreeze."
     disconnect: "&c%player% disconnected in freeze."
   cps:
     missargs: "&c/cps <player>"
-    running: "&fCPS checker apply to &b%target%"
-    format: "&9%target% &8> &b%left% &f| &b%right% &fcps."
-    end: "&fAverage &b%target% &fcps &8> &b%left% &f| &b%right% &fcps."
+    running: "&fCPS checker apply to #2EE6D6%target%"
+    format: "#17A1B2%target% &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
+    end: "&fAverage #2EE6D6%target% &fcps &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
   vanish:
     activated: "[ACTION][CHAT]&fVanish &aactivated"
     desactivated: "[ACTION][CHAT]&fVanish &cdesactivated"
   teleport:
     missargs: "&c/tp <player>"
-    confirmation: "&fTeleportation to &9&l%target%"
+    confirmation: "&fTeleportation to #17A1B2&l%target%"
   teleporthere:
     missargs: "&c/tph <player>"
-    confirmation: "&fTeleportation of &9&l%target% &fto you."
+    confirmation: "&fTeleportation of #17A1B2&l%target% &fto you."
   sanctionset:
     missargs: "&c/ss <player>"
   noclip:
@@ -101,13 +101,13 @@ commands:
   chatcolor:
     activated: "&fChatColor &aactivated"
     desactivated: "&fChatColor &cdesactivated"
-    color: "&b"
+    color: "#2EE6D6"
   inventory:
     missargs: "&c/invsee <player>"
   modlist:
     format:
       - "&8&l&m------------------------------"
-      - "&3&l        Guard ModList"
+      - "#0E6F7D&l        Guard ModList"
       - " "
       - "&8- &f%target% %value%"
       - "&8&l&m------------------------------"
@@ -118,15 +118,15 @@ commands:
   lookup:
     message:
       - "&8&l&m------------------------------"
-      - "&3&l        Guard LookUP"
+      - "#0E6F7D&l        Guard LookUP"
       - ""
-      - "&fName&8: &b%target%"
-      - "&fUUID&8: &b%uuid%"
-      - "&fPremium&8: &b%premium%"
-      - "&fCreate At&8: &b%date%"
-      - "&fIP&8: &b%ip%"
-      - "&fCountry&8: &b%country%"
-      - "&fISP&8: &b%isp%"
+      - "&fName&8: #2EE6D6%target%"
+      - "&fUUID&8: #2EE6D6%uuid%"
+      - "&fPremium&8: #2EE6D6%premium%"
+      - "&fCreate At&8: #2EE6D6%date%"
+      - "&fIP&8: #2EE6D6%ip%"
+      - "&fCountry&8: #2EE6D6%country%"
+      - "&fISP&8: #2EE6D6%isp%"
       - ""
       - "&8&l&m------------------------------"
 #
@@ -136,58 +136,58 @@ commands:
 #
 menu:
   freeze:
-    title: "&3&lFreeze"
+    title: "#0E6F7D&lFreeze"
     lore:
       - ""
       - "&fYou are freeze."
       - "&fPlease join the discord or you will get ban."
       - ""
-      - "&3discord.gg/..."
+      - "#0E6F7Ddiscord.gg/..."
   sanctionset:
     selector:
-      title: "&3Select a player"
+      title: "#0E6F7DSelect a player"
       player_lore:
         - ""
         - "&8> &eClick-Here to select this player."
     main:
-      title: "&3&lSS &f> &b%target%"
-      ban: "&3&lBan &c(MOD Only)"
+      title: "#0E6F7D&lSS &f> #2EE6D6%target%"
+      ban: "#0E6F7D&lBan &c(MOD Only)"
       ban_lore:
         - ""
         - "&8> &eClick-Here to access to this category."
-      warn: "&3&lWarn"
+      warn: "#0E6F7D&lWarn"
       warn_lore:
         - ""
         - "&8> &eClick-Here to access to this category."
-      mute: "&3&lMute"
+      mute: "#0E6F7D&lMute"
       mute_lore:
         - ""
         - "&8> &eClick-Here to access to this category."
     mute:
-      title: "&3&lMute &f> &b%target%"
+      title: "#0E6F7D&lMute &f> #2EE6D6%target%"
       lore:
         - ""
-        - "&3Type&f: &b%type%"
-        - "&3Reason&f: &b%reason%"
-        - "&3Duration&f: &b%duration%"
+        - "#0E6F7DType&f: #2EE6D6%type%"
+        - "#0E6F7DReason&f: #2EE6D6%reason%"
+        - "#0E6F7DDuration&f: #2EE6D6%duration%"
         - ""
         - "&8> &eClick-Here to apply the sanction."
     warn:
-      title: "&3&lWarn &f> &b%target%"
+      title: "#0E6F7D&lWarn &f> #2EE6D6%target%"
       lore:
         - ""
-        - "&3Type&f: &b%type%"
-        - "&3Reason&f: &b%reason%"
-        - "&3Duration&f: &b%duration%"
+        - "#0E6F7DType&f: #2EE6D6%type%"
+        - "#0E6F7DReason&f: #2EE6D6%reason%"
+        - "#0E6F7DDuration&f: #2EE6D6%duration%"
         - ""
         - "&8> &eClick-Here to apply the sanction."
     ban:
-      title: "&3&lBan &f> &b%target%"
+      title: "#0E6F7D&lBan &f> #2EE6D6%target%"
       lore:
         - ""
-        - "&3Type&f: &b%type%"
-        - "&3Reason&f: &b%reason%"
-        - "&3Duration&f: &b%duration%"
+        - "#0E6F7DType&f: #2EE6D6%type%"
+        - "#0E6F7DReason&f: #2EE6D6%reason%"
+        - "#0E6F7DDuration&f: #2EE6D6%duration%"
         - ""
         - "&8> &eClick-Here to apply the sanction."
   parameters:
@@ -195,7 +195,7 @@ menu:
       title: "&f&lFlySpeed"
       lore:
         - ""
-        - "&fFlySpeed: &bx%value%"
+        - "&fFlySpeed: #2EE6D6x%value%"
         - ""
         - "&8&l> &aLeft Click to increase"
         - "&8&l> &cRight click to collapse"
@@ -206,23 +206,23 @@ menu:
         - "&fGodMode: %value%"
         - ""
     nightvision:
-      title: "&9&lNight Vision"
+      title: "#17A1B2&lNight Vision"
       lore:
         - ""
         - "&fNight Vision: %value%"
         - ""
   xray:
-    title: "&3&lXRay"
+    title: "#0E6F7D&lXRay"
     player:
       name: "&c&l%player%"
       lore:
         - ""
-        - "&bDiamond&8: &f%diamond% &7(%pourcent_diamond%%)"
+        - "#2EE6D6Diamond&8: &f%diamond% &7(%pourcent_diamond%%)"
         - "&aEmerald&8: &f%emerald% &7(%pourcent_emerald%%)"
         - "&eGold&8: &f%gold% &7(%pourcent_gold%%)"
         - "&7Iron&8: &f%iron% &7(%pourcent_iron%%)"
         - "&cRedstone&8: &f%redstone% &7(%pourcent_redstone%%)"
-        - "&9Lapis&8: &f%lapis% &7(%pourcent_lapis%%)"
+        - "#17A1B2Lapis&8: &f%lapis% &7(%pourcent_lapis%%)"
         - "&8Coal: &f%coal% &7(%pourcent_coal%%)"
         - "&7Stone&8: &f%stone%"
         - ""
@@ -362,9 +362,9 @@ automod:
   chat:
     warning_message:
       - "&8&l&m------------------------------"
-      - "&3&l          Guard"
+      - "#0E6F7D&l          Guard"
       - ""
-      - "&f » &bYour message has been blocked for the following reason:"
+      - "&f » #2EE6D6Your message has been blocked for the following reason:"
       - "&f Prohibited character or words."
       - ""
       - "&8&l&m------------------------------"
