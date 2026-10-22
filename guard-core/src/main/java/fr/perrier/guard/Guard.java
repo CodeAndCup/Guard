@@ -6,7 +6,9 @@ import fr.perrier.guard.manager.listener.CloseInventory;
 import fr.perrier.guard.manager.listener.PlayerJoin;
 import fr.perrier.guard.manager.listener.PlayerLeave;
 import fr.perrier.guard.manager.listener.PluginMessage;
+import fr.perrier.guard.network.Codec;
 import fr.perrier.guard.network.MessengerHolder;
+import fr.perrier.guard.reports.ReportFlash;
 import fr.perrier.guard.manager.listener.commands.*;
 import fr.perrier.guard.manager.listener.hotbar.*;
 import fr.perrier.guard.manager.xray.XrayManager;
@@ -74,6 +76,10 @@ public class Guard extends JavaPlugin {
 
         CompatHolder.init(getServer().getBukkitVersion(), System.getProperty("java.version"));
         MessengerHolder.init(this);
+        // abonnements réseau (dispatch main thread, cf. Messenger)
+        MessengerHolder.get().onMessage(Codec.TYPE_STAFFCHAT, StaffChat.networkHandler());
+        MessengerHolder.get().onMessage(Codec.TYPE_NOTIFY, ReportFlash.networkHandler());
+        MessengerHolder.get().onMessage(Codec.TYPE_VANISH, VanishSync.networkHandler());
 
         new Metrics(this,bstatsID);
 

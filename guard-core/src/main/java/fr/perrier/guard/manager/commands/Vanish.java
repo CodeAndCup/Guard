@@ -35,6 +35,7 @@ public class Vanish {
             if(DatabaseManager.isEnabled()) {
                 Guard.getInstance().getDbManager().toggleVanish(uuid, false);
             }
+            VanishSync.broadcast(uuid, false);
             if (Guard.getInstance().getServer().getPluginManager().getPlugin("LunarClient-API") != null) {
                 if (LunarClientAPI.getInstance().isRunningLunarClient(player)) {
                     LunarClientAPI.getInstance().disableAllStaffModules(player);
@@ -48,6 +49,7 @@ public class Vanish {
             if(DatabaseManager.isEnabled()) {
                 Guard.getInstance().getDbManager().toggleVanish(uuid, true);
             }
+            VanishSync.broadcast(uuid, true);
             if (Guard.getInstance().getServer().getPluginManager().getPlugin("LunarClient-API") != null) {
                 if (LunarClientAPI.getInstance().isRunningLunarClient(player)) {
                     player.sendMessage(ChatUtil.prefix("&fLunarClient Staff &aActivé&f."));
