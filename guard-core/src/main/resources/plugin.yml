@@ -62,7 +62,7 @@ permissions:
     description: "Access to freeze commands"
   guard.vanish:
     description: "Access to vanish commands"
-  guard.chatcholor:
+  guard.chatcolor:
     description: "Access to chatcolor commands"
   guard.tphere:
     description: "Access to tphere commands"
