@@ -23,6 +23,11 @@ public final class DatabaseManager {
     private static final String DDL_VANISH =
             "CREATE TABLE IF NOT EXISTS player_vanish (uuid VARCHAR(36) not null, vanish BOOLEAN not null)";
 
+    private static final String DDL_REPORTS =
+            "CREATE TABLE IF NOT EXISTS reports (id INT AUTO_INCREMENT PRIMARY KEY, reporter VARCHAR(16) NOT NULL, " +
+            "reported VARCHAR(16) NOT NULL, reason VARCHAR(255) NOT NULL, server_name VARCHAR(64) NOT NULL, " +
+            "created BIGINT NOT NULL, status VARCHAR(16) NOT NULL, resolved_by VARCHAR(16))";
+
     private final HikariDataSource dataSource;
     private final ExecutorService executor;
 
@@ -36,6 +41,7 @@ public final class DatabaseManager {
         executor.execute(() -> {
             try (java.sql.Connection c = dataSource.getConnection(); java.sql.Statement st = c.createStatement()) {
                 st.execute(DDL_VANISH);
+                st.execute(DDL_REPORTS);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -72,6 +78,20 @@ public final class DatabaseManager {
     /** Format historique du plugin, gardé tel quel. */
     static String jdbcUrl(String host, int port, String db) {
         return "jdbc:mysql://" + host + ":" + port + "/" + db + "?characterEncoding=utf8";
+    }
+
+    /** Travail SQL arbitraire sur le pool/exécuteur internes ; exception → future exceptionnelle, jamais crash main thread. */
+    public <T> CompletableFuture<T> query(java.util.function.Function<Connection, T> work) {
+        CompletableFuture<T> result = new CompletableFuture<>();
+        executor.execute(() -> {
+            try (Connection c = dataSource.getConnection()) {
+                result.complete(work.apply(c));
+            } catch (Throwable t) {
+                t.printStackTrace();
+                result.completeExceptionally(t);
+            }
+        });
+        return result;
     }
 
     public CompletableFuture<Void> toggleVanish(UUID uuid, boolean vanish) {
