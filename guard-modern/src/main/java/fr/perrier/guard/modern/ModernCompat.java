@@ -17,8 +17,13 @@ public final class ModernCompat {
         StringBuilder out = new StringBuilder();
         Matcher m = HEX.matcher(raw);
         while (m.find()) {
-            m.appendReplacement(out,
-                    Matcher.quoteReplacement("\u00A7x" + m.group().substring(1).toUpperCase(Locale.ROOT)));
+            // forme canonique §x : un code format par chiffre, sinon le serializer legacy
+            // laisse les 6 chiffres en texte brut
+            StringBuilder digits = new StringBuilder();
+            for (char c : m.group().substring(1).toUpperCase(Locale.ROOT).toCharArray()) {
+                digits.append('\u00A7').append(c);
+            }
+            m.appendReplacement(out, Matcher.quoteReplacement("\u00A7x" + digits));
         }
         m.appendTail(out);
         return ChatColor.translateAlternateColorCodes('&', out.toString());

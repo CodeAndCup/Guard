@@ -68,7 +68,8 @@ class CompatResolver {
     private static int[] parse(String version) {
         if (version == null) return null;
         try {
-            String[] parts = version.split("\\.");
+            // "1.21.5-R0.1-SNAPSHOT" → "1.21.5" (les getBukkitVersion() portent tous un suffixe de build)
+            String[] parts = version.split("-", 2)[0].split("\\.");
             int[] out = new int[Math.min(3, parts.length)];
             for (int i = 0; i < out.length; i++) {
                 out[i] = Integer.parseInt(parts[i].trim());

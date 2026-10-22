@@ -9,8 +9,9 @@ public class CompatResolverTest {
 
     @Test
     public void modernRendersNativeHexWhenServerAndJvmAreRecent() {
-        // le contrat visible : sur un serveur moderne, les hex restent §x natifs (pas de dégradation de palette)
-        assertEquals("\u00A7x17A1B2hi",
+        // le contrat visible : sur un serveur moderne, les hex restent natifs en forme CANONIQUE §x
+        // (un §x suivi de codes format, un par chiffre — sinon le serializer legacy laisse les chiffres bruts)
+        assertEquals("\u00A7x\u00A71\u00A77\u00A7A\u00A71\u00A7B\u00A72hi",
                 CompatResolver.select("26.3", "25").colorize("#17A1B2hi"));
     }
 
@@ -38,6 +39,14 @@ public class CompatResolverTest {
         assertFalse(CompatResolver.isModernMc("1.16.0"));   // seuil posé par le plan : au-dessus de 1.16.0
         assertFalse(CompatResolver.isModernMc("1.15.2"));
         assertFalse(CompatResolver.isModernMc("1.8.8"));
+    }
+
+    @Test
+    public void mcVersionThresholdAcceptsRealBukkitStrings() {
+        // formes brutes de getServer().getBukkitVersion() : "1.21.5-R0.1-SNAPSHOT"
+        assertTrue(CompatResolver.isModernMc("1.21.5-R0.1-SNAPSHOT"));
+        assertTrue(CompatResolver.isModernMc("26.3-dev"));
+        assertFalse(CompatResolver.isModernMc("1.8.8-R0.1-SNAPSHOT"));
     }
 
     @Test

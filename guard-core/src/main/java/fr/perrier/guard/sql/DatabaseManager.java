@@ -77,14 +77,24 @@ public final class DatabaseManager {
     public CompletableFuture<Void> toggleVanish(UUID uuid, boolean vanish) {
         CompletableFuture<Void> done = new CompletableFuture<>();
         executor.execute(() -> {
-            try (Connection c = dataSource.getConnection();
-                 PreparedStatement ps = c.prepareStatement(
-                         "INSERT INTO player_vanish (uuid, vanish) VALUES (?,?) " +
-                         "ON DUPLICATE KEY UPDATE vanish=VALUES(vanish)")) {
-                ps.setString(1, uuid.toString());
-                ps.setBoolean(2, vanish);
-                ps.executeUpdate();
-                done.complete(null);
+            try (Connection c = dataSource.getConnection()) {
+                // pas de clé unique sur uuid (schéma historique conservé) : ON DUPLICATE KEY ne
+                // se déclencherait jamais → UPDATE puis INSERT si aucune ligne touchée
+                try (PreparedStatement ps = c.prepareStatement("UPDATE player_vanish SET vanish=? WHERE uuid=?")) {
+                    ps.setBoolean(1, vanish);
+                    ps.setString(2, uuid.toString());
+                    if (ps.executeUpdate() > 0) {
+                        done.complete(null);
+                    }
+                }
+                if (!done.isDone()) {
+                    try (PreparedStatement ins = c.prepareStatement("INSERT INTO player_vanish (uuid, vanish) VALUES (?,?)")) {
+                        ins.setString(1, uuid.toString());
+                        ins.setBoolean(2, vanish);
+                        ins.executeUpdate();
+                        done.complete(null);
+                    }
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
                 done.completeExceptionally(e);
@@ -121,7 +131,13 @@ public final class DatabaseManager {
     }
 
     public void close() {
+        // on laisse l'exécuteur finir ses tâches avant de couper le pool, sinon un toggle en vol est coupé à onDisable
         executor.shutdown();
+        try {
+            executor.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         dataSource.close();
     }
 }

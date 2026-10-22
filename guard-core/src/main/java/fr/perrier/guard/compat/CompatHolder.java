@@ -21,8 +21,4 @@ public final class CompatHolder {
         LOG.info("Compat: " + compat.getClass().getSimpleName()
                 + " (mc " + mcVersion + ", java " + javaVersion + ")");
     }
-
-    static void setForTest(Compat c) {
-        compat = c;
-    }
 }

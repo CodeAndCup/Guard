@@ -25,6 +25,7 @@ import org.bstats.bukkit.Metrics;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 public class Guard extends JavaPlugin {
 
@@ -33,7 +34,7 @@ public class Guard extends JavaPlugin {
     @Getter
     private DatabaseManager dbManager;
     @Getter
-    private HashMap<UUID,Boolean> VanishALL;
+    private Map<UUID,Boolean> VanishALL;
     @Getter
     private static MenuAPI menuAPI;
     @Getter
@@ -98,7 +99,7 @@ public class Guard extends JavaPlugin {
             dbManager = DatabaseManager.create();
         }
 
-        VanishALL = new HashMap<>();
+        VanishALL = new ConcurrentHashMap<>();
 
         menuAPI = new MenuAPI(instance);
         commandHandler = new CommandHandler(this);
