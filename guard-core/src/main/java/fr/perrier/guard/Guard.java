@@ -49,9 +49,9 @@ public class Guard extends JavaPlugin {
     private static FileConfiguration defaultConfig;
 
     @Getter
-    public static int spigotID = 116879;
+    private static final int spigotID = 116879;
     @Getter
-    public static int bstatsID = 21932;
+    private static final int bstatsID = 21932;
 
     @Override
     public void onLoad() {

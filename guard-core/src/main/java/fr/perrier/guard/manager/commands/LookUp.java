@@ -33,20 +33,24 @@ public class LookUp {
         player.sendMessage(ChatUtil.prefix("&cScanning.."));
 
         AbstractMap.SimpleEntry<Integer, StringBuffer> responseMinecraft = sendRequest("https://api.ashcon.app/mojang/v2/user/" + target.getName());
-        if(responseMinecraft.getValue().toString().isEmpty())
+        if(responseMinecraft.getKey() == 404)
             sendRequest("https://api.mojang.com/users/profiles/minecraft/" + target.getName());
-        JSONObject jsonMinecraftObject = new JSONObject(responseMinecraft.getValue().toString());
 
         AbstractMap.SimpleEntry<Integer,StringBuffer> responseIP = sendRequest("http://ip-api.com/json/" + target.getAddress().getAddress().getHostAddress());
         JSONObject jsonIPObject = new JSONObject(responseIP.getValue().toString());
 
+        String create_at = "&c???";
+        if(responseMinecraft.getKey() == 200) {
+            JSONObject rMcJSON = new JSONObject(responseMinecraft.getValue().toString());
+            create_at = !rMcJSON.isNull("created_at") ? rMcJSON.getString("created_at") : "&c???";
+        }
 
         for(String lore : Messages.COMMANDS_LOOKUP_MESSAGE.getLore()) {
             player.sendMessage(ChatUtil.translate(lore
                     .replace("%target%", target.getName())
                     .replace("%uuid%", target.getUniqueId().toString())
                     .replace("%premium%", (responseMinecraft.getKey() == 200 ? "&a&l✓" : "&c&l✗"))
-                    .replace("%date%",(responseMinecraft.getKey() == 200 ? jsonMinecraftObject.getString("created_at") : "&c???"))
+                    .replace("%date%",create_at)
                     .replace("%ip%", target.getAddress().getAddress().getHostAddress())
                     .replace("%country%", (!jsonIPObject.getString("status").equalsIgnoreCase("fail") ? jsonIPObject.getString("country") : "&c???"))
                     .replace("%isp%", (!jsonIPObject.getString("status").equalsIgnoreCase("fail") ? jsonIPObject.getString("isp") : "&c???"))
