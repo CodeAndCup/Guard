@@ -31,7 +31,7 @@ public class Guard extends JavaPlugin {
     @Getter
     public static Guard instance;
     @Getter
-    private Manager dbManager;
+    private DatabaseManager dbManager;
     @Getter
     private HashMap<UUID,Boolean> VanishALL;
     @Getter
@@ -95,8 +95,7 @@ public class Guard extends JavaPlugin {
 
 
         if(Guard.getDefaultConfig().getBoolean("database.enable")) {
-            Setup.initDB();
-            dbManager = new Manager();
+            dbManager = DatabaseManager.create();
         }
 
         VanishALL = new HashMap<>();

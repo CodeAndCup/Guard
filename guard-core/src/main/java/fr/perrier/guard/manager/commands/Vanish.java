@@ -5,13 +5,13 @@ import fr.perrier.guard.*;
 import fr.perrier.guard.commands.annotations.*;
 import fr.perrier.guard.manager.items.*;
 import fr.perrier.guard.manager.listener.hotbar.*;
+import fr.perrier.guard.sql.DatabaseManager;
 import fr.perrier.guard.utils.*;
 import fr.perrier.guard.utils.commands.CommandsUtils;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.*;
 
-import java.sql.*;
 import java.util.*;
 
 public class Vanish {
@@ -32,16 +32,8 @@ public class Vanish {
             Messages.send(player,Messages.COMMANDS_VANISH_DESACTIVATED);
             Guard.getInstance().getVanishALL().put(uuid,false);
 
-            if(Guard.getDefaultConfig().getBoolean("database.enable")) {
-                final fr.perrier.guard.sql.Connection vanishConnection = Guard.getInstance().getDbManager().getConnection();
-                try {
-                    final Connection connection = vanishConnection.getConnection();
-                    final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE player_vanish SET vanish=false WHERE uuid=?");
-                    preparedStatement.setString(1, uuid.toString());
-                    preparedStatement.executeUpdate();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+            if(DatabaseManager.isEnabled()) {
+                Guard.getInstance().getDbManager().toggleVanish(uuid, false);
             }
             if (Guard.getInstance().getServer().getPluginManager().getPlugin("LunarClient-API") != null) {
                 if (LunarClientAPI.getInstance().isRunningLunarClient(player)) {
@@ -53,17 +45,8 @@ public class Vanish {
 
             Messages.send(player,Messages.COMMANDS_VANISH_ACTIVATED);
             Guard.getInstance().getVanishALL().put(uuid,true);
-            if(Guard.getDefaultConfig().getBoolean("database.enable")) {
-
-                final fr.perrier.guard.sql.Connection vanishConnection = Guard.getInstance().getDbManager().getConnection();
-                try {
-                    final Connection connection = vanishConnection.getConnection();
-                    final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE player_vanish SET vanish=true WHERE uuid=?");
-                    preparedStatement.setString(1, uuid.toString());
-                    preparedStatement.executeUpdate();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+            if(DatabaseManager.isEnabled()) {
+                Guard.getInstance().getDbManager().toggleVanish(uuid, true);
             }
             if (Guard.getInstance().getServer().getPluginManager().getPlugin("LunarClient-API") != null) {
                 if (LunarClientAPI.getInstance().isRunningLunarClient(player)) {
