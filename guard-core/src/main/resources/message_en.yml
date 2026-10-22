@@ -67,6 +67,13 @@ commands:
       enabled: "&aStaff chat enabled."
       disabled: "&cStaff chat disabled."
       format: "&8[{server_name}] &b{staff} &f: {message}"
+    report:
+      usage: "&c/report &b<player> <reason>"
+      sent: "&aReport #%id% sent. A moderator will handle it."
+      cooldown: "&cWait %seconds% s before another report."
+      flash: "&b[Report] &f%text%"
+      xray-flash: "&b[Guard] &f%text%"
+      cross-freeze: "&b[Guard] &c%text% got frozen on another server."
   freeze:
     missargs: "&c/freeze <player>"
     activated: "&9%target% was frozen."

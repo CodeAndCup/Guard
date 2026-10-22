@@ -17,6 +17,7 @@ public enum CommandsUtils {
     TPHERE("commands.teleporthere.name",Guard.getDefaultConfig().getStringList("commands.teleporthere.name").toArray(new String[0])),
     VANISH("commands.vanish.name",Guard.getDefaultConfig().getStringList("commands.vanish.name").toArray(new String[0])),
     STAFFCHAT("commands.staffchat.name",Guard.getDefaultConfig().getStringList("commands.staffchat.name").toArray(new String[0])),
+    REPORT("commands.report.name",Guard.getDefaultConfig().getStringList("commands.report.name").toArray(new String[0])),
     XRAY("commands.xray.name",Guard.getDefaultConfig().getStringList("commands.xray.name").toArray(new String[0])),
     LOOKUP("commands.lookup.name",Guard.getDefaultConfig().getStringList("commands.lookup.name").toArray(new String[0])),
     HELP(null,new String[]{"guard","hguard","helpguard","guard:help","guard:guard"}),

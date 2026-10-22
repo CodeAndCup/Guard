@@ -31,11 +31,20 @@ public class Freeze {
         }
         if(!target.hasPotionEffect(PotionEffectType.BLINDNESS)) {
             freezePlayer(target);
+            broadcastFreeze(target.getName(), true);
             player.sendMessage(String.format("%s%s", Messages.prefix(), ChatUtil.translate(Messages.COMMANDS_FREEZE_ACTIVATED.getMessage().replace("%target%", target.getName()))));
         }else{
             unfreezePlayer(target);
+            broadcastFreeze(target.getName(), false);
             player.sendMessage(Messages.prefix() + ChatUtil.translate(Messages.COMMANDS_FREEZE_DESACTIVATED.getMessage().replace("%target%",target.getName())));
         }
+    }
+
+    /** Flash inter-serveurs : gel répliqué sur les autres instances + notification cross (best-effort). */
+    private static void broadcastFreeze(String targetName, boolean freeze) {
+        fr.perrier.guard.reports.ReportFlash.broadcast(
+                freeze ? fr.perrier.guard.reports.ReportFlash.KIND_FREEZE : fr.perrier.guard.reports.ReportFlash.KIND_UNFREEZE,
+                targetName);
     }
 
     public static void freezePlayer(Player target) {

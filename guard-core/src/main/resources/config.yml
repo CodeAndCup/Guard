@@ -36,6 +36,9 @@ database:
 network:
   enable: true
   server-name: "Serveur" # nom affiché dans le staffchat / les alertes inter-serveurs
+reports:
+  enable: true
+  cooldown-seconds: 60
 #
 #▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 #
@@ -92,6 +95,10 @@ commands:
   xray:
     active: true
     name: ["xray","xraylookup","guard:xray"]
+    diamond-alert: 32 # alerte staff + flash cross quand un joueur a miné ce nombre de diamants (-1 = désactivé)
+  report:
+    active: true
+    name: ["report","guard:report"]
   lookup:
     active: true
     name: ["lookup","guard:lookup"]

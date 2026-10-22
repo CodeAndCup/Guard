@@ -130,6 +130,7 @@ public class Guard extends JavaPlugin {
         commandHandler.registerCommands(Xray.class);
         commandHandler.registerCommands(LookUp.class);
         commandHandler.registerCommands(StaffChat.class);
+        commandHandler.registerCommands(Report.class);
     }
 
     public void loadListener() {

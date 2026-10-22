@@ -11,6 +11,20 @@ public final class ReportStores {
     private ReportStores() {
     }
 
+    /** Instance memoisée (le store YAML ne doit être créé qu'une fois : il détient son exécuteur). */
+    private static volatile ReportStore instance;
+
+    public static ReportStore get() {
+        if (instance == null) {
+            synchronized (ReportStores.class) {
+                if (instance == null) {
+                    instance = create();
+                }
+            }
+        }
+        return instance;
+    }
+
     public static ReportStore create() {
         if (DatabaseManager.isEnabled() && Guard.getInstance().getDbManager() != null) {
             return new MySqlReportStore(Guard.getInstance().getDbManager());
