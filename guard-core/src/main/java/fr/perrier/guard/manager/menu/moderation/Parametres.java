@@ -16,7 +16,8 @@ import java.util.*;
 public class Parametres extends GlassMenu {
     @Override
     public int getGlassColor() {
-        return 14;
+        // palette B turquoise (avant : 14 rouge)
+        return 9;
     }
 
     @Override

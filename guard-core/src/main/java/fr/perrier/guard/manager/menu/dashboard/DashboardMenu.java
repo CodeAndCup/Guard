@@ -109,9 +109,8 @@ public class DashboardMenu extends Menu {
 
             @Override
             public void clicked(Player p, int slot, ClickType clickType, int hotbarButton) {
-                // tuile câblée à la tâche 6 (ToolsMenu) — stub temporaire
                 Button.playNeutral(p);
-                Messages.send(p, Messages.COMING_SOON);
+                new ToolsMenu().openMenu(p);
             }
         });
 

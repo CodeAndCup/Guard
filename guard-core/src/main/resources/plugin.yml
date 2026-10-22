@@ -10,6 +10,8 @@ softdepend: ["LunarClient-API"]
 
 commands:
   guard:
+    description: "Guard dashboard and admin commands"
+    usage: "/<command> [help|reload]"
 
 permissions:
   guard.*:

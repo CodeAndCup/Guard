@@ -203,10 +203,27 @@ menu:
         name: "&c&lRejeter"
         lore:
           - "&fRésout en rejeté."
+  tools:
+    title: "#0E6F7D&lOutils"
+    xray:
+      name: "#2EE6D6&lX-Ray"
+      lore:
+        - "&fStatistiques de minage."
+        - "&8> &eCliquez-ici."
+    lookup:
+      name: "#2EE6D6&lLookUp"
+      lore:
+        - "&fHistorique du compte"
+        - "&fet IP du joueur."
+      prompt: "&fNom du joueur a scanner &b?"
+    parameters:
+      name: "#2EE6D6&lParametres"
+      lore:
+        - "&fFlyspeed, préférences."
+        - "&8> &eCliquez-ici."
   profile:
     title: "#0E6F7D&lProfil &f%target%"
-    offline: "&cJoueur déconnecté."
-    tab:
+    offline: "&cJoueur déconnecté."    tab:
       sanctions: "#2EE6D6&lSanctions"
       inventory: "#2EE6D6&lInventaire"
       history: "#2EE6D6&lHistorique"

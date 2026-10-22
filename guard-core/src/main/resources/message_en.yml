@@ -203,8 +203,26 @@ menu:
         name: "&c&lReject"
         lore:
           - "&fResolve as rejected."
+  tools:
+    title: "#0E6F7D&lTools"
+    xray:
+      name: "#2EE6D6&lX-Ray"
+      lore:
+        - "&fMining statistics."
+        - "&8> &eClick here."
+    lookup:
+      name: "#2EE6D6&lLookUp"
+      lore:
+        - "&fAccount history"
+        - "&fand player IP."
+      prompt: "&fPlayer name to scan &b?"
+    parameters:
+      name: "#2EE6D6&lSettings"
+      lore:
+        - "&fFlyspeed, preferences."
+        - "&8> &eClick here."
   profile:
-    title: "#0E6F7D&lProfil &f%target%"
+    title: "#0E6F7D&lProfile &f%target%"
     offline: "&cPlayer disconnected."
     tab:
       sanctions: "#2EE6D6&lSanctions"
