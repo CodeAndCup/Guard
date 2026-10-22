@@ -12,6 +12,16 @@
 
   <artifactId>guard-modern</artifactId>
 
+  <dependencies>
+    <!-- API de compilation seule ; le serveur la fournit (provided). Paper api arrive au plan 2. -->
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot</artifactId>
+      <version>1.21.5-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.source>21</maven.compiler.source>

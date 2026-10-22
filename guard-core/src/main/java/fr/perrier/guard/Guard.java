@@ -1,6 +1,7 @@
 package fr.perrier.guard;
 
 import fr.perrier.guard.automod.chat.AutoMute;
+import fr.perrier.guard.compat.CompatHolder;
 import fr.perrier.guard.manager.listener.CloseInventory;
 import fr.perrier.guard.manager.listener.PlayerJoin;
 import fr.perrier.guard.manager.listener.PlayerLeave;
@@ -68,6 +69,8 @@ public class Guard extends JavaPlugin {
         defaultConfigFile = new File(getDataFolder(), "config.yml");
 
         createLanguageConfig();
+
+        CompatHolder.init(getServer().getBukkitVersion(), System.getProperty("java.version"));
 
         new Metrics(this,bstatsID);
 
