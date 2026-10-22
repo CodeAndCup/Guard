@@ -127,10 +127,18 @@ public class ReportDetailMenu extends Menu {
     }
 
     private void resolve(Player staff, String outcome, String langKey) {
-        ReportStores.get().resolve(report.getId(), staff.getName(), outcome).thenAccept(nil ->
-                Bukkit.getScheduler().runTask(Guard.getInstance(), () ->
+        ReportStores.get().resolve(report.getId(), staff.getName(), outcome).whenComplete((nil, throwable) ->
+                Bukkit.getScheduler().runTask(Guard.getInstance(), () -> {
+                    if (throwable != null) {
+                        // le staff doit savoir si le resolve a échoué (sinon il croit avoir agi)
                         staff.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
-                                .getString(langKey, "&aFait.")
-                                .replace("%id%", String.valueOf(report.getId())))))));
+                                .getString("menu.reports.resolve-failed", "&cÉchec du resolve (serveur ?), réessayez."))));
+                        throwable.printStackTrace();
+                        return;
+                    }
+                    staff.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
+                            .getString(langKey, "&aFait.")
+                            .replace("%id%", String.valueOf(report.getId())))));
+                }));
     }
 }

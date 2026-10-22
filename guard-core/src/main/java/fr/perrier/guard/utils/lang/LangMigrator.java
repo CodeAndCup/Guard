@@ -10,17 +10,18 @@ import java.util.Map;
 /**
  * Ajoute les clés lang absentes (defaults du jar) SANS toucher aux traductions existantes.
  * Appelé au boot et à chaque /hguard reload pour couvrir les fichiers lang anciens installés chez l'utilisateur.
+ * Les valeurs sont conservées BRUTES (String ou List) : les lore de menus sont des listes.
  */
 public final class LangMigrator {
 
     private LangMigrator() {
     }
 
-    public static int fill(File langFile, Map<String, String> defaults) {
+    public static int fill(File langFile, Map<String, Object> defaults) {
         FileConfiguration lang = YamlConfiguration.loadConfiguration(langFile);
         int added = 0;
-        for (Map.Entry<String, String> e : defaults.entrySet()) {
-            if (lang.getString(e.getKey(), null) == null) {
+        for (Map.Entry<String, Object> e : defaults.entrySet()) {
+            if (lang.get(e.getKey()) == null) {
                 lang.set(e.getKey(), e.getValue());
                 added++;
             }

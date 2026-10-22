@@ -106,6 +106,9 @@ public class ReportsMenu extends PaginatedMenu {
     public void onOpen(Player player) {
         ReportStores.get().listOpen().thenAccept(list -> Bukkit.getScheduler().runTask(Guard.getInstance(), () -> {
             String ids = idsOf(list);
+            if (!player.isOnline() || Menu.getCurrentlyOpenedMenus().get(player.getName()) != this) {
+                return; // menu fermé entre-temps : ne pas rouvrir à la décharge du async
+            }
             if (ids.equals(lastIds)) {
                 return; // rien de neuf : pas de re-rendu (évite la boucle onOpen → load)
             }

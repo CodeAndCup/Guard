@@ -254,6 +254,9 @@ public class ProfileMenu extends Menu {
         public void onOpen(Player player) {
             ReportStores.get().listOpen().thenAccept(list -> Bukkit.getScheduler().runTask(Guard.getInstance(), () -> {
                 String ids = filterIds(list);
+                if (!player.isOnline() || Menu.getCurrentlyOpenedMenus().get(player.getName()) != this) {
+                    return; // menu fermé entre-temps
+                }
                 if (ids.equals(lastIds)) {
                     return; // rien de neuf : pas de re-rendu (évite la boucle onOpen → load)
                 }

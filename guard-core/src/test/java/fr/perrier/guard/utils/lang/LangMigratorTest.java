@@ -6,6 +6,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,10 +19,12 @@ public class LangMigratorTest {
     @TempDir
     File temp;
 
-    private Map<String, String> defaults() {
-        Map<String, String> m = new HashMap<>();
+    private Map<String, Object> defaults() {
+        Map<String, Object> m = new HashMap<>();
         m.put("menu.dashboard.title", "#0E6F7DGuard");
         m.put("menu.reports.empty", "#FFFFFFAucun report");
+        // les lore des menus sont des LISTES dans les lang : le migrateur doit les conserver telles quelles
+        m.put("menu.reports.item.lore", Arrays.asList("l1", "l2"));
         return m;
     }
 
@@ -34,11 +37,13 @@ public class LangMigratorTest {
 
         int added = LangMigrator.fill(lang, defaults());
 
-        assertEquals(2, added);
+        assertEquals(3, added);
         YamlConfiguration after = YamlConfiguration.loadConfiguration(lang);
         assertEquals("vieux", after.getString("old.key"));
         assertEquals("#0E6F7DGuard", after.getString("menu.dashboard.title"));
         assertEquals("#FFFFFFAucun report", after.getString("menu.reports.empty"));
+        // la clé liste reste une liste : getStringList doit renvoyer le contenu intact
+        assertEquals(Arrays.asList("l1", "l2"), after.getStringList("menu.reports.item.lore"));
     }
 
     @Test
@@ -50,7 +55,7 @@ public class LangMigratorTest {
 
         int added = LangMigrator.fill(lang, defaults());
 
-        assertEquals(1, added); // seule menu.reports.empty manque
+        assertEquals(2, added); // menu.reports.empty + menu.reports.item.lore
         YamlConfiguration after = YamlConfiguration.loadConfiguration(lang);
         assertEquals("Ma Couleur A Moi", after.getString("menu.dashboard.title"));
         assertEquals("#FFFFFFAucun report", after.getString("menu.reports.empty"));
@@ -70,7 +75,7 @@ public class LangMigratorTest {
     public void missingFileIsCreated() {
         File lang = new File(temp, "message_fr.yml");
         int added = LangMigrator.fill(lang, defaults());
-        assertEquals(2, added);
+        assertEquals(3, added);
         assertTrue(lang.exists());
     }
 }

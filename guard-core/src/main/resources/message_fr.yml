@@ -75,68 +75,67 @@ commands:
       flash: "#2EE6D6[Report] &f%text%"
       xray-flash: "#2EE6D6[Guard] &f%text%"
       cross-freeze: "#2EE6D6[Guard] &c%text% a été gelé sur un autre serveur."
-  freeze:
-    missargs: "&c/freeze <player>"
-    activated: "#17A1B2%target% a été freeze."
-    desactivated: "#17A1B2%target% a été unfreeze."
-    disconnect: "&c%player% a déconnecté en freeze."
-  cps:
-    missargs: "&c/cps <player>"
-    running: "&fCompteur de CPS &aactive &fsur : #2EE6D6%target%"
-    format: "#17A1B2%target% &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
-    end: "&fAverage #2EE6D6%target% &fcps &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
-  vanish:
-    activated: "&fVanish &aactivé"
-    desactivated: "&fVanish &cdesactivé"
-  teleport:
-    missargs: "&c/tp <player>"
-    confirmation: "&fTeleportation à #17A1B2&l%target%"
-  teleporthere:
-    missargs: "&c/tph <player>"
-    confirmation: "&fTeleportation de #17A1B2&l%target% &fà vous."
-  sanctionset:
-    missargs: "&c/ss <player>"
-  noclip:
-    activated: "&fNoClip &aactivé"
-    desactivated: "&fNoClip &cdesactivé"
-  chatcolor:
-    activated: "&fChatColor &aactivé"
-    desactivated: "&fChatColor &cdesactivé"
-    color: "#2EE6D6"
-  inventory:
-    missargs: "&c/invsee <player>"
-  modlist:
-    format:
-      - "&8&l&m------------------------------"
-      - "#0E6F7D&l        Guard ModList"
-      - " "
-      - "&8- &f%target% %value%"
-      - "&8&l&m------------------------------"
-  chatlock:
-    activated: "&fVous avez &clock &fle chat."
-    desactivated: "&fVous avez &aunlock &fle chat."
-    lock_message: "&cDésolé mais le chat est lock."
-  lookup:
-    message:
-      - "&8&l&m------------------------------"
-      - "#0E6F7D&l        Guard LookUP"
-      - ""
-      - "&fPseudo&8: #2EE6D6%target%"
-      - "&fUUID&8: #2EE6D6%uuid%"
-      - "&fPremium&8: #2EE6D6%premium%"
-      - "&fCrée le&8: #2EE6D6%date%"
-      - "&fIP&8: #2EE6D6%ip%"
-      - "&fCountry&8: #2EE6D6%country%"
-      - "&fISP&8: #2EE6D6%isp%"
-      - ""
-      - "&8&l&m------------------------------"
+freeze:
+  missargs: "&c/freeze <player>"
+  activated: "#17A1B2%target% a été freeze."
+  desactivated: "#17A1B2%target% a été unfreeze."
+  disconnect: "&c%player% a déconnecté en freeze."
+cps:
+  missargs: "&c/cps <player>"
+  running: "&fCompteur de CPS &aactive &fsur : #2EE6D6%target%"
+  format: "#17A1B2%target% &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
+  end: "&fAverage #2EE6D6%target% &fcps &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
+vanish:
+  activated: "&fVanish &aactivé"
+  desactivated: "&fVanish &cdesactivé"
+teleport:
+  missargs: "&c/tp <player>"
+  confirmation: "&fTeleportation à #17A1B2&l%target%"
+teleporthere:
+  missargs: "&c/tph <player>"
+  confirmation: "&fTeleportation de #17A1B2&l%target% &fà vous."
+sanctionset:
+  missargs: "&c/ss <player>"
+noclip:
+  activated: "&fNoClip &aactivé"
+  desactivated: "&fNoClip &cdesactivé"
+chatcolor:
+  activated: "&fChatColor &aactivé"
+  desactivated: "&fChatColor &cdesactivé"
+  color: "#2EE6D6"
+inventory:
+  missargs: "&c/invsee <player>"
+modlist:
+  format:
+    - "&8&l&m------------------------------"
+    - "#0E6F7D&l        Guard ModList"
+    - " "
+    - "&8- &f%target% %value%"
+    - "&8&l&m------------------------------"
+chatlock:
+  activated: "&fVous avez &clock &fle chat."
+  desactivated: "&fVous avez &aunlock &fle chat."
+  lock_message: "&cDésolé mais le chat est lock."
+lookup:
+  message:
+    - "&8&l&m------------------------------"
+    - "#0E6F7D&l        Guard LookUP"
+    - ""
+    - "&fPseudo&8: #2EE6D6%target%"
+    - "&fUUID&8: #2EE6D6%uuid%"
+    - "&fPremium&8: #2EE6D6%premium%"
+    - "&fCrée le&8: #2EE6D6%date%"
+    - "&fIP&8: #2EE6D6%ip%"
+    - "&fCountry&8: #2EE6D6%country%"
+    - "&fISP&8: #2EE6D6%isp%"
+    - ""
+    - "&8&l&m------------------------------"
 #
 #▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 #
 # Menu message configuration
 #
 menu:
-  comingsoon: "&cBientôt disponible."
   dashboard:
     title: "#0E6F7D&lGuard #fDashboard"
     players:
@@ -223,7 +222,8 @@ menu:
         - "&8> &eCliquez-ici."
   profile:
     title: "#0E6F7D&lProfil &f%target%"
-    offline: "&cJoueur déconnecté."    tab:
+    offline: "&cJoueur déconnecté."
+    tab:
       sanctions: "#2EE6D6&lSanctions"
       inventory: "#2EE6D6&lInventaire"
       history: "#2EE6D6&lHistorique"

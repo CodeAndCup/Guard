@@ -190,15 +190,15 @@ public class Guard extends JavaPlugin {
         }
     }
 
-    /** Defaults du jar (resource embarquée) aplatis en clés pointées → valeurs. */
-    private java.util.Map<String, String> langDefaultsFromJar() {
-        java.util.Map<String, String> map = new java.util.LinkedHashMap<>();
+    /** Defaults du jar (resource embarquée) aplatis en clés pointées → valeurs BRUTES (String/List). */
+    private java.util.Map<String, Object> langDefaultsFromJar() {
+        java.util.Map<String, Object> map = new java.util.LinkedHashMap<>();
         java.io.InputStreamReader reader = new java.io.InputStreamReader(
                 getResource("message_" + getDefaultConfig().getString("language") + ".yml"), java.nio.charset.StandardCharsets.UTF_8);
         YamlConfiguration jar = YamlConfiguration.loadConfiguration(reader);
         for (String key : jar.getKeys(true)) {
             if (!(jar.get(key) instanceof org.bukkit.configuration.ConfigurationSection)) {
-                map.put(key, String.valueOf(jar.get(key)));
+                map.put(key, jar.get(key));
             }
         }
         return map;

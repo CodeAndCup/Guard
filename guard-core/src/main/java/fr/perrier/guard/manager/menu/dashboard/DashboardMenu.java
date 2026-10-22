@@ -82,9 +82,8 @@ public class DashboardMenu extends Menu {
                     Messages.send(p, Messages.NOPERM);
                     return;
                 }
-                // tuile câblée à la tâche 3 (ReportsMenu) — stub temporaire
                 Button.playNeutral(p);
-                Messages.send(p, Messages.COMING_SOON);
+                new ReportsMenu().openMenu(p);
             }
         });
 
