@@ -104,6 +104,8 @@ public enum Messages {
 
     AUTOMOD_CHAT_WARN("automod.chat.warning_message",Guard.getLangConfig().getStringList("automod.chat.warning_message")),
     AUTOMOD_CHAT_ALERT("automod.chat.moderator_alert",Guard.getLangConfig().getString("automod.chat.moderator_alert")),
+
+    COMING_SOON("menu.comingsoon",Guard.getLangConfig().getString("menu.comingsoon")),
     ;
 
 

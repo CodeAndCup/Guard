@@ -13,27 +13,29 @@ public class Help {
 
     @Command(names = CommandsUtils.HELP, perm = "guard.help")
     public static void onGuardHelp(Player player, @Param(name = "option", baseValue = "none") String option) {
-        if(option.isEmpty() || option.equalsIgnoreCase("none") || option.equalsIgnoreCase("help")) {
+        if (option.isEmpty() || option.equalsIgnoreCase("none")) {
+            new fr.perrier.guard.manager.menu.dashboard.DashboardMenu().openMenu(player);
+        } else if (option.equalsIgnoreCase("help")) {
             String help = "&8&l&m------------------------------\n" +
-                    "&3&l          Guard\n" +
+                    "#0E6F7D&l          Guard\n" +
                     "&a \n" +
-                    "&f- &3/hguard &b[reload]\n" +
-                    "&f- &3/chatcolor\n" +
-                    "&f- &3/cps &b<player>\n" +
-                    "&f- &3/freeze &b<player>\n" +
-                    "&f- &3/ss &b<player>\n" +
-                    "&f- &3/tp &b<player>\n" +
-                    "&f- &3/tphere &b<player>\n" +
-                    "&f- &3/vanish\n" +
-                    "&f- &3/noclip\n" +
-                    "&f- &3/invsee &b<player> [inv/ec]\n" +
-                    "&f- &3/modlist\n" +
-                    "&f- &3/chatlock\n" +
-                    "&f- &3/xray\n" +
-                    "&f- &3/lookup &b<player>\n" +
+                    "&f- #0E6F7D/hguard #17A1B2[reload]\n" +
+                    "&f- #0E6F7D/chatcolor\n" +
+                    "&f- #0E6F7D/cps #17A1B2<player>\n" +
+                    "&f- #0E6F7D/freeze #17A1B2<player>\n" +
+                    "&f- #0E6F7D/ss #17A1B2<player>\n" +
+                    "&f- #0E6F7D/tp #17A1B2<player>\n" +
+                    "&f- #0E6F7D/tphere #17A1B2<player>\n" +
+                    "&f- #0E6F7D/vanish\n" +
+                    "&f- #0E6F7D/noclip\n" +
+                    "&f- #0E6F7D/invsee #17A1B2<player> [inv/ec]\n" +
+                    "&f- #0E6F7D/modlist\n" +
+                    "&f- #0E6F7D/chatlock\n" +
+                    "&f- #0E6F7D/xray\n" +
+                    "&f- #0E6F7D/lookup #17A1B2<player>\n" +
                     "&2 \n" +
-                    "&3Version: &b" + Guard.getInstance().getDescription().getVersion() + " \n" +
-                    "&3Discord Support: &bdiscord.cupcode.fr \n" +
+                    "#0E6F7DVersion: #17A1B2" + Guard.getInstance().getDescription().getVersion() + " \n" +
+                    "#0E6F7DDiscord Support: #17A1B2discord.cupcode.fr \n" +
                     "&8&l&m------------------------------";
             player.sendMessage(ChatUtil.translate(help));
         } else if (option.equalsIgnoreCase("reload")) {

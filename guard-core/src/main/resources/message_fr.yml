@@ -135,6 +135,47 @@ commands:
 # Menu message configuration
 #
 menu:
+  comingsoon: "&cBientôt disponible."
+  dashboard:
+    title: "#0E6F7D&lGuard #fDashboard"
+    players:
+      name: "#2EE6D6&lJoueurs"
+      lore:
+        - "&fJoueurs connectés."
+        - "&8> &eCliquez-ici."
+      title: "#0E6F7D&lJoueurs connectés"
+    reports:
+      name: "#2EE6D6&lReports"
+      lore:
+        - "&fSignalements en attente."
+        - "&8> &eCliquez-ici."
+    moderation:
+      title: "#0E6F7D&lModération"
+      name: "#2EE6D6&lModération"
+      lore:
+        - "&fVanish, chatlock, staffchat, noclip."
+        - "&8> &eCliquez-ici."
+      vanish:
+        name: "#2EE6D6&lVanish"
+        lore:
+          - "&8> &eClique pour disparaitre/apparaitre."
+      chatlock:
+        name: "#2EE6D6&lChatLock"
+        lore:
+          - "&8> &eClique pour lock/unlock le chat."
+      staffchat:
+        name: "#2EE6D6&lStaffChat"
+        lore:
+          - "&8> &eClique pour activer/couper."
+      noclip:
+        name: "#2EE6D6&lNoClip"
+        lore:
+          - "&8> &eClique pour activer/couper."
+    tools:
+      name: "#2EE6D6&lOutils"
+      lore:
+        - "&fX-Ray, LookUp, Paramètres."
+        - "&8> &eCliquez-ici."
   freeze:
     title: "#0E6F7D&lFreeze"
     lore:

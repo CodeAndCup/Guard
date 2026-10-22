@@ -135,6 +135,47 @@ commands:
 # Menu message configuration
 #
 menu:
+  comingsoon: "&cComing soon."
+  dashboard:
+    title: "#0E6F7D&lGuard #fDashboard"
+    players:
+      name: "#2EE6D6&lPlayers"
+      lore:
+        - "&fConnected players."
+        - "&8> &eClick here."
+      title: "#0E6F7D&lConnected players"
+    reports:
+      name: "#2EE6D6&lReports"
+      lore:
+        - "&fPending reports."
+        - "&8> &eClick here."
+    moderation:
+      title: "#0E6F7D&lModeration"
+      name: "#2EE6D6&lModeration"
+      lore:
+        - "&fVanish, chatlock, staffchat, noclip."
+        - "&8> &eClick here."
+      vanish:
+        name: "#2EE6D6&lVanish"
+        lore:
+          - "&8> &eClick to disappear/appear."
+      chatlock:
+        name: "#2EE6D6&lChatLock"
+        lore:
+          - "&8> &eClick to lock/unlock the chat."
+      staffchat:
+        name: "#2EE6D6&lStaffChat"
+        lore:
+          - "&8> &eClick to toggle."
+      noclip:
+        name: "#2EE6D6&lNoClip"
+        lore:
+          - "&8> &eClick to toggle."
+    tools:
+      name: "#2EE6D6&lTools"
+      lore:
+        - "&fX-Ray, LookUp, Settings."
+        - "&8> &eClick here."
   freeze:
     title: "#0E6F7D&lFreeze"
     lore:
