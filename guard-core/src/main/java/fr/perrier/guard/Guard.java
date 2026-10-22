@@ -6,6 +6,7 @@ import fr.perrier.guard.manager.listener.CloseInventory;
 import fr.perrier.guard.manager.listener.PlayerJoin;
 import fr.perrier.guard.manager.listener.PlayerLeave;
 import fr.perrier.guard.manager.listener.PluginMessage;
+import fr.perrier.guard.network.MessengerHolder;
 import fr.perrier.guard.manager.listener.commands.*;
 import fr.perrier.guard.manager.listener.hotbar.*;
 import fr.perrier.guard.manager.xray.XrayManager;
@@ -72,6 +73,7 @@ public class Guard extends JavaPlugin {
         createLanguageConfig();
 
         CompatHolder.init(getServer().getBukkitVersion(), System.getProperty("java.version"));
+        MessengerHolder.init(this);
 
         new Metrics(this,bstatsID);
 
@@ -158,6 +160,9 @@ public class Guard extends JavaPlugin {
 
         if(Guard.getDefaultConfig().getBoolean("database.enable"))
             this.dbManager.close();
+
+        if(MessengerHolder.get() != null)
+            MessengerHolder.get().close();
     }
 
     public void createLanguageConfig() {

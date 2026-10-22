@@ -29,6 +29,13 @@ database:
   user: root # Username
   password: root # Password
 #
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄#
+#
+#Realtime sync between Guard instances behind a proxy (staffchat, reports, vanish)
+#
+network:
+  enable: true
+#
 #▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 #
 #Edit for commands use in /ss
