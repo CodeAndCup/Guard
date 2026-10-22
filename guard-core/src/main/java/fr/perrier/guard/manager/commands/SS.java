@@ -28,6 +28,21 @@ public class SS implements Listener {
             Messages.send(player,Messages.PLAYERNOTFOUND);
             return;
         }
-        new MenuSS(null,target).openMenu(player);
+        new SanctionScreen(null, target).openMenu(player);
+    }
+
+    /** Commande console de la config (sanction.<cat>) exécutée par le staff [%target%/%duration%/%reason%].
+     *  Point unique utilisé par SanctionScreen (fusion des anciens sous-menus SS) et les hotbars. */
+    public static void runSanction(Player staff, String category, Player target, String duration, String reason) {
+        String sanction = Guard.getDefaultConfig().getString("sanction." + category.toLowerCase());
+        if (sanction == null) {
+            throw new IllegalStateException("sanction." + category.toLowerCase() + " manquant dans la config");
+        }
+        sanction = sanction.replace("%target%", target.getName());
+        sanction = sanction.replace("%duration%", duration.replace("Perm",
+                Objects.requireNonNull(Guard.getDefaultConfig().getString("sanction.duration_permanant"))));
+        sanction = sanction.replace("%reason%", reason);
+        staff.performCommand(sanction);
+        staff.closeInventory();
     }
 }

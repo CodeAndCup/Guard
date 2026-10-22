@@ -202,6 +202,22 @@ menu:
         name: "&c&lRejeter"
         lore:
           - "&fRésout en rejeté."
+  sanction:
+    title: "#0E6F7D&lSanctions &f%target%"
+    custom-duration: "&fDurée pour &b%reason%&f ? (&7cancel &fpour annuler)"
+    toggle:
+      on: "#2EE6D6&lDurée perso &f: ON"
+      off: "&fDurée perso &7: OFF"
+    category:
+      mute:
+        name: "&fMute"
+        selected: "#2EE6D6&lMute"
+      warn:
+        name: "&fWarn"
+        selected: "#2EE6D6&lWarn"
+      ban:
+        name: "&fBan"
+        selected: "#2EE6D6&lBan"
   freeze:
     title: "#0E6F7D&lFreeze"
     lore:

@@ -66,7 +66,7 @@ public class SelectPlayerSS extends PaginatedMenu {
 
         @Override
         public void clicked(Player player, int slot, ClickType clickType, int hotbarButton) {
-            new MenuSS(new SelectPlayerSS(),target).openMenu(player);
+            new SanctionScreen(new SelectPlayerSS(),target).openMenu(player);
         }
     }
 }
