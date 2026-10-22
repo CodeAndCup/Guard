@@ -27,6 +27,7 @@ public class VanishHotbar {
             items.add(ModerationItems.vanish_off.toItemStack());
         }
         items.add(ModerationItems.nothing);
+        items.add(new ItemBuilder(XMaterial.NAME_TAG.parseItem()).setName(Guard.getInstance().getLangConfig().getString("items.profile", "&fProfil")).toItemStack());
         items.add(ModerationItems.parameters.toItemStack());
         items.add(ModerationItems.nothing);
         items.add(ModerationItems.page2from1.toItemStack());

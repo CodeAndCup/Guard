@@ -42,6 +42,7 @@ items:
   cps: "&7&lCPS"
   random_tp: "&6&lRandom TP"
   ss_book: "&c&lSS Book"
+  profile: "&f&lProfil"
   parameters: "&4&lParametres"
   teleporter: "#2EE6D6&lTeleporteur"
   knockback: "&2&lKnockBack"
@@ -202,6 +203,25 @@ menu:
         name: "&c&lRejeter"
         lore:
           - "&fRésout en rejeté."
+  profile:
+    title: "#0E6F7D&lProfil &f%target%"
+    offline: "&cJoueur déconnecté."
+    tab:
+      sanctions: "#2EE6D6&lSanctions"
+      inventory: "#2EE6D6&lInventaire"
+      history: "#2EE6D6&lHistorique"
+      info: "#2EE6D6&lInfo"
+    info:
+      name: "#2EE6D6&l%target%"
+      lore:
+        - "&fPing: %ping%"
+        - "&fAdresse: &7%address%"
+        - "&fClient: &7%brand%"
+    cps:
+      name: "#2EE6D6&lCPS"
+      lore: "&f%left% / %right% &7(clics/s)"
+    history:
+      title: "#0E6F7D&lHistorique &f%target%"
   sanction:
     title: "#0E6F7D&lSanctions &f%target%"
     custom-duration: "&fDurée pour &b%reason%&f ? (&7cancel &fpour annuler)"

@@ -19,6 +19,9 @@ public class PlayerLeave implements Listener {
 
         Player p = e.getPlayer();
 
+        // brand client régénéré à chaque join (PluginMessage) — ce joueur-là n'en a plus
+        PluginMessage.forget(p);
+
         //TODO FREEZE
         if(p.hasPotionEffect(PotionEffectType.BLINDNESS)) {
             for(Player staff : Bukkit.getOnlinePlayers()) {

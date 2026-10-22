@@ -27,6 +27,10 @@ public class ItemList implements Listener {
                 p.performCommand("cps " + e.getRightClicked().getName());
             else if(Objects.requireNonNull(it.getItemMeta()).getDisplayName().equalsIgnoreCase(ChatUtil.translate(cfg.getString("items.inventory_view"))))
                 p.performCommand("invsee " + e.getRightClicked().getName());
+            else if(e.getRightClicked() instanceof Player && Objects.requireNonNull(it.getItemMeta()).getDisplayName().equalsIgnoreCase(ChatUtil.translate(cfg.getString("items.profile", "&fProfil")))) {
+                // profil complet à onglets (pas de commande dédiée : rien à ajouter au plugin.yml)
+                new fr.perrier.guard.manager.menu.profile.ProfileMenu((Player) e.getRightClicked()).openMenu(p);
+            }
         }catch (Exception ignored) {}
     }
 

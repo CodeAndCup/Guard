@@ -2,11 +2,11 @@ package fr.perrier.guard.manager.menu.dashboard;
 
 import com.cryptomorin.xseries.XMaterial;
 import fr.perrier.guard.Guard;
+import fr.perrier.guard.manager.menu.profile.ProfileMenu;
 import fr.perrier.guard.menu.Button;
 import fr.perrier.guard.menu.pagination.PaginatedMenu;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
-import fr.perrier.guard.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -54,9 +54,9 @@ public class PlayersMenu extends PaginatedMenu {
 
         @Override
         public void clicked(Player p0, int slot, ClickType clickType, int hotbarButton) {
-            // branché sur le ProfilMenu à la tâche 5 — stub temporaire
+            // profil à onglets (Sanctions / Inventaire / Historique / Info)
             Button.playNeutral(p0);
-            Messages.send(p0, Messages.COMING_SOON);
+            new ProfileMenu(player).openMenu(p0);
         }
     }
 }
