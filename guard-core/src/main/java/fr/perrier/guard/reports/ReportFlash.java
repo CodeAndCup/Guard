@@ -23,10 +23,18 @@ public class ReportFlash {
     public static final String KIND_FREEZE = "FREEZE";
     public static final String KIND_UNFREEZE = "UNFREEZE";
 
-    /** Émission : flash best-effort vers tous les serveurs (pas d'ack, source de vérité ailleurs). */
+    /** Émission : display local PUIS flash vers tous les serveurs. Pourquoi l'affichage local :
+     * le Forward BungeeCord n'est jamais délivré au serveur émetteur (pas de loopback) — sans
+     * affichage local, les mods du serveur source (et le mode mono-serveur) ne verraient jamais l'alerte. */
     public static void broadcast(String kind, String text) {
+        text = text.replace("\u0000", " "); // un \u0000 dans le texte casserait le parse du payload (3 parts) sur chaque serveur
         String payload = kind + "\u0000" + Guard.getDefaultConfig().getString("network.server-name", "Serveur")
                 + "\u0000" + text;
+        if (KIND_REPORT.equals(kind) || KIND_XRAY.equals(kind)) {
+            alert(KIND_REPORT.equals(kind) ? "guard.reports.view" : "guard.xray",
+                    KIND_REPORT.equals(kind) ? "commands.report.flash" : "commands.report.xray-flash", text);
+        }
+        // pour FREEZE/UNFREEZE : pas d'affichage local (le staff local qui a gelé est déjà informé par Freeze.onFreeze)
         MessengerHolder.get().broadcast(Codec.TYPE_NOTIFY, payload);
     }
 

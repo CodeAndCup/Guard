@@ -43,9 +43,23 @@ public class CodecTest {
 
     @Test
     public void wrongChannelOrSubchannelIsDropped() {
-        byte[] full = Codec.encodeForward(Codec.encode(Codec.TYPE_STAFFCHAT, "x"));
-        // remplace la sous-canal par autre chose : depuis les bytes reçus du proxy, un canal inconnu → null
         assertNull(Codec.decodeForward("notbungee".getBytes()));
         assertNull(Codec.decodeForward(null));
+    }
+
+    @Test
+    public void wrongSubchannelIsDropped() {
+        // enveloppe forgée avec un autre sous-canal : la porte réellement contrôlable par un client
+        java.io.ByteArrayOutputStream buffer = new java.io.ByteArrayOutputStream();
+        try (java.io.DataOutputStream out = new java.io.DataOutputStream(buffer)) {
+            out.writeUTF("Forward");
+            out.writeUTF("ONLINE");
+            out.writeUTF("Other");   // sous-canal != "Guard"
+            out.writeShort(1);
+            out.write(Codec.TYPE_STAFFCHAT);
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+        assertNull(Codec.decodeForward(buffer.toByteArray()));
     }
 }

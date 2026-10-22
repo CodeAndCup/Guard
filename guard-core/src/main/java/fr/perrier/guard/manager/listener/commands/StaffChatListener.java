@@ -26,6 +26,7 @@ public class StaffChatListener implements Listener {
                 // pas de blocage silencieux d'un "@" hors staffchat actif : laisser passer en chat normal
                 return;
             }
+            StaffChat.clearToggle(player.getUniqueId()); // sinon le toggle wedge : messages cancel + /sc bloqué
             Messages.send(player, Messages.COMMANDDISABLE);
             event.setCancelled(true);
             return;

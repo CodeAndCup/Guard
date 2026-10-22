@@ -2,9 +2,7 @@ package fr.perrier.guard.manager.xray;
 
 import fr.perrier.guard.Guard;
 import fr.perrier.guard.reports.ReportFlash;
-import fr.perrier.guard.utils.ChatUtil;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -75,7 +73,8 @@ public class XrayPlayer {
         list.put(player, this);
     }
 
-    /** Alerte X-Ray locale + flash cross au seuil de diamants condig.yml (commands.xray.diamond-alert), une fois par session. */
+    /** Flash cross au seuil de diamants (config commands.xray.diamond-alert), une fois par session.
+     *  L'alerte locale est faite par ReportFlash.broadcast (le Forward BungeeCord n'a pas de loopback). */
     private void checkDiamondAlert() {
         if (diamondAlertSent) {
             return;
@@ -85,14 +84,6 @@ public class XrayPlayer {
             return;
         }
         diamondAlertSent = true;
-        String text = player.getName() + ": " + diamond + " diamants minés";
-        for (Player staff : Bukkit.getOnlinePlayers()) {
-            if (staff.hasPermission("guard.xray")) {
-                staff.sendMessage(ChatUtil.translate(
-                        Guard.getLangConfig().getString("commands.report.xray-flash", "&b[Guard] &f%text%")
-                                .replace("%text%", text)));
-            }
-        }
-        ReportFlash.broadcast(ReportFlash.KIND_XRAY, text);
+        ReportFlash.broadcast(ReportFlash.KIND_XRAY, player.getName() + ": " + diamond + " diamants minés");
     }
 }

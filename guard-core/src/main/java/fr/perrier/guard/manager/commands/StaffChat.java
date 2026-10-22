@@ -44,6 +44,11 @@ public class StaffChat {
         return toggles.getOrDefault(uuid, false);
     }
 
+    /** Retire le toggle (staffchat désactivé en config : pas de wedge d'état). */
+    public static void clearToggle(UUID uuid) {
+        toggles.remove(uuid);
+    }
+
     /** Pur : le message commence par le prefix "@" (et contient du texte après). */
     public static boolean isStaffChatMessage(String raw) {
         return raw != null && raw.startsWith(AT_PREFIX) && raw.length() > AT_PREFIX.length();
