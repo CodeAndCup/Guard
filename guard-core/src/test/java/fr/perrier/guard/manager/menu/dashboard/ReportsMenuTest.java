@@ -22,7 +22,7 @@ public class ReportsMenuTest {
 
     @Test
     public void loreLinesReplacePlaceholders() {
-        Report r = new Report(12, "Alex", "Steve", "forcefield", "lobby",
+        Report r = new Report("11111111-1111-1111-1111-111111111111", "Alex", "Steve", "forcefield", "lobby",
                 1690000000000L, Report.STATUS_OPEN, null);
         List<String> out = ReportsMenu.loreLines(r, Arrays.asList(
                 "#0E6F7DReport #%id% %status%",
@@ -30,7 +30,7 @@ public class ReportsMenuTest {
                 "&fRaison: %reason%",
                 "&fServeur: %server%"));
 
-        assertEquals("#0E6F7DReport #12 ●", out.get(0));
+        assertEquals("#0E6F7DReport #11111111-1111-1111-1111-111111111111 ●", out.get(0));
         assertEquals("&fDe: Alex -> Steve", out.get(1));
         assertEquals("&fRaison: forcefield", out.get(2));
         assertEquals("&fServeur: lobby", out.get(3));

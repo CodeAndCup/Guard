@@ -33,9 +33,8 @@ public class YamlReportStore implements ReportStore {
         executor.execute(() -> {
             try {
                 YamlConfiguration yml = load();
-                int id = yml.getInt("next-id", 1);
+                String id = java.util.UUID.randomUUID().toString();
                 report.setId(id);
-                yml.set("next-id", id + 1);
                 String p = "reports." + id + ".";
                 yml.set(p + "reporter", report.getReporter());
                 yml.set(p + "reported", report.getReported());
@@ -66,7 +65,7 @@ public class YamlReportStore implements ReportStore {
                     for (String key : all.getKeys(false)) {
                         String p = "reports." + key + ".";
                         if (Report.STATUS_OPEN.equals(yml.getString(p + "status"))) {
-                            out.add(new Report(Integer.parseInt(key),
+                            out.add(new Report(key,
                                     yml.getString(p + "reporter"),
                                     yml.getString(p + "reported"),
                                     yml.getString(p + "reason"),
@@ -87,7 +86,7 @@ public class YamlReportStore implements ReportStore {
     }
 
     @Override
-    public CompletableFuture<Void> resolve(int id, String by, String outcome) {
+    public CompletableFuture<Void> resolve(String id, String by, String outcome) {
         CompletableFuture<Void> done = new CompletableFuture<>();
         executor.execute(() -> {
             try {

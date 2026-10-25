@@ -24,7 +24,7 @@ public final class DatabaseManager {
             "CREATE TABLE IF NOT EXISTS player_vanish (uuid VARCHAR(36) not null, vanish BOOLEAN not null)";
 
     private static final String DDL_REPORTS =
-            "CREATE TABLE IF NOT EXISTS reports (id INT AUTO_INCREMENT PRIMARY KEY, reporter VARCHAR(16) NOT NULL, " +
+            "CREATE TABLE IF NOT EXISTS reports (id VARCHAR(36) PRIMARY KEY, reporter VARCHAR(16) NOT NULL, " +
             "reported VARCHAR(16) NOT NULL, reason VARCHAR(255) NOT NULL, server_name VARCHAR(64) NOT NULL, " +
             "created BIGINT NOT NULL, status VARCHAR(16) NOT NULL, resolved_by VARCHAR(16))";
 

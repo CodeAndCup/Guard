@@ -48,7 +48,7 @@ public class Report {
             Messages.send(reporter, Messages.PLAYERNOTFOUND);
             return;
         }
-        fr.perrier.guard.reports.Report report = new fr.perrier.guard.reports.Report(0, reporter.getName(), target.getName(), safeReason,
+        fr.perrier.guard.reports.Report report = new fr.perrier.guard.reports.Report(null, reporter.getName(), target.getName(), safeReason,
                 Guard.getDefaultConfig().getString("network.server-name", "Serveur"),
                 System.currentTimeMillis(), fr.perrier.guard.reports.Report.STATUS_OPEN, null);
         ReportStores.get().submit(report).whenComplete((saved, throwable) -> {

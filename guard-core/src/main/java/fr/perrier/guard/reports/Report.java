@@ -14,7 +14,7 @@ public class Report {
     public static final String STATUS_REJECTED = "REJECTED";
 
     @Setter
-    private int id;
+    private String id;
     private String reporter;
     private String reported;
     private String reason;

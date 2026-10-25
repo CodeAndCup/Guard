@@ -28,6 +28,10 @@ database:
   name: minecraft # Table name
   user: root # Username
   password: root # Password
+# NB: les reports utilisent des id UUID (VARCHAR(36)) depuis la 1.1.
+# Sur une base existante créée par une version plus ancienne (id INT AUTO_INCREMENT) :
+#   ALTER TABLE reports MODIFY id VARCHAR(36), puis recréer les ids existants
+#   (ou TRUNCATE/repartir de zéro — les rapports déjà résolus n'ont pas d'historique à garder).
 #
 #▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄#
 #

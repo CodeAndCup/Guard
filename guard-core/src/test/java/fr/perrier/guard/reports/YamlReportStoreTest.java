@@ -5,11 +5,13 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /** Contrat du store YAML (fallback mono-serveur) : submit/listOpen/resolve + persistance réelle du fichier. */
 public class YamlReportStoreTest {
@@ -18,11 +20,14 @@ public class YamlReportStoreTest {
     Path temp;
 
     @Test
-    public void submitAssignsIdAndPersists() {
+    public void submitAssignsUuidIdAndPersists() {
         YamlReportStore store = new YamlReportStore(temp.resolve("reports.yml").toFile());
-        Report r = new Report(0, "Alex", "Steve", "hacks", "lobby", System.currentTimeMillis(), Report.STATUS_OPEN, null);
+        Report r = new Report(null, "Alex", "Steve", "hacks", "lobby", System.currentTimeMillis(), Report.STATUS_OPEN, null);
         Report saved = store.submit(r).join();
-        assertNotEquals(0, saved.getId());
+        // id = UUID valide, assigné par le store
+        assertEquals(r, saved);
+        assertNotNull(saved.getId());
+        UUID.fromString(saved.getId()); // jette si invalide
         List<Report> open = store.listOpen().join();
         assertEquals(1, open.size());
         assertEquals(saved.getId(), open.get(0).getId());
@@ -33,7 +38,7 @@ public class YamlReportStoreTest {
     @Test
     public void resolveRemovesFromOpen() {
         YamlReportStore store = new YamlReportStore(temp.resolve("reports.yml").toFile());
-        Report saved = store.submit(new Report(0, "A", "S", "r", "lobby", System.currentTimeMillis(), Report.STATUS_OPEN, null)).join();
+        Report saved = store.submit(new Report(null, "A", "S", "r", "lobby", System.currentTimeMillis(), Report.STATUS_OPEN, null)).join();
         store.resolve(saved.getId(), "Modo", Report.STATUS_ACCEPTED).join();
         assertEquals(0, store.listOpen().join().size());
     }
@@ -41,28 +46,25 @@ public class YamlReportStoreTest {
     @Test
     public void fileSurvivesStoreReopen() {
         YamlReportStore store = new YamlReportStore(temp.resolve("reports.yml").toFile());
-        int first = store.submit(new Report(0, "Alex", "Steve", "hacks", "lobby", System.currentTimeMillis(), Report.STATUS_OPEN, null)).join().getId();
+        String first = store.submit(new Report(null, "Alex", "Steve", "hacks", "lobby", System.currentTimeMillis(), Report.STATUS_OPEN, null)).join().getId();
         List<Report> open = new YamlReportStore(temp.resolve("reports.yml").toFile()).listOpen().join();
         assertEquals(1, open.size());
         assertEquals(first, open.get(0).getId());
-        assertTrue(open.get(0).getId() > 0);
     }
 
     @Test
-    public void idsKeepIncrementingAcrossReopen() {
+    public void idsAreUniqueAcrossReopen() {
         YamlReportStore store = new YamlReportStore(temp.resolve("reports.yml").toFile());
-        int first = store.submit(new Report(0, "A", "S", "r", "lobby", 0, Report.STATUS_OPEN, null)).join().getId();
-        int second = new YamlReportStore(temp.resolve("reports.yml").toFile())
-                .submit(new Report(0, "B", "T", "r2", "lobby", 0, Report.STATUS_OPEN, null)).join().getId();
-        assertTrue(second > first);
+        String first = store.submit(new Report(null, "A", "S", "r", "lobby", 0, Report.STATUS_OPEN, null)).join().getId();
+        String second = new YamlReportStore(temp.resolve("reports.yml").toFile())
+                .submit(new Report(null, "B", "T", "r2", "lobby", 0, Report.STATUS_OPEN, null)).join().getId();
+        assertNotEquals(first, second);
     }
 
     @Test
-    public void resolvedSurvivesReopen() {
+    public void unknownUuidResolveFailsLoudly() {
         YamlReportStore store = new YamlReportStore(temp.resolve("reports.yml").toFile());
-        int id = store.submit(new Report(0, "A", "S", "r", "lobby", 0, Report.STATUS_OPEN, null)).join().getId();
-        new YamlReportStore(temp.resolve("reports.yml").toFile()).resolve(id, "Modo", Report.STATUS_REJECTED).join();
-        CompletableFuture<List<Report>> f = new YamlReportStore(temp.resolve("reports.yml").toFile()).listOpen();
-        assertEquals(0, f.join().size());
+        CompletableFuture<Void> f = store.resolve(UUID.randomUUID().toString(), "Modo", Report.STATUS_REJECTED);
+        assertThrows(java.util.concurrent.CompletionException.class, f::join);
     }
 }
