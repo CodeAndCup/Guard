@@ -237,46 +237,28 @@ public class CommandHandler implements Listener {
             }
 
             // 2) match exact (les mots déjà tapés) → complétion du paramètre courant
+            //    NB : pas de garde "commande racine + args" — c'est EXACTEMENT le cas "/ss Ste"
+            //    que la complétion de paramètres doit servir.
             boolean trailingEmpty = args.length > 0 && args[args.length - 1].trim().isEmpty();
             for (CommandData cmd : availableCommands) {
                 if (!cmd.canAccess(sender)) {
                     continue;
                 }
-                for (String cmdName : cmd.getNames()) {
-                    String[] cmdParts = cmdName.toLowerCase().split(" ");
-                    boolean isMatch = args.length >= cmdParts.length - 1;
-                    if (isMatch) {
-                        for (int i = 1; i < cmdParts.length; i++) {
-                            if (i == cmdParts.length - 1 && trailingEmpty) {
-                                continue; // espace final après la commande : match toléré
-                            }
-                            String argVal = args[i - 1];
-                            if (argVal == null || argVal.trim().isEmpty() || !cmdParts[i].equals(argVal.toLowerCase())) {
-                                isMatch = false;
-                                break;
-                            }
-                        }
+                String matchedName = matchedName(cmd.getNames(), alias, args);
+                if (matchedName == null) {
+                    continue;
+                }
+                String[] cmdParts = matchedName.toLowerCase().split(" ");
+                int parameterIndex = parameterIndexFor(cmdParts, args);
+                if (parameterIndex > 0 && parameterIndex <= cmd.getParameters().size()) {
+                    ParameterData paramData = cmd.getParameters().get(parameterIndex - 1);
+                    String currentParam = args.length > 0 ? args[args.length - 1] : "";
+                    List<String> paramCompletions = tabCompleteParameter(player, currentParam,
+                            paramData.getParameterClass(), paramData.getTabCompleteFlags());
+                    if (paramCompletions != null && !paramCompletions.isEmpty()) {
+                        return paramCompletions;
                     }
-                    if (trailingEmpty && cmdParts.length == 1) {
-                        isMatch = false; // "/root " → on propose les sous-commandes
-                    }
-                    if (cmdParts.length == 1 && args.length > 0 && !trailingEmpty) {
-                        isMatch = false;
-                    }
-
-                    if (isMatch) {
-                        int parameterIndex = parameterIndexFor(cmdParts, args);
-                        if (parameterIndex > 0 && parameterIndex <= cmd.getParameters().size()) {
-                            ParameterData paramData = cmd.getParameters().get(parameterIndex - 1);
-                            String currentParam = args.length > 0 ? args[args.length - 1] : "";
-                            List<String> paramCompletions = tabCompleteParameter(player, currentParam,
-                                    paramData.getParameterClass(), paramData.getTabCompleteFlags());
-                            if (paramCompletions != null && !paramCompletions.isEmpty()) {
-                                return paramCompletions;
-                            }
-                            return completions; // plus de paramètres à compléter
-                        }
-                    }
+                    return completions; // plus de paramètres à compléter
                 }
             }
 
@@ -318,6 +300,34 @@ public class CommandHandler implements Listener {
      */
     static int parameterIndexFor(String[] cmdParts, String[] args) {
         return args.length - (cmdParts.length - 1);
+    }
+
+    /**
+     * Pur (testé) : nom de la commande dont les mots tapés correspondent aux args, null si aucun.
+     * Espace final toléré ("/ss " attend un paramètre), racine seule + args = match (ex "/ss Ste").
+     */
+    static String matchedName(String[] names, String alias, String[] args) {
+        boolean trailingEmpty = args.length > 0 && args[args.length - 1].trim().isEmpty();
+        for (String cmdName : names) {
+            String[] cmdParts = cmdName.toLowerCase().split(" ");
+            boolean isMatch = args.length >= cmdParts.length - 1;
+            if (isMatch) {
+                for (int i = 1; i < cmdParts.length; i++) {
+                    if (i == cmdParts.length - 1 && trailingEmpty) {
+                        continue; // espace final : match toléré
+                    }
+                    String argVal = args[i - 1];
+                    if (argVal == null || argVal.trim().isEmpty() || !cmdParts[i].equals(argVal.toLowerCase())) {
+                        isMatch = false;
+                        break;
+                    }
+                }
+            }
+            if (isMatch && cmdParts[0].equalsIgnoreCase(alias)) {
+                return cmdName;
+            }
+        }
+        return null;
     }
 
     public void reloadCommands() {

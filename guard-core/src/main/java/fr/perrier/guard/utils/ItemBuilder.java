@@ -1,8 +1,6 @@
 package fr.perrier.guard.utils;
 
 import com.google.gson.*;
-import com.mojang.authlib.*;
-import com.mojang.authlib.properties.*;
 import org.bukkit.*;
 import org.bukkit.enchantments.*;
 import org.bukkit.inventory.*;
@@ -89,29 +87,87 @@ public class ItemBuilder {
     /**
      * Change the texture of an item
      *
-     * @param hash the head hash
+     * @param hash the head texture value (base64)
+     *
+     * 100% réflexif : authlib (GameProfile/Property) est une lib MINECRAFT interne dont les
+     * signatures bougent entre versions (NoSuchMethodError sur Paper 26.2) — on ne l'importe
+     * JAMAIS à la compilation. Deux chemins, du plus récent au plus ancien :
+     * 1) API Bukkit moderne : Server.createProfile + SkullMeta.setOwnerProfile (1.18.2+)
+     * 2) legacy : GameProfile authlib + champ interne "profile" du CraftMetaSkull (1.8 → anciens)
      */
     public ItemBuilder setTexture(String hash) {
         if (hash == null || hash.isEmpty()) {
-            return this; // rien à appliquer : on ne crée pas de profil vide (NPE authlib sur les versions récentes)
+            return this; // rien à appliquer
         }
-        // nom de profil non-null obligatoire (authlib) ; seul le hash texture compte pour l'affichage
-        GameProfile profile = new GameProfile(UUID.randomUUID(), "guard-head");
-        PropertyMap propertyMap = profile.getProperties();
-        propertyMap.put("textures", new Property("textures", hash));
-        SkullMeta skullMeta = (SkullMeta) this.is.getItemMeta();
-        Class<?> c_skullMeta = skullMeta.getClass();
+        java.util.UUID id = java.util.UUID.randomUUID();
+        String profileName = "Guard";
+
+        // 1) API Bukkit moderne
         try {
-            Field f_profile = c_skullMeta.getDeclaredField("profile");
+            Object profile = Bukkit.getServer().getClass()
+                    .getMethod("createProfile", java.util.UUID.class, String.class)
+                    .invoke(Bukkit.getServer(), id, profileName);
+            Object properties = reflectiveProperties(profile);
+            reflectivePutTexture(properties, hash);
+            ItemMeta meta = this.is.getItemMeta();
+            meta.getClass().getMethod("setOwnerProfile", Class.forName("org.bukkit.profile.PlayerProfile"))
+                    .invoke(meta, profile);
+            this.is.setItemMeta(meta);
+            return this;
+        } catch (Exception ignored) {
+            // indisponible sur cette version : chemin legacy
+        }
+
+        // 2) legacy : GameProfile authlib + champ interne "profile"
+        try {
+            Class<?> gameProfileClass = Class.forName("com.mojang.authlib.GameProfile");
+            Class<?> propertyMapClass = Class.forName("com.mojang.authlib.properties.PropertyMap");
+
+            Object propertyMap = propertyMapClass.getDeclaredConstructor().newInstance();
+            Object profile = newGameProfile(gameProfileClass, id, profileName, propertyMap);
+            reflectivePutTexture(reflectiveProperties(profile), hash);
+
+            SkullMeta skullMeta = (SkullMeta) this.is.getItemMeta();
+            Field f_profile = skullMeta.getClass().getDeclaredField("profile");
             f_profile.setAccessible(true);
             f_profile.set(skullMeta, profile);
-            f_profile.setAccessible(false);
             this.is.setItemMeta(skullMeta);
             return this;
-        } catch (IllegalAccessException | NoSuchFieldException e) {
+        } catch (Exception e) {
+            // tête sans texture custom (serveur verrouillé) : on garde la tête par défaut
             e.printStackTrace();
         }
         return this;
+    }
+
+    /** PropertyMap d'un profil : getProperties() (authlib historique) ou properties() (versions récentes). */
+    private static Object reflectiveProperties(Object profile) throws Exception {
+        try {
+            return profile.getClass().getMethod("getProperties").invoke(profile);
+        } catch (NoSuchMethodException ignored) {
+        }
+        return profile.getClass().getMethod("properties").invoke(profile);
+    }
+
+    /** GameProfile : ctor (UUID, String) puis (UUID, String, PropertyMap) si le 2-arg a disparu. */
+    private static Object newGameProfile(Class<?> gameProfileClass, java.util.UUID id, String name, Object propertyMap) throws Exception {
+        try {
+            return gameProfileClass.getDeclaredConstructor(java.util.UUID.class, String.class).newInstance(id, name);
+        } catch (NoSuchMethodException ignored) {
+        }
+        return gameProfileClass.getDeclaredConstructor(java.util.UUID.class, String.class, propertyMap.getClass())
+                .newInstance(id, name, propertyMap);
+    }
+
+    private static void reflectivePut(Object map, String key, Object value) throws Exception {
+        map.getClass().getMethod("put", Object.class, Object.class).invoke(map, key, value);
+    }
+
+    private static void reflectivePutTexture(Object propertyMap, String hash) throws Exception {
+        Class<?> propertyClass = Class.forName("com.mojang.authlib.properties.Property");
+        Object property = propertyClass.getDeclaredConstructor(String.class, String.class)
+                .newInstance("textures", hash);
+        reflectivePut(propertyMap, "textures", property);
     }
 
     /**
