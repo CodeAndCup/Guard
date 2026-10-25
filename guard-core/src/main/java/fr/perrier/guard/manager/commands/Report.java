@@ -3,6 +3,7 @@ package fr.perrier.guard.manager.commands;
 import fr.perrier.guard.Guard;
 import fr.perrier.guard.commands.annotations.Command;
 import fr.perrier.guard.commands.annotations.Param;
+import fr.perrier.guard.reports.ReportCache;
 import fr.perrier.guard.reports.ReportCooldown;
 import fr.perrier.guard.reports.ReportFlash;
 import fr.perrier.guard.reports.ReportStores;
@@ -60,6 +61,7 @@ public class Report {
                 return;
             }
             ReportCooldown.remember(reporter.getUniqueId(), System.currentTimeMillis());
+            ReportCache.refreshAsync(); // le menu Reports le verra sans rouvrir
             reporter.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
                     .getString("commands.report.sent", "&aReport #%id% envoyé.")
                     .replace("%id%", String.valueOf(saved.getId())))));

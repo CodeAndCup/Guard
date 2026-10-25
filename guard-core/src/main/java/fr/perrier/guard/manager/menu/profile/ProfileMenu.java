@@ -12,15 +12,14 @@ import fr.perrier.guard.menu.GlassMenu;
 import fr.perrier.guard.menu.Menu;
 import fr.perrier.guard.menu.buttons.BackButton;
 import fr.perrier.guard.reports.Report;
-import fr.perrier.guard.reports.ReportStores;
+import fr.perrier.guard.reports.ReportCache;
 import fr.perrier.guard.utils.ChatUtil;
+import fr.perrier.guard.utils.Heads;
 import fr.perrier.guard.utils.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +27,7 @@ import java.util.Map;
 
 /**
  * Profil joueur à onglets. Onglet INFO rendu ici (tête/ping/adresse/brand/CPS) ;
- * SANCTIONS → SanctionScreen, INVENTORY → ViewInventoryMenu, HISTORY → sous-menu reports filtrés.
+ * SANCTIONS → SanctionScreen, INVENTORY → ViewInventoryMenu, HISTORY → reports de la cible.
  * Toute action re-vérifie que la cible est encore en ligne (menu.profile.offline sinon).
  */
 public class ProfileMenu extends GlassMenu {
@@ -57,7 +56,7 @@ public class ProfileMenu extends GlassMenu {
         return -1;
     }
 
-    /** Pur : couleur du ping (< 50 vert, < 150 jaune, sinon rouge). */
+    /** Pur : couleur du ping (< 50 vert, <= 150 jaune, sinon rouge). */
     public static String pingColor(int ping) {
         if (ping < 50) {
             return "&a";
@@ -92,14 +91,13 @@ public class ProfileMenu extends GlassMenu {
 
         int slot = 2; // 1 et 7 sont des slots de bordure GlassMenu : les onglets commencent à 2
         for (final String tab : tabs()) {
-            final int s = slot;
-            buttons.put(s, new Button() {
+            buttons.put(slot, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player p) {
-                    ItemBuilder item = new ItemBuilder(tabItem(tab))
+                    return new ItemBuilder(tabItem(tab))
                             .setName(ChatUtil.translate(Guard.getLangConfig()
-                                    .getString("menu.profile.tab." + tab.toLowerCase(), tab)));
-                    return item.toItemStack();
+                                    .getString("menu.profile.tab." + tab.toLowerCase(), tab)))
+                            .toItemStack();
                 }
 
                 @Override
@@ -109,24 +107,19 @@ public class ProfileMenu extends GlassMenu {
             });
             slot++;
         }
+
+        // onglet INFO : tête de la cible (ping, adresse, brand client) + session CPS
         buttons.put(13, new Button() {
             @Override
             public ItemStack getButtonItem(Player p) {
-                ItemBuilder item = new ItemBuilder(XMaterial.PLAYER_HEAD.parseItem())
-                        .setSkullOwner(target.getName())
+                int ping = ping(target);
+                String pingText = ping < 0 ? "&7?" : pingColor(ping) + ping;
+                return new ItemBuilder(Heads.skullOf(target.getName()))
                         .setName(ChatUtil.translate(Guard.getLangConfig()
                                 .getString("menu.profile.info.name", "&f%target%")
-                                .replace("%target%", target.getName())));
-                int ping = ping(target);
-                String brand = PluginMessage.brandOf(target);
-                String pingText = ping < 0 ? "&7?" : pingColor(ping) + String.valueOf(ping);
-                for (String line : Guard.getLangConfig().getStringList("menu.profile.info.lore")) {
-                    item.addLoreLine(ChatUtil.translate(line
-                            .replace("%ping%", pingText)
-                            .replace("%address%", target.getAddress() == null ? "?" : target.getAddress().getAddress().getHostAddress())
-                            .replace("%brand%", brand)));
-                }
-                return item.toItemStack();
+                                .replace("%target%", target.getName())))
+                        .setLore(lore(pingText))
+                        .toItemStack();
             }
         });
         buttons.put(21, new Button() {
@@ -145,8 +138,22 @@ public class ProfileMenu extends GlassMenu {
             }
         });
 
-        // le cadre glass est pose par GlassMenu (pattern documenté de la lib) — pas de remplissage intégral
+        // le cadre glass est posé par GlassMenu (pattern documenté de la lib)
         return buttons;
+    }
+
+    private List<String> lore(String pingText) {
+        String brand = PluginMessage.brandOf(target);
+        String address = target.getAddress() == null ? "?"
+                : target.getAddress().getAddress().getHostAddress();
+        java.util.List<String> out = new java.util.ArrayList<>();
+        for (String line : Guard.getLangConfig().getStringList("menu.profile.info.lore")) {
+            out.add(ChatUtil.translate(line
+                    .replace("%ping%", pingText)
+                    .replace("%address%", address)
+                    .replace("%brand%", brand)));
+        }
+        return out;
     }
 
     private void openTab(Player staff, String tab) {
@@ -186,11 +193,8 @@ public class ProfileMenu extends GlassMenu {
         }
     }
 
-    /** Onglet Historique : reports OPEN signalant la cible (source = store, pas de DB v1). */
+    /** Onglet Historique : reports OPEN signalant la cible (lecture synchrone du cache). */
     public class HistoryMenu extends GlassMenu {
-
-        private List<Report> reports = new ArrayList<>();
-        private String lastIds = "";
 
         @Override
         public String getTitle(Player player) {
@@ -209,29 +213,23 @@ public class ProfileMenu extends GlassMenu {
             Map<Integer, Button> buttons = new HashMap<>();
 
             int slot = 10; // 9 = slot de bordure GlassMenu
-            for (final Report report : reports) {
-                if (slot >= getSize()) {
-                    break;
+            for (final Report report : ReportCache.openSnapshot()) {
+                if (!target.getName().equalsIgnoreCase(String.valueOf(report.getReported()))) {
+                    continue;
                 }
                 final int s = slot++;
                 buttons.put(s, new Button() {
                     @Override
                     public ItemStack getButtonItem(Player p) {
-                        ItemBuilder item = new ItemBuilder(XMaterial.PAPER.parseItem())
+                        return new ItemBuilder(Heads.skullOf(report.getReported()))
                                 .setName(ChatUtil.translate(Guard.getLangConfig()
                                         .getString("menu.reports.item.name", "&f%reported%")
                                         .replace("%id%", String.valueOf(report.getId()))
                                         .replace("%reported%", String.valueOf(report.getReported()))
-                                        .replace("%reporter%", String.valueOf(report.getReporter()))));
-                        List<String> template = Guard.getLangConfig().getStringList("menu.reports.item.lore");
-                        if (template.isEmpty()) {
-                            item.addLoreLine(ChatUtil.translate("&7" + report.getReason()));
-                        } else {
-                            for (String line : ReportsMenu.loreLines(report, template)) {
-                                item.addLoreLine(ChatUtil.translate(line));
-                            }
-                        }
-                        return item.toItemStack();
+                                        .replace("%reporter%", String.valueOf(report.getReporter()))))
+                                .setLore(ReportsMenu.loreLines(report,
+                                        Guard.getLangConfig().getStringList("menu.reports.item.lore")))
+                                .toItemStack();
                     }
                 });
             }
@@ -243,33 +241,7 @@ public class ProfileMenu extends GlassMenu {
 
         @Override
         public void onOpen(Player player) {
-            ReportStores.get().listOpen().thenAccept(list -> Bukkit.getScheduler().runTask(Guard.getInstance(), () -> {
-                String ids = filterIds(list);
-                if (!player.isOnline() || Menu.getCurrentlyOpenedMenus().get(player.getName()) != this) {
-                    return; // menu fermé entre-temps
-                }
-                if (ids.equals(lastIds)) {
-                    return; // rien de neuf : pas de re-rendu (évite la boucle onOpen → load)
-                }
-                lastIds = ids;
-                reports = new ArrayList<>();
-                for (Report report : list) {
-                    if (target.getName().equalsIgnoreCase(report.getReported())) {
-                        reports.add(report);
-                    }
-                }
-                openMenu(player);
-            }));
-        }
-
-        private String filterIds(List<Report> list) {
-            StringBuilder sb = new StringBuilder();
-            for (Report r : list) {
-                if (target.getName().equalsIgnoreCase(r.getReported())) {
-                    sb.append(r.getId()).append(',');
-                }
-            }
-            return sb.toString();
+            ReportCache.refreshAsync();
         }
     }
 }

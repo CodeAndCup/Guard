@@ -6,11 +6,10 @@ import fr.perrier.guard.menu.Button;
 import fr.perrier.guard.menu.Menu;
 import fr.perrier.guard.menu.pagination.PaginatedMenu;
 import fr.perrier.guard.reports.Report;
-import fr.perrier.guard.reports.ReportStores;
+import fr.perrier.guard.reports.ReportCache;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.Heads;
 import fr.perrier.guard.utils.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -22,16 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * Tuile Reports : file des reports OPEN (store relu à chaque ouverture — source de vérité).
- * Chargement ASYNC puis re-rendu main thread ; 0 report → écran vide lang menu.reports.empty.
+ * Tuile Reports : file des reports OPEN.
+ * source = ReportCache (memoire, rafraichi en async) : lecture SYNCHRONE à l'affichage,
+ * donc aucun re-render asynchrone — c'etait la cause de l'affichage intermittent.
  */
 public class ReportsMenu extends PaginatedMenu {
-
-    private List<Report> reports = new ArrayList<>();
-    private String lastIds = "";
-    private boolean storeError;
 
     /** Pur : glyphe du statut (deterministe, inconnu → "?"). */
     public static String statusGlyph(String status) {
@@ -75,7 +70,7 @@ public class ReportsMenu extends PaginatedMenu {
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player p0) {
         HashMap<Integer, Button> buttons = new HashMap<>();
-        for (Report report : reports) {
+        for (Report report : ReportCache.openSnapshot()) {
             buttons.put(buttons.size(), new ReportButton(report));
         }
         return buttons;
@@ -83,18 +78,18 @@ public class ReportsMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getGlobalButtons(Player player) {
-        if (!reports.isEmpty()) {
+        if (!ReportCache.openSnapshot().isEmpty()) {
             return null;
         }
         Map<Integer, Button> buttons = new HashMap<>();
         buttons.put(22, new Button() {
             @Override
             public ItemStack getButtonItem(Player p) {
-                String key = storeError ? "menu.reports.store-error" : "menu.reports.empty";
-                String def = storeError ? "&cStore injoignable (console)" : "&fAucun report";
+                // 0 report = vraiment 0 (cache synchrone) ; un store injoignable est signale
+                // dans la console au rafraichissement du cache, pas ici (ecran vide ambigu sinon)
                 return new ItemBuilder(XMaterial.PAPER.parseItem())
                         .setName(ChatUtil.translate(Guard.getLangConfig()
-                                .getString(key, def)))
+                                .getString("menu.reports.empty", "&fAucun report")))
                         .toItemStack();
             }
         });
@@ -108,44 +103,8 @@ public class ReportsMenu extends PaginatedMenu {
 
     @Override
     public void onOpen(Player player) {
-        ReportStores.get().listOpen().whenComplete((list, throwable) -> Bukkit.getScheduler().runTask(Guard.getInstance(), () -> {
-            if (!player.isOnline() || Menu.getCurrentlyOpenedMenus().get(player.getName()) != this) {
-                return; // menu fermé entre-temps : ne pas rouvrir à la décharge du async
-            }
-            // instrumentation support : distinguer "0 report" de "store HS" en console
-            Guard.getInstance().getLogger().info("[Reports] " + player.getName() + " → listOpen: "
-                    + (throwable != null ? "ERREUR " + throwable : (list == null ? 0 : list.size()) + " ouvert(s)"));
-            if (throwable != null) {
-                // store HS : on DIT que le store est en erreur (sinon l'écran vide est indistinguable d'un 0 report)
-                throwable.printStackTrace();
-                if (!storeError) {
-                    storeError = true;
-                    openMenu(player); // un seul re-rendu par erreur (sinon boucle onOpen → load)
-                }
-                return;
-            }
-            storeError = false;
-            if (list == null || list.isEmpty()) {
-                lastIds = "";
-                reports = new ArrayList<>();
-                return;
-            }
-            String ids = idsOf(list);
-            if (ids.equals(lastIds)) {
-                return; // rien de neuf : pas de re-rendu (évite la boucle onOpen → load)
-            }
-            lastIds = ids;
-            reports = list;
-            openMenu(player); // re-rendu (chemin update du Menu si même titre/taille)
-        }));
-    }
-
-    private String idsOf(List<Report> list) {
-        StringBuilder sb = new StringBuilder();
-        for (Report r : list) {
-            sb.append(r.getId()).append(',');
-        }
-        return sb.toString();
+        // prepare la prochaine ouverture ; l'affichage courant lit deja le cache en synchrone
+        ReportCache.refreshAsync();
     }
 
     /** Bouton d'un report : tête du joueur signalé + lore lang ; clic → écran de détail. */

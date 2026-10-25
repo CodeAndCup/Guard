@@ -8,6 +8,7 @@ import fr.perrier.guard.manager.listener.PlayerLeave;
 import fr.perrier.guard.manager.listener.PluginMessage;
 import fr.perrier.guard.network.Codec;
 import fr.perrier.guard.network.MessengerHolder;
+import fr.perrier.guard.reports.ReportCache;
 import fr.perrier.guard.reports.ReportFlash;
 import fr.perrier.guard.manager.listener.commands.*;
 import fr.perrier.guard.manager.listener.hotbar.*;
@@ -110,6 +111,9 @@ public class Guard extends JavaPlugin {
 
         VanishALL = new ConcurrentHashMap<>();
 
+        // cache des reports (les menus le lisent en synchrone : plus d'affichage intermittent)
+        ReportCache.startPeriodicRefresh();
+
         menuAPI = new MenuAPI(instance);
         commandHandler = new CommandHandler(this);
         // types de paramètres (transform + tab completion) : sans ce hook, les commandes
@@ -133,9 +137,9 @@ public class Guard extends JavaPlugin {
         commandHandler.registerCommands(InventoryView.class);
         commandHandler.registerCommands(ModList.class);
         commandHandler.registerCommands(NoClip.class);
-        commandHandler.registerCommands(SS.class);
-        commandHandler.registerCommands(TP.class);
-        commandHandler.registerCommands(TPHere.class);
+        commandHandler.registerCommands(SanctionSet.class);
+        commandHandler.registerCommands(Teleport.class);
+        commandHandler.registerCommands(TeleportHere.class);
         commandHandler.registerCommands(Vanish.class);
         commandHandler.registerCommands(Xray.class);
         commandHandler.registerCommands(LookUp.class);

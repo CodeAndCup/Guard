@@ -2,7 +2,7 @@ package fr.perrier.guard.manager.menu.sanctionset;
 
 import com.cryptomorin.xseries.XMaterial;
 import fr.perrier.guard.Guard;
-import fr.perrier.guard.manager.commands.SS;
+import fr.perrier.guard.manager.commands.SanctionSet;
 import fr.perrier.guard.menu.Button;
 import fr.perrier.guard.menu.Menu;
 import fr.perrier.guard.menu.buttons.BackButton;
@@ -12,7 +12,6 @@ import fr.perrier.guard.menu.pagination.ConfirmationMenu;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
 import fr.perrier.guard.utils.Messages;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -234,12 +233,12 @@ public class SanctionScreen extends Menu {
             new ConversationButton<String>(item, reasonName, message, (targetReason, pair) -> {
                 ConversationContext cc = pair.getLeft();
                 Player staff = (Player) cc.getForWhom();
-                new ConfirmationMenu(() -> SS.runSanction(staff, category, target, pair.getRight(), targetReason),
+                new ConfirmationMenu(() -> SanctionSet.runSanction(staff, category, target, pair.getRight(), targetReason),
                         item, back).openMenu(staff);
             }).clicked(player, 0, null, 0);
             return;
         }
-        new ConfirmationMenu(() -> SS.runSanction(player, category, target, duration, reasonName),
+        new ConfirmationMenu(() -> SanctionSet.runSanction(player, category, target, duration, reasonName),
                 confirmItem(player, category, reasonName, duration), back).openMenu(player);
     }
 

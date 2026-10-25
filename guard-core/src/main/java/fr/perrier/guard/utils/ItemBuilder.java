@@ -125,8 +125,27 @@ public class ItemBuilder {
         return profile.getClass().getMethod("properties").invoke(profile);
     }
 
-    private static void reflectivePut(Object map, String key, Object value) throws Exception {
-        map.getClass().getMethod("put", Object.class, Object.class).invoke(map, key, value);
+    /**
+     * Ecrit (key,value) dans une collection de properties. Les implémentations serveur
+     * n'exposent PAS put(Object,Object) érasé (Paper : CraftPlayerProfile$PropertySet) —
+     * on cherche la signature réelle parmi les méthodes publiques (testé).
+     */
+    static void reflectivePut(Object map, String key, Object value) throws Exception {
+        try {
+            map.getClass().getMethod("put", Object.class, Object.class).invoke(map, key, value);
+            return;
+        } catch (NoSuchMethodException ignored) {
+        }
+        for (Method candidate : map.getClass().getMethods()) {
+            if ((candidate.getName().equals("put") || candidate.getName().equals("add"))
+                    && candidate.getParameterTypes().length == 2) {
+                candidate.setAccessible(true);
+                candidate.invoke(map, key, value);
+                return;
+            }
+        }
+        throw new NoSuchMethodException("aucune méthode put/add à 2 arguments sur "
+                + map.getClass().getName());
     }
 
     private static void reflectivePutTexture(Object propertyMap, String hash) throws Exception {

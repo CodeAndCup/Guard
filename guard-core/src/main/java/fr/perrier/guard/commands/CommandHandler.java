@@ -342,9 +342,9 @@ public class CommandHandler implements Listener {
         registerCommands(InventoryView.class);
         registerCommands(ModList.class);
         registerCommands(NoClip.class);
-        registerCommands(SS.class);
-        registerCommands(TP.class);
-        registerCommands(TPHere.class);
+        registerCommands(SanctionSet.class);
+        registerCommands(Teleport.class);
+        registerCommands(TeleportHere.class);
         registerCommands(Vanish.class);
         registerCommands(Xray.class);
         registerCommands(LookUp.class);

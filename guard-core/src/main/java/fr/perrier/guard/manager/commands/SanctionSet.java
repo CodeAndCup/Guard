@@ -11,7 +11,7 @@ import org.bukkit.event.*;
 
 import java.util.*;
 
-public class SS implements Listener {
+public class SanctionSet implements Listener {
 
     @Command(names = CommandsUtils.SS, perm = "guard.ss")
     public static void onSanctionSet(Player player, @Param(name = "Joueur", baseValue = "§", tabCompleteFlags = "players")String targetName) {

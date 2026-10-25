@@ -7,11 +7,11 @@ import fr.perrier.guard.utils.commands.CommandsUtils;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 
-public class TP {
+public class TeleportHere {
 
-    @Command(names = CommandsUtils.TP, perm = "guard.tp")
-    public static void onTP(Player player, @Param(name = "Player", tabCompleteFlags = "players")String starget) {
-        if(!Guard.getDefaultConfig().getBoolean("commands.teleport.active")) {
+    @Command(names = CommandsUtils.TPHERE, perm = "guard.tphere")
+    public static void onTPHere(Player player, @Param(name = "Player", tabCompleteFlags = "players")String starget) {
+        if(!Guard.getDefaultConfig().getBoolean("commands.teleporthere.active")) {
             Messages.send(player,Messages.COMMANDDISABLE);
             return;
         }
@@ -21,10 +21,10 @@ public class TP {
             return;
         }
         if(target.equals(player)) {
-            player.sendMessage(ChatUtil.translate("&eHerobrine joined the game"));
+            player.sendMessage(ChatUtil.prefix("&cOkkk.."));
             return;
         }
-        player.teleport(target.getLocation());
-        player.sendMessage(Messages.prefix() + ChatUtil.translate(Messages.COMMANDS_TELEPORT_CONFIRMATION.getMessage().replace("%target%",target.getName())));
+        target.teleport(player.getLocation());
+        player.sendMessage(ChatUtil.prefix(Messages.COMMANDS_TELEPORTHERE_CONFIRMATION.getMessage().replace("%target%",target.getName())));
     }
 }

@@ -7,6 +7,7 @@ import fr.perrier.guard.menu.GlassMenu;
 import fr.perrier.guard.menu.Menu;
 import fr.perrier.guard.menu.buttons.BackButton;
 import fr.perrier.guard.reports.Report;
+import fr.perrier.guard.reports.ReportCache;
 import fr.perrier.guard.reports.ReportStores;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
@@ -123,18 +124,22 @@ public class ReportDetailMenu extends GlassMenu {
     }
 
     private void resolve(Player staff, String outcome, String langKey) {
-        ReportStores.get().resolve(report.getId(), staff.getName(), outcome).whenComplete((nil, throwable) ->
-                Bukkit.getScheduler().runTask(Guard.getInstance(), () -> {
-                    if (throwable != null) {
-                        // le staff doit savoir si le resolve a échoué (sinon il croit avoir agi)
-                        staff.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
-                                .getString("menu.reports.resolve-failed", "&cÉchec du resolve (serveur ?), réessayez."))));
-                        throwable.printStackTrace();
-                        return;
-                    }
+        ReportStores.get().resolve(report.getId(), staff.getName(), outcome).whenComplete((nil, throwable) -> {
+            if (throwable == null) {
+                ReportCache.refreshAsync(); // rapports résolus : disparaissent de la file
+            }
+            Bukkit.getScheduler().runTask(Guard.getInstance(), () -> {
+                if (throwable != null) {
+                    // le staff doit savoir si le resolve a échoué (sinon il croit avoir agi)
                     staff.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
-                            .getString(langKey, "&aFait.")
-                            .replace("%id%", String.valueOf(report.getId())))));
-                }));
+                            .getString("menu.reports.resolve-failed", "&cÉchec du resolve (serveur ?), réessayez."))));
+                    throwable.printStackTrace();
+                    return;
+                }
+                staff.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
+                        .getString(langKey, "&aFait.")
+                        .replace("%id%", String.valueOf(report.getId())))));
+            });
+        });
     }
 }
