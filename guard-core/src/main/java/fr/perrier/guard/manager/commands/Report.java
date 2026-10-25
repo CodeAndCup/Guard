@@ -51,7 +51,14 @@ public class Report {
         fr.perrier.guard.reports.Report report = new fr.perrier.guard.reports.Report(0, reporter.getName(), target.getName(), safeReason,
                 Guard.getDefaultConfig().getString("network.server-name", "Serveur"),
                 System.currentTimeMillis(), fr.perrier.guard.reports.Report.STATUS_OPEN, null);
-        ReportStores.get().submit(report).thenAccept(saved -> {
+        ReportStores.get().submit(report).whenComplete((saved, throwable) -> {
+            if (throwable != null) {
+                // store injoignable (DB, IO) : sans ce message le staff croit le report parti
+                throwable.printStackTrace();
+                reporter.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
+                        .getString("commands.report.failed", "&cÉchec de l'envoi du report (voir console)."))));
+                return;
+            }
             ReportCooldown.remember(reporter.getUniqueId(), System.currentTimeMillis());
             reporter.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
                     .getString("commands.report.sent", "&aReport #%id% envoyé.")

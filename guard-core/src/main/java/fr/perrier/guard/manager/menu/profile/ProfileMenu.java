@@ -44,7 +44,7 @@ public class ProfileMenu extends Menu {
     }
 
     /** Réflexion : l'API ping change selon la version (1.21 = Player#getPing ; 1.8 = Player.Spigot#getPing). */
-    static int ping(Player p) {
+    public static int ping(Player p) {
         try {
             return ((Number) p.getClass().getMethod("getPing").invoke(p)).intValue();
         } catch (Exception ignored) {

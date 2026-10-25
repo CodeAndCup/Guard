@@ -41,13 +41,16 @@ public class PlayersMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player p0) {
+            // clés dédiées à la LISTE (menu.dashboard.players.item.*), pas celles de la tuile
             ItemBuilder item = new ItemBuilder(XMaterial.PLAYER_HEAD.parseItem())
                     .setSkullOwner(player.getDisplayName())
                     .setName(ChatUtil.translate(Guard.getLangConfig()
-                            .getString("menu.dashboard.players.name", "&f" + player.getName())
+                            .getString("menu.dashboard.players.item.name", "&f%player%")
                             .replace("%player%", player.getName())));
-            for (String lore : Guard.getLangConfig().getStringList("menu.dashboard.players.lore")) {
-                item.addLoreLine(ChatUtil.translate(lore.replace("%player%", player.getName())));
+            for (String lore : Guard.getLangConfig().getStringList("menu.dashboard.players.item.lore")) {
+                item.addLoreLine(ChatUtil.translate(lore
+                        .replace("%player%", player.getName())
+                        .replace("%ping%", String.valueOf(ProfileMenu.ping(player)))));
             }
             return item.toItemStack();
         }

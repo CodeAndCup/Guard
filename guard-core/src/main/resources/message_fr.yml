@@ -71,6 +71,7 @@ commands:
     report:
       usage: "&c/report #2EE6D6<joueur> <raison>"
       sent: "&aReport #%id% envoyé. Un modérateur va s'en occuper."
+      failed: "#2EE6D6&cÉchec de l'envoi du report — voir la console du serveur."
       cooldown: "&cAttendez encore %seconds% s avant un nouveau report."
       flash: "#2EE6D6[Report] &f%text%"
       xray-flash: "#2EE6D6[Guard] &f%text%"
@@ -137,12 +138,17 @@ lookup:
 #
 menu:
   dashboard:
-    title: "#0E6F7D&lGuard #fDashboard"
+    title: "#0E6F7D&lGuard &fDashboard"
     players:
       name: "#2EE6D6&lJoueurs"
       lore:
         - "&fJoueurs connectés."
         - "&8> &eCliquez-ici."
+      item:
+        name: "#2EE6D6&l%player%"
+        lore:
+          - "&fPing: %ping%"
+          - "&8> &eCliquez-ici pour le profil."
       title: "#0E6F7D&lJoueurs connectés"
     reports:
       name: "#2EE6D6&lReports"
@@ -179,6 +185,7 @@ menu:
   reports:
     title: "#0E6F7D&lReports"
     empty: "&fAucun report en attente."
+    store-error: "&cStore des reports injoignable — voir la console."
     accepted: "&aReport #%id% accepté."
     rejected: "&cReport #%id% rejeté."
     item:

@@ -117,7 +117,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setName(String name) {
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+        im.setDisplayName(ChatUtil.translate(name));
         is.setItemMeta(im);
         return this;
     }
@@ -214,7 +214,7 @@ public class ItemBuilder {
         ItemMeta im = is.getItemMeta();
         List<String> list = new ArrayList<>();
         for (String s : lore) {
-            list.add(ChatColor.translateAlternateColorCodes('&', s));
+            list.add(ChatUtil.translate(s));
         }
         im.setLore(list);
         is.setItemMeta(im);
@@ -230,7 +230,7 @@ public class ItemBuilder {
         ItemMeta im = is.getItemMeta();
         List<String> list = new ArrayList<>();
         for (String s : lore) {
-            list.add(ChatColor.translateAlternateColorCodes('&', s));
+            list.add(ChatUtil.translate(s));
         }
         im.setLore(list);
         is.setItemMeta(im);

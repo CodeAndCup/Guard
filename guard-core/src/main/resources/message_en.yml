@@ -71,6 +71,7 @@ commands:
     report:
       usage: "&c/report #2EE6D6<player> <reason>"
       sent: "&aReport #%id% sent. A moderator will handle it."
+      failed: "&cFailed to send the report — check the server console."
       cooldown: "&cWait %seconds% s before another report."
       flash: "#2EE6D6[Report] &f%text%"
       xray-flash: "#2EE6D6[Guard] &f%text%"
@@ -137,12 +138,17 @@ lookup:
 #
 menu:
   dashboard:
-    title: "#0E6F7D&lGuard #fDashboard"
+    title: "#0E6F7D&lGuard &fDashboard"
     players:
       name: "#2EE6D6&lPlayers"
       lore:
         - "&fConnected players."
         - "&8> &eClick here."
+      item:
+        name: "#2EE6D6&l%player%"
+        lore:
+          - "&fPing: %ping%"
+          - "&8> &eClick here for the profile."
       title: "#0E6F7D&lConnected players"
     reports:
       name: "#2EE6D6&lReports"
@@ -179,6 +185,7 @@ menu:
   reports:
     title: "#0E6F7D&lReports"
     empty: "&fNo pending report."
+    store-error: "&cReport store unreachable — check the console."
     accepted: "&aReport #%id% accepted."
     rejected: "&cReport #%id% rejected."
     item:

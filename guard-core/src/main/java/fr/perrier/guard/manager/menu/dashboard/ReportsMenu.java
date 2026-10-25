@@ -30,6 +30,7 @@ public class ReportsMenu extends PaginatedMenu {
 
     private List<Report> reports = new ArrayList<>();
     private String lastIds = "";
+    private boolean storeError;
 
     /** Pur : glyphe du statut (deterministe, inconnu → "?"). */
     public static String statusGlyph(String status) {
@@ -88,9 +89,11 @@ public class ReportsMenu extends PaginatedMenu {
         buttons.put(22, new Button() {
             @Override
             public ItemStack getButtonItem(Player p) {
+                String key = storeError ? "menu.reports.store-error" : "menu.reports.empty";
+                String def = storeError ? "&cStore injoignable (console)" : "&fAucun report";
                 return new ItemBuilder(XMaterial.PAPER.parseItem())
                         .setName(ChatUtil.translate(Guard.getLangConfig()
-                                .getString("menu.reports.empty", "&fAucun report")))
+                                .getString(key, def)))
                         .toItemStack();
             }
         });
@@ -104,11 +107,26 @@ public class ReportsMenu extends PaginatedMenu {
 
     @Override
     public void onOpen(Player player) {
-        ReportStores.get().listOpen().thenAccept(list -> Bukkit.getScheduler().runTask(Guard.getInstance(), () -> {
-            String ids = idsOf(list);
+        ReportStores.get().listOpen().whenComplete((list, throwable) -> Bukkit.getScheduler().runTask(Guard.getInstance(), () -> {
             if (!player.isOnline() || Menu.getCurrentlyOpenedMenus().get(player.getName()) != this) {
                 return; // menu fermé entre-temps : ne pas rouvrir à la décharge du async
             }
+            if (throwable != null) {
+                // store HS : on DIT que le store est en erreur (sinon l'écran vide est indistinguable d'un 0 report)
+                throwable.printStackTrace();
+                if (!storeError) {
+                    storeError = true;
+                    openMenu(player); // un seul re-rendu par erreur (sinon boucle onOpen → load)
+                }
+                return;
+            }
+            storeError = false;
+            if (list == null || list.isEmpty()) {
+                lastIds = "";
+                reports = new ArrayList<>();
+                return;
+            }
+            String ids = idsOf(list);
             if (ids.equals(lastIds)) {
                 return; // rien de neuf : pas de re-rendu (évite la boucle onOpen → load)
             }

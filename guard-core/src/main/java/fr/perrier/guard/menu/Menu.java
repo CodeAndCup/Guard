@@ -2,6 +2,7 @@ package fr.perrier.guard.menu;
 
 import com.cryptomorin.xseries.*;
 import fr.perrier.guard.Guard;
+import fr.perrier.guard.utils.ChatUtil;
 import lombok.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -89,9 +90,8 @@ public abstract class Menu {
         this.inventory = null;
         int size = (getSize() == -1) ? size(this.buttons) : getSize();
         boolean update = false;
-        String title = getTitle(player);
-        if (title.length() > 32)
-            title = title.substring(0, 32);
+        // limite 32 caractères VISIBLES : les couleurs § (hex §x§R§G§B = 14 chars) sont gratuites
+        String title = ChatUtil.truncateTitle(getTitle(player), ChatUtil.TITLE_LIMIT);
         if (player.getOpenInventory() != null)
             if (previousMenu == null) {
                 ButtonListener.onInventoryClose(player);
@@ -113,7 +113,10 @@ public abstract class Menu {
         for (Map.Entry<Integer, Button> buttonEntry : this.buttons.entrySet())
             try {
                 this.inventory.setItem(buttonEntry.getKey(), createItemStack(player, buttonEntry.getValue()));
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                // un bouton qui throw ne doit plus disparaître en silence : sans ce log,
+                // un slot vide sans stack trace est indiagnosticable en production
+                e.printStackTrace();
             }
         if (isPlaceholder())
             for (int index = 0; index < size; index++) {
