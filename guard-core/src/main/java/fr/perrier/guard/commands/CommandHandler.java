@@ -460,11 +460,32 @@ public class CommandHandler implements Listener {
         }
     }
 
-    @SneakyThrows
+    /**
+     * La command map du serveur, SANS deviner le nom du paquet CraftBukkit
+     * (org.bukkit.craftbukkit.&lt;version&gt; est mort sur Paper mojmap : ClassNotFoundException).
+     * On lit la classe RÉELLE du serveur — pattern CupCodeAPI (référence mainteneur).
+     */
     public static SimpleCommandMap getCommandMap() {
-        final Class<?> craftServerClass = Reflection.getOBCClass("CraftServer");
-        assert craftServerClass != null;
-        final Method getCommandMapMethod = craftServerClass.getMethod("getCommandMap");
-        return (SimpleCommandMap) getCommandMapMethod.invoke(craftServerClass.cast(Bukkit.getServer()), new Object[0]);
+        return readCommandMap(Bukkit.getServer());
+    }
+
+    /**
+     * Pur (testé) : champ privé "commandMap" d'abord (chemin 1.8→Paper), repli méthode publique.
+     */
+    static SimpleCommandMap readCommandMap(Object server) {
+        final Class<?> serverClass = server.getClass();
+        try {
+            final Field field = serverClass.getDeclaredField("commandMap");
+            field.setAccessible(true);
+            return (SimpleCommandMap) field.get(server);
+        } catch (Exception ignored) {
+        }
+        try {
+            final Method method = serverClass.getMethod("getCommandMap");
+            return (SimpleCommandMap) method.invoke(server);
+        } catch (Exception e) {
+            throw new IllegalStateException(
+                    "Guard: command map inaccessible sur ce serveur (" + serverClass.getName() + ")", e);
+        }
     }
 }
