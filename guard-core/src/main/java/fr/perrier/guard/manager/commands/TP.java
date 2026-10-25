@@ -10,7 +10,7 @@ import org.bukkit.entity.*;
 public class TP {
 
     @Command(names = CommandsUtils.TP, perm = "guard.tp")
-    public static void onTP(Player player, @Param(name = "Player")String starget) {
+    public static void onTP(Player player, @Param(name = "Player", tabCompleteFlags = "players")String starget) {
         if(!Guard.getDefaultConfig().getBoolean("commands.teleport.active")) {
             Messages.send(player,Messages.COMMANDDISABLE);
             return;

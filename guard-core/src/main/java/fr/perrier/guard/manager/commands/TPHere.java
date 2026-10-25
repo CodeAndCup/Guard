@@ -10,7 +10,7 @@ import org.bukkit.entity.*;
 public class TPHere {
 
     @Command(names = CommandsUtils.TPHERE, perm = "guard.tphere")
-    public static void onTPHere(Player player, @Param(name = "Player")String starget) {
+    public static void onTPHere(Player player, @Param(name = "Player", tabCompleteFlags = "players")String starget) {
         if(!Guard.getDefaultConfig().getBoolean("commands.teleporthere.active")) {
             Messages.send(player,Messages.COMMANDDISABLE);
             return;

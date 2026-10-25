@@ -8,6 +8,7 @@ import fr.perrier.guard.menu.pagination.PaginatedMenu;
 import fr.perrier.guard.reports.Report;
 import fr.perrier.guard.reports.ReportStores;
 import fr.perrier.guard.utils.ChatUtil;
+import fr.perrier.guard.utils.Heads;
 import fr.perrier.guard.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -157,10 +158,10 @@ public class ReportsMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player p0) {
-            ItemBuilder item = new ItemBuilder(XMaterial.PLAYER_HEAD.parseItem())
-                    .setSkullOwner(report.getReported())
+            ItemBuilder item = new ItemBuilder(Heads.skullOf(report.getReported()))
                     .setName(ChatUtil.translate(Guard.getLangConfig()
                             .getString("menu.reports.item.name", "&f" + report.getReported())
+                            .replace("%id%", String.valueOf(report.getId()))
                             .replace("%reported%", safe(report.getReported()))
                             .replace("%reporter%", safe(report.getReporter()))));
             List<String> template = Guard.getLangConfig().getStringList("menu.reports.item.lore");

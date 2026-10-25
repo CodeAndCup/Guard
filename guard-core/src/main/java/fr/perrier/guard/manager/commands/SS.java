@@ -14,7 +14,7 @@ import java.util.*;
 public class SS implements Listener {
 
     @Command(names = CommandsUtils.SS, perm = "guard.ss")
-    public static void onSanctionSet(Player player, @Param(name = "Joueur", baseValue = "§")String targetName) {
+    public static void onSanctionSet(Player player, @Param(name = "Joueur", baseValue = "§", tabCompleteFlags = "players")String targetName) {
         if(!Guard.getDefaultConfig().getBoolean("commands.sanctionset.active")) {
             Messages.send(player,Messages.COMMANDDISABLE);
             return;

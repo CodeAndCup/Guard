@@ -13,7 +13,7 @@ public class InventoryView {
 
 
     @Command(names = CommandsUtils.INVENTORY_VIEW, perm = "guard.inventory")
-    public static void onInventoryView(Player player, @Param(name = "Player")String starget, @Param(name = "type", baseValue = "inv")String type) {
+    public static void onInventoryView(Player player, @Param(name = "Player", tabCompleteFlags = "players")String starget, @Param(name = "type", baseValue = "inv")String type) {
         if(!Guard.getDefaultConfig().getBoolean("commands.inventory.active")) {
             Messages.send(player,Messages.COMMANDDISABLE);
             return;

@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 public class Report {
 
     @Command(names = CommandsUtils.REPORT, perm = "")
-    public static void onReport(Player reporter, @Param(name = "target") String starget,
+    public static void onReport(Player reporter, @Param(name = "target", tabCompleteFlags = "players") String starget,
                                 @Param(name = "raison", wildcard = true, baseValue = "\u00A7") String reason) {
         if (!Guard.getDefaultConfig().getBoolean("commands.report.active", true)) {
             Messages.send(reporter, Messages.COMMANDDISABLE);

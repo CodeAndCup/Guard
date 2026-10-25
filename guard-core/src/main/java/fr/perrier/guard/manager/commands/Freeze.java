@@ -15,7 +15,7 @@ import java.util.*;
 public class Freeze {
 
     @Command(names = CommandsUtils.FREEZE, perm = "guard.freeze")
-    public static void onFreeze(Player player, @Param(name = "target")String starget) {
+    public static void onFreeze(Player player, @Param(name = "target", tabCompleteFlags = "players")String starget) {
         if(!Guard.getDefaultConfig().getBoolean("commands.freeze.active")) {
             Messages.send(player,Messages.COMMANDDISABLE);
             return;

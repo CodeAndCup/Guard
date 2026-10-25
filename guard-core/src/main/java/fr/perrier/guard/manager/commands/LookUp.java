@@ -19,7 +19,7 @@ import java.util.AbstractMap;
 public class LookUp {
 
     @Command(names = CommandsUtils.LOOKUP, perm = "guard.lookup")
-    public static void onLookUP(Player player, @Param(name = "Player")String starget) {
+    public static void onLookUP(Player player, @Param(name = "Player", tabCompleteFlags = "players")String starget) {
         if(!Guard.getDefaultConfig().getBoolean("commands.lookup.active")) {
             Messages.send(player,Messages.COMMANDDISABLE);
             return;

@@ -17,7 +17,7 @@ public class Cps {
     public static HashMap<UUID, Double> saveD = new HashMap<UUID,Double>();
 
     @Command(names = CommandsUtils.CPS, perm = "guard.cps")
-    public static void onCPS(Player player, @Param(name = "target")String starget, @Param(name = "check", baseValue = "0")String scheck) {
+    public static void onCPS(Player player, @Param(name = "target", tabCompleteFlags = "players")String starget, @Param(name = "check", baseValue = "0")String scheck) {
         if(!Guard.getDefaultConfig().getBoolean("commands.cps.active")) {
             Messages.send(player,Messages.COMMANDDISABLE);
             return;
