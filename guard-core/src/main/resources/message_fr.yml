@@ -185,7 +185,8 @@ menu:
   reports:
     title: "#0E6F7D&lReports"
     empty: "&fAucun report en attente."
-    store-error: "&cStore des reports injoignable — voir la console."
+    store-error: "&cStore des reports injoignable - voir la console."
+    resolve-failed: "&cÉchec du resolve (store ?) — voir la console du serveur."
     accepted: "&aReport #%id% accepté."
     rejected: "&cReport #%id% rejeté."
     item:

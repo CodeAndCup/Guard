@@ -186,6 +186,7 @@ menu:
     title: "#0E6F7D&lReports"
     empty: "&fNo pending report."
     store-error: "&cReport store unreachable — check the console."
+    resolve-failed: "&cResolve failed (store ?) — check the server console."
     accepted: "&aReport #%id% accepted."
     rejected: "&cReport #%id% rejected."
     item:
