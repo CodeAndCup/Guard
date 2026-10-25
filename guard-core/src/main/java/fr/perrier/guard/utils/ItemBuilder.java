@@ -92,7 +92,11 @@ public class ItemBuilder {
      * @param hash the head hash
      */
     public ItemBuilder setTexture(String hash) {
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        if (hash == null || hash.isEmpty()) {
+            return this; // rien à appliquer : on ne crée pas de profil vide (NPE authlib sur les versions récentes)
+        }
+        // nom de profil non-null obligatoire (authlib) ; seul le hash texture compte pour l'affichage
+        GameProfile profile = new GameProfile(UUID.randomUUID(), "guard-head");
         PropertyMap propertyMap = profile.getProperties();
         propertyMap.put("textures", new Property("textures", hash));
         SkullMeta skullMeta = (SkullMeta) this.is.getItemMeta();

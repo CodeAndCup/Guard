@@ -5,9 +5,8 @@ import fr.perrier.guard.Guard;
 import fr.perrier.guard.manager.menu.moderation.Parametres;
 import fr.perrier.guard.manager.menu.xray.XrayMenu;
 import fr.perrier.guard.menu.Button;
-import fr.perrier.guard.menu.Menu;
+import fr.perrier.guard.menu.GlassMenu;
 import fr.perrier.guard.menu.buttons.ConversationButton;
-import fr.perrier.guard.menu.buttons.Glass;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
 import org.bukkit.conversations.ConversationContext;
@@ -20,9 +19,9 @@ import java.util.Map;
 
 /**
  * Tuile Outils : X-Ray / LookUp / Parametres — wiring pur vers les menus et la commande existants,
- * aucune nouvelle logique. LookUp sans cible = saisie du pseudo par conversation, puis la commande existante.
+ * aucune nouvelle logique. Cadre glass via GlassMenu (pattern documenté de la lib).
  */
-public class ToolsMenu extends Menu {
+public class ToolsMenu extends GlassMenu {
 
     @Override
     public String getTitle(Player player) {
@@ -30,7 +29,12 @@ public class ToolsMenu extends Menu {
     }
 
     @Override
-    public Map<Integer, Button> getButtons(Player player) {
+    public int getGlassColor() {
+        return 9;
+    }
+
+    @Override
+    public Map<Integer, Button> getAllButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
         // X-Ray : le menu existant, caché si pas de perm
@@ -48,6 +52,7 @@ public class ToolsMenu extends Menu {
                 }
             });
         }
+
         // LookUp : la commande existante, cible saisie par conversation
         if (player.hasPermission("guard.lookup")) {
             ItemStack item = tile(XMaterial.PAPER, "lookup");
@@ -59,7 +64,8 @@ public class ToolsMenu extends Menu {
                         staff.performCommand(cmdName + " " + pair.getRight().trim());
                     }));
         }
-        // Parametres : menu existant (no perm — réglages perso)
+
+        // Parametres : menu existant (pas de perm — réglages perso)
         buttons.put(15, new Button() {
             @Override
             public ItemStack getButtonItem(Player p) {
@@ -73,17 +79,7 @@ public class ToolsMenu extends Menu {
             }
         });
 
-        for (int i = 0; i < getSize(); i++) {
-            if (!buttons.containsKey(i)) {
-                buttons.put(i, new Glass(15));
-            }
-        }
         return buttons;
-    }
-
-    @Override
-    public int getSize() {
-        return 27;
     }
 
     private ItemStack tile(XMaterial material, String key) {

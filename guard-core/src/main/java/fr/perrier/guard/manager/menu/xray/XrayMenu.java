@@ -1,8 +1,10 @@
 package fr.perrier.guard.manager.menu.xray;
 
 import com.cryptomorin.xseries.XMaterial;
+import fr.perrier.guard.manager.menu.dashboard.DashboardMenu;
 import fr.perrier.guard.manager.xray.XrayPlayer;
 import fr.perrier.guard.menu.Button;
+import fr.perrier.guard.menu.Menu;
 import fr.perrier.guard.menu.pagination.PaginatedMenu;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
@@ -21,6 +23,11 @@ public class XrayMenu extends PaginatedMenu {
     @Override
     public String getPrePaginatedTitle(Player p0) {
         return Messages.MENU_XRAY_TITLE.getMessage();
+    }
+
+    @Override
+    public Menu backButton() {
+        return new DashboardMenu(); // retour vers le dashboard (atteint depuis Outils ou /xray)
     }
 
     @Override

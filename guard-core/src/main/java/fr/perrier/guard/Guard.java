@@ -112,6 +112,9 @@ public class Guard extends JavaPlugin {
 
         menuAPI = new MenuAPI(instance);
         commandHandler = new CommandHandler(this);
+        // types de paramètres (transform + tab completion) : sans ce hook, les commandes
+        // à paramètre non-String NPE et aucune complétion de paramètre ne fonctionne
+        commandHandler.hook();
 
         loadCommands();
         loadListener();

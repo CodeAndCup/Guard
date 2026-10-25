@@ -7,8 +7,7 @@ import fr.perrier.guard.manager.commands.NoClip;
 import fr.perrier.guard.manager.commands.StaffChat;
 import fr.perrier.guard.manager.commands.Vanish;
 import fr.perrier.guard.menu.Button;
-import fr.perrier.guard.menu.Menu;
-import fr.perrier.guard.menu.buttons.Glass;
+import fr.perrier.guard.menu.GlassMenu;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
 import fr.perrier.guard.utils.Messages;
@@ -23,9 +22,9 @@ import java.util.Map;
 
 /**
  * Dashboard /guard : 4 tuiles (Joueurs / Reports / Modération / Outils).
- * Contenu 100% piloté par les clés lang menu.dashboard.* (clés garanties au boot par LangMigrator).
+ * Cadre glass posé par GlassMenu (pattern documenté de la lib) — contenu piloté par les clés lang.
  */
-public class DashboardMenu extends Menu {
+public class DashboardMenu extends GlassMenu {
 
     public static final int SLOT_PLAYERS = 10;
     public static final int SLOT_REPORTS = 12;
@@ -50,11 +49,16 @@ public class DashboardMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return lang("title", "&2&lGuard");
+        return ChatUtil.translate(Guard.getLangConfig().getString("menu.dashboard.title", "&2&lGuard"));
     }
 
     @Override
-    public Map<Integer, Button> getButtons(Player player) {
+    public int getGlassColor() {
+        return 9; // cyan — palette B
+    }
+
+    @Override
+    public Map<Integer, Button> getAllButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
         buttons.put(SLOT_PLAYERS, new Button() {
@@ -113,11 +117,6 @@ public class DashboardMenu extends Menu {
             }
         });
 
-        for (int i = 0; i < getSize(); i++) {
-            if (!buttons.containsKey(i)) {
-                buttons.put(i, new Glass(15));
-            }
-        }
         return buttons;
     }
 
@@ -132,7 +131,7 @@ public class DashboardMenu extends Menu {
 
     @Override
     public int getSize() {
-        return 27;
+        return 27; // 3 rangées : les tuiles 10/12/14/16 restent hors des slots de bordure
     }
 
     static String lang(String key, String def) {
@@ -149,7 +148,7 @@ public class DashboardMenu extends Menu {
     }
 
     /** Sous-menu Modération : les mêmes actions que les commandes existantes (aucune duplication), cachées selon la perm. */
-    public static class ModerationMenu extends Menu {
+    public static class ModerationMenu extends GlassMenu {
 
         @Override
         public String getTitle(Player player) {
@@ -157,17 +156,17 @@ public class DashboardMenu extends Menu {
         }
 
         @Override
-        public Map<Integer, Button> getButtons(Player player) {
+        public int getGlassColor() {
+            return 9;
+        }
+
+        @Override
+        public Map<Integer, Button> getAllButtons(Player player) {
             Map<Integer, Button> buttons = new HashMap<>();
             put(buttons, player, 10, XMaterial.SPIDER_EYE, "vanish", "guard.vanish", () -> Vanish.onVanish(player));
             put(buttons, player, 12, XMaterial.PAPER, "chatlock", "guard.chatlock", () -> ChatLock.onChatLock(player));
             put(buttons, player, 14, XMaterial.OAK_SIGN, "staffchat", "guard.staffchat", () -> StaffChat.onStaffChat(player));
             put(buttons, player, 16, XMaterial.BARRIER, "noclip", "guard.noclip", () -> NoClip.onNoClip(player));
-            for (int i = 0; i < getSize(); i++) {
-                if (!buttons.containsKey(i)) {
-                    buttons.put(i, new Glass(15));
-                }
-            }
             return buttons;
         }
 

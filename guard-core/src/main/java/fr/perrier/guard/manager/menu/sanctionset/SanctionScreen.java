@@ -35,6 +35,9 @@ import java.util.Map;
 public class SanctionScreen extends Menu {
 
     private static final List<String> ALL_CATEGORIES = Arrays.asList("Mute", "Warn", "Ban");
+    /** Slots de bordure d'un inventaire 45 (meme set que GlassMenu) : filtres/raisons/back les evitant. */
+    private static final java.util.Set<Integer> BORDER_45 =
+            new java.util.LinkedHashSet<>(Arrays.asList(0, 1, 7, 8, 9, 17, 27, 35, 36, 37, 43, 44));
 
     /** Pur : catégories présentes (Mute/Warn/Ban dans cet ordre), absente si section lang manquante. */
     public static List<String> categories(FileConfiguration lang) {
@@ -117,7 +120,7 @@ public class SanctionScreen extends Menu {
         final String current = visible.contains(selected) ? selected : (visible.isEmpty() ? null : visible.get(0));
 
         // filtres (rangée du haut), catégorie active marquée en palette flash
-        int filterSlot = 1;
+        int filterSlot = 2;
         for (final String cat : visible) {
             final boolean active = cat.equals(current);
             buttons.put(filterSlot, new Button() {
@@ -133,14 +136,19 @@ public class SanctionScreen extends Menu {
                 public void clicked(Player p, int slot, ClickType clickType, int hotbarButton) {
                     selected = cat;
                 }
+
+                @Override
+                public boolean shouldUpdate(Player p, int slot, ClickType clickType) {
+                    return true; // sans ça, changer de catégorie ne re-rendait pas le menu (aucun effet visible)
+                }
             });
-            filterSlot += 2;
+            filterSlot++;
         }
 
         // toggle durée personnalisée
         if (current != null) {
             final String category = current;
-            buttons.put(7, new Button() {
+            buttons.put(6, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player p) {
                     String key = customDuration ? "toggle.on" : "toggle.off";
@@ -154,16 +162,25 @@ public class SanctionScreen extends Menu {
                 public void clicked(Player p, int slot, ClickType clickType, int hotbarButton) {
                     customDuration = !customDuration;
                 }
+
+                @Override
+                public boolean shouldUpdate(Player p, int slot, ClickType clickType) {
+                    return true; // re-render pour refleter le nouvel etat du toggle
+                }
             });
 
             // raisons de la catégorie active, itérées depuis les clés lang
             final Menu back = oldMenu != null ? oldMenu : new SelectPlayerSS();
-            int reasonSlot = 9;
+            int reasonSlot = 19;
             for (final String key : reasons(Guard.getLangConfig(), category)) {
                 final String name = reasonName(Guard.getLangConfig(), category, key);
                 final String duration = reasonDuration(Guard.getLangConfig(), category, key);
-                if (reasonSlot >= getSize() - 1) {
-                    break; // 1 page v1 ; pagination si ça déborde (short-cut: raisons <= 26, monter en PaginatedMenu si besoin)
+                if (BORDER_45.contains(reasonSlot)) {
+                    reasonSlot++; // slot réservé à la bordure
+                    continue;
+                }
+                if (reasonSlot >= getSize() - 4) {
+                    break; // 1 page v1 ; pagination si ça déborde (monter en PaginatedMenu si besoin)
                 }
                 buttons.put(reasonSlot++, new Button() {
                     @Override
@@ -186,13 +203,14 @@ public class SanctionScreen extends Menu {
                 });
             }
 
-            // back
-            buttons.put(0, new BackButton(back));
+            // back hors bordure
+            buttons.put(41, new BackButton(back));
         }
 
-        for (int i = 0; i < getSize(); i++) {
+        // bordure seule (pattern glass de la lib) — plus de remplissage integral
+        for (int i : new int[]{0, 1, 7, 8, 9, 17, 27, 35, 36, 37, 43, 44}) {
             if (!buttons.containsKey(i)) {
-                buttons.put(i, new Glass(14));
+                buttons.put(i, new Glass(9));
             }
         }
         return buttons;

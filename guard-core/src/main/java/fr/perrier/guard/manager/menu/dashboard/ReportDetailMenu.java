@@ -3,9 +3,9 @@ package fr.perrier.guard.manager.menu.dashboard;
 import com.cryptomorin.xseries.XMaterial;
 import fr.perrier.guard.Guard;
 import fr.perrier.guard.menu.Button;
+import fr.perrier.guard.menu.GlassMenu;
 import fr.perrier.guard.menu.Menu;
 import fr.perrier.guard.menu.buttons.BackButton;
-import fr.perrier.guard.menu.buttons.Glass;
 import fr.perrier.guard.reports.Report;
 import fr.perrier.guard.reports.ReportStores;
 import fr.perrier.guard.utils.ChatUtil;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /** Détail d'un report : récap + Accepter (tp au signalé + ACCEPTED) / Rejeter (REJECTED). Boutons à coup unique. */
-public class ReportDetailMenu extends Menu {
+public class ReportDetailMenu extends GlassMenu {
 
     private final Report report;
     private final Menu back;
@@ -40,7 +40,12 @@ public class ReportDetailMenu extends Menu {
     }
 
     @Override
-    public Map<Integer, Button> getButtons(Player player) {
+    public int getGlassColor() {
+        return 9;
+    }
+
+    @Override
+    public Map<Integer, Button> getAllButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
         // récap (tête du signalé)
@@ -97,18 +102,9 @@ public class ReportDetailMenu extends Menu {
             }
         });
 
-        buttons.put(26, new BackButton(back));
-        for (int i = 0; i < getSize(); i++) {
-            if (!buttons.containsKey(i)) {
-                buttons.put(i, new Glass(15));
-            }
-        }
+        // back hors des slots de bordure ({...,25,26})
+        buttons.put(24, new BackButton(back));
         return buttons;
-    }
-
-    @Override
-    public int getSize() {
-        return 27;
     }
 
     private List<String> guardTemplate() {

@@ -26,9 +26,13 @@ public final class ReportStores {
     }
 
     public static ReportStore create() {
+        ReportStore store;
         if (DatabaseManager.isEnabled() && Guard.getInstance().getDbManager() != null) {
-            return new MySqlReportStore(Guard.getInstance().getDbManager());
+            store = new MySqlReportStore(Guard.getInstance().getDbManager());
+        } else {
+            store = new YamlReportStore(new File(Guard.getInstance().getDataFolder(), "reports.yml"));
         }
-        return new YamlReportStore(new File(Guard.getInstance().getDataFolder(), "reports.yml"));
+        Guard.getInstance().getLogger().info("[Reports] store: " + store.getClass().getSimpleName());
+        return store;
     }
 }

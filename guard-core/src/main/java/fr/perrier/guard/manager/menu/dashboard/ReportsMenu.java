@@ -111,6 +111,9 @@ public class ReportsMenu extends PaginatedMenu {
             if (!player.isOnline() || Menu.getCurrentlyOpenedMenus().get(player.getName()) != this) {
                 return; // menu fermé entre-temps : ne pas rouvrir à la décharge du async
             }
+            // instrumentation support : distinguer "0 report" de "store HS" en console
+            Guard.getInstance().getLogger().info("[Reports] " + player.getName() + " → listOpen: "
+                    + (throwable != null ? "ERREUR " + throwable : (list == null ? 0 : list.size()) + " ouvert(s)"));
             if (throwable != null) {
                 // store HS : on DIT que le store est en erreur (sinon l'écran vide est indistinguable d'un 0 report)
                 throwable.printStackTrace();

@@ -90,8 +90,8 @@ public abstract class Menu {
         this.inventory = null;
         int size = (getSize() == -1) ? size(this.buttons) : getSize();
         boolean update = false;
-        // limite 32 caractères VISIBLES : les couleurs § (hex §x§R§G§B = 14 chars) sont gratuites
-        String title = ChatUtil.truncateTitle(getTitle(player), ChatUtil.TITLE_LIMIT);
+        // titre traduit (les vieux menus passent des #hex via Messages) puis tronqué en caractères VISIBLES
+        String title = ChatUtil.truncateTitle(ChatUtil.translate(getTitle(player)), ChatUtil.TITLE_LIMIT);
         if (player.getOpenInventory() != null)
             if (previousMenu == null) {
                 ButtonListener.onInventoryClose(player);

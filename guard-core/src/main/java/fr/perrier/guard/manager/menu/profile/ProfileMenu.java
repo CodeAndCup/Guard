@@ -8,9 +8,9 @@ import fr.perrier.guard.manager.menu.dashboard.ReportsMenu;
 import fr.perrier.guard.manager.menu.moderation.ViewInventoryMenu;
 import fr.perrier.guard.manager.menu.sanctionset.SanctionScreen;
 import fr.perrier.guard.menu.Button;
+import fr.perrier.guard.menu.GlassMenu;
 import fr.perrier.guard.menu.Menu;
 import fr.perrier.guard.menu.buttons.BackButton;
-import fr.perrier.guard.menu.buttons.Glass;
 import fr.perrier.guard.reports.Report;
 import fr.perrier.guard.reports.ReportStores;
 import fr.perrier.guard.utils.ChatUtil;
@@ -31,7 +31,7 @@ import java.util.Map;
  * SANCTIONS → SanctionScreen, INVENTORY → ViewInventoryMenu, HISTORY → sous-menu reports filtrés.
  * Toute action re-vérifie que la cible est encore en ligne (menu.profile.offline sinon).
  */
-public class ProfileMenu extends Menu {
+public class ProfileMenu extends GlassMenu {
 
     public static final String TAB_SANCTIONS = "SANCTIONS";
     public static final String TAB_INVENTORY = "INVENTORY";
@@ -82,10 +82,15 @@ public class ProfileMenu extends Menu {
     }
 
     @Override
-    public Map<Integer, Button> getButtons(Player player) {
+    public int getGlassColor() {
+        return 9; // cyan — palette B (avant : remplissage intégral en glass gris 15)
+    }
+
+    @Override
+    public Map<Integer, Button> getAllButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        int slot = 1;
+        int slot = 2; // 1 et 7 sont des slots de bordure GlassMenu : les onglets commencent à 2
         for (final String tab : tabs()) {
             final int s = slot;
             buttons.put(s, new Button() {
@@ -102,17 +107,16 @@ public class ProfileMenu extends Menu {
                     openTab(p, tab);
                 }
             });
-            slot += 2;
+            slot++;
         }
-
-        // onglet INFO : tête de la cible (ping, adresse, brand client) + session CPS
         buttons.put(13, new Button() {
             @Override
             public ItemStack getButtonItem(Player p) {
                 ItemBuilder item = new ItemBuilder(XMaterial.PLAYER_HEAD.parseItem())
                         .setSkullOwner(target.getName())
                         .setName(ChatUtil.translate(Guard.getLangConfig()
-                                .getString("menu.profile.info.name", "&f" + target.getName())));
+                                .getString("menu.profile.info.name", "&f%target%")
+                                .replace("%target%", target.getName())));
                 int ping = ping(target);
                 String brand = PluginMessage.brandOf(target);
                 String pingText = ping < 0 ? "&7?" : pingColor(ping) + String.valueOf(ping);
@@ -141,17 +145,8 @@ public class ProfileMenu extends Menu {
             }
         });
 
-        for (int i = 0; i < getSize(); i++) {
-            if (!buttons.containsKey(i)) {
-                buttons.put(i, new Glass(15));
-            }
-        }
+        // le cadre glass est pose par GlassMenu (pattern documenté de la lib) — pas de remplissage intégral
         return buttons;
-    }
-
-    @Override
-    public int getSize() {
-        return 27;
     }
 
     private void openTab(Player staff, String tab) {
@@ -191,8 +186,8 @@ public class ProfileMenu extends Menu {
         }
     }
 
-    /** Onget Historique : reports OPEN signalant la cible (source = store, pas de DB v1) + rappel CPS en tête. */
-    public class HistoryMenu extends Menu {
+    /** Onglet Historique : reports OPEN signalant la cible (source = store, pas de DB v1). */
+    public class HistoryMenu extends GlassMenu {
 
         private List<Report> reports = new ArrayList<>();
         private String lastIds = "";
@@ -205,10 +200,15 @@ public class ProfileMenu extends Menu {
         }
 
         @Override
-        public Map<Integer, Button> getButtons(Player player) {
+        public int getGlassColor() {
+            return 9;
+        }
+
+        @Override
+        public Map<Integer, Button> getAllButtons(Player player) {
             Map<Integer, Button> buttons = new HashMap<>();
 
-            int slot = 9;
+            int slot = 10; // 9 = slot de bordure GlassMenu
             for (final Report report : reports) {
                 if (slot >= getSize()) {
                     break;
@@ -236,18 +236,9 @@ public class ProfileMenu extends Menu {
                 });
             }
 
-            buttons.put(26, new BackButton(ProfileMenu.this));
-            for (int i = 0; i < getSize(); i++) {
-                if (!buttons.containsKey(i)) {
-                    buttons.put(i, new Glass(15));
-                }
-            }
+            // back hors des slots de bordure ({...,25,26})
+            buttons.put(22, new BackButton(ProfileMenu.this));
             return buttons;
-        }
-
-        @Override
-        public int getSize() {
-            return 27;
         }
 
         @Override
