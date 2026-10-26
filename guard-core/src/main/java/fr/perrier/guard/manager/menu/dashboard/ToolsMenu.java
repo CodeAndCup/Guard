@@ -33,6 +33,12 @@ public class ToolsMenu extends GlassMenu {
         return 9;
     }
 
+    /** 27 slots : bordure GlassMenu {0,1,7,8,9,17,18,19,25,26}, tuiles centrées en rangée 2 (11/13/15). */
+    @Override
+    public int getSize() {
+        return 27;
+    }
+
     @Override
     public Map<Integer, Button> getAllButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();

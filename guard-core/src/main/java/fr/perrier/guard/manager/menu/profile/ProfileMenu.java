@@ -26,8 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Profil joueur à onglets. Onglet INFO rendu ici (tête/ping/adresse/brand/CPS) ;
- * SANCTIONS → SanctionScreen, INVENTORY → ViewInventoryMenu, HISTORY → reports de la cible.
+ * Profil joueur : tête au centre (ping/adresse/brand), 3 onglets centrés en haut,
+ * CPS centré en bas. SANCTIONS → SanctionScreen, INVENTORY → ViewInventoryMenu,
+ * HISTORY → reports de la cible. L'onglet INFO est retiré : son « clic » ne faisait
+ * rien (l'info est déjà rendue par la tête du centre) — c'était un bouton mort.
  * Toute action re-vérifie que la cible est encore en ligne (menu.profile.offline sinon).
  */
 public class ProfileMenu extends GlassMenu {
@@ -35,11 +37,10 @@ public class ProfileMenu extends GlassMenu {
     public static final String TAB_SANCTIONS = "SANCTIONS";
     public static final String TAB_INVENTORY = "INVENTORY";
     public static final String TAB_HISTORY = "HISTORY";
-    public static final String TAB_INFO = "INFO";
 
     /** Pur : ordre d'affichage des onglets, fixe. */
     public static List<String> tabs() {
-        return Arrays.asList(TAB_SANCTIONS, TAB_INVENTORY, TAB_HISTORY, TAB_INFO);
+        return Arrays.asList(TAB_SANCTIONS, TAB_INVENTORY, TAB_HISTORY);
     }
 
     /** Réflexion : l'API ping change selon la version (1.21 = Player#getPing ; 1.8 = Player.Spigot#getPing). */
@@ -85,11 +86,17 @@ public class ProfileMenu extends GlassMenu {
         return 9; // cyan — palette B (avant : remplissage intégral en glass gris 15)
     }
 
+    /** 27 slots : bordure GlassMenu {0,1,7,8,9,17,18,19,25,26} ; utile = 2-6 / 10-16 / 20-24. */
+    @Override
+    public int getSize() {
+        return 27;
+    }
+
     @Override
     public Map<Integer, Button> getAllButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        int slot = 2; // 1 et 7 sont des slots de bordure GlassMenu : les onglets commencent à 2
+        int slot = 3; // onglets centrés en rangée 1 (utile 2-6 : 3,4,5)
         for (final String tab : tabs()) {
             buttons.put(slot, new Button() {
                 @Override
@@ -122,7 +129,8 @@ public class ProfileMenu extends GlassMenu {
                         .toItemStack();
             }
         });
-        buttons.put(21, new Button() {
+        // CPS centré en rangée 3 (utile 20-24 : centre = 22)
+        buttons.put(22, new Button() {
             @Override
             public ItemStack getButtonItem(Player p) {
                 Double left = Cps.saveG.get(target.getUniqueId());

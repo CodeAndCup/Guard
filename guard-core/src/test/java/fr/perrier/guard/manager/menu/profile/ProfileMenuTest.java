@@ -11,7 +11,7 @@ public class ProfileMenuTest {
 
     @Test
     public void tabOrderIsFixed() {
-        assertEquals(Arrays.asList("SANCTIONS", "INVENTORY", "HISTORY", "INFO"), ProfileMenu.tabs());
+        assertEquals(Arrays.asList("SANCTIONS", "INVENTORY", "HISTORY"), ProfileMenu.tabs());
     }
 
     @Test
