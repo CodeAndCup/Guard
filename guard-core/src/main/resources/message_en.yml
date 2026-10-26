@@ -205,6 +205,16 @@ menu:
         - "&fX-Ray, LookUp, Settings."
         - "&8> &eClick here."
   reports:
+    filter:
+      name: "#2EE6D6&lFilter &f: %filter%"
+      lore:
+        - "&8> &eClick to cycle."
+    sort:
+      name: "#2EE6D6&lSort &f: %sort%"
+      lore:
+        - "&8> &eClick to cycle."
+    onlymine:
+      name: "#2EE6D6&lMy reports &f: %state%"
     title: "#0E6F7D&lReports"
     empty: "&fNo pending report."
     store-error: "&cReport store unreachable — check the console."

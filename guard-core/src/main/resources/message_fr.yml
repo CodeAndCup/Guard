@@ -222,6 +222,16 @@ menu:
         - "&fX-Ray, LookUp, Paramètres."
         - "&8> &eCliquez-ici."
   reports:
+    filter:
+      name: "#2EE6D6&lFiltre &f: %filter%"
+      lore:
+        - "&8> &eClique pour changer."
+    sort:
+      name: "#2EE6D6&lTri &f: %sort%"
+      lore:
+        - "&8> &eClique pour changer."
+    onlymine:
+      name: "#2EE6D6&lMes rapports &f: %state%"
     title: "#0E6F7D&lReports"
     empty: "&fAucun report en attente."
     store-error: "&cStore des reports injoignable - voir la console."
