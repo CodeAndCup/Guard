@@ -75,10 +75,19 @@ public class ReportFlash {
         String rendered = ChatUtil.translate(Guard.getLangConfig().getString(langKey,
                 "&b[Guard] &f" + text).replace("%text%", text));
         for (Player staff : Bukkit.getOnlinePlayers()) {
-            if (staff.hasPermission(perm)) {
+            // perm OU (pas la perm notify et désabonné) → pas de flash : le toggle réseau s'applique
+            // aussi à la réception, pas seulement aux événements locaux
+            if (staff.hasPermission(perm) && wantsNotifications(staff)) {
                 staff.sendMessage(rendered);
             }
         }
+    }
+
+    /** Vrai si ce staff veut recevoir les alertes (désinscription via /reports off).
+     *  SANS la permission guard.reports.notify : reçoit quoi qu'il arrive (anti-accident). */
+    private static boolean wantsNotifications(Player staff) {
+        return ReportNotifications.wantsNotifications(staff.getUniqueId(),
+                !staff.hasPermission("guard.reports.notify"));
     }
 
     private static void applyFreeze(String targetName, boolean freeze) {

@@ -136,6 +136,35 @@ lookup:
 #
 # Menu message configuration
 #
+reports:
+  refus:
+    self: "&cYou cannot report yourself."
+    immune: "&cThis player cannot be reported."
+    offline: "&cThis player must be online to be reported."
+    limit: "&cYou have too many pending reports."
+    cooldown: "&cWait %seconds% s before reporting again."
+    target-cooldown: "&cThis player was just reported, try again later."
+  reasons:
+    cheat:
+      name: "Cheating / Hacked Client"
+    toxic:
+      name: "Harassment"
+    grief:
+      name: "Griefing"
+    spam:
+      name: "Spam / Advertising"
+  notify-on: "&aReport notifications enabled."
+  notify-off: "&cReport notifications disabled."
+  search-set: "&fSearch: &b%value%"
+  usage: "&c/reports | search <user|id|reason|handler> <value> | sethandler <id> <player|none> | on|off | clear"
+  usage-sethandler: "&c/reports sethandler <id> <player|none>"
+  handler-set: "&aHandler assigned."
+  handler-cleared: "&eHandler cleared."
+  handler-offline: "&cThat moderator is not online."
+  not-found: "&cReport not found: %id%"
+  cleared: "&aCleared %count% report(s)."
+  clear-failed: "&cClear failed (store ?)."
+
 menu:
   reports:
     reason:
@@ -159,6 +188,43 @@ menu:
           name: "#2EE6D6&lConfirm"
         no:
           name: "&c&lCancel"
+    filter:
+      name: "#2EE6D6&lFilter &f: %filter%"
+      lore:
+        - "&8> &eClick to cycle."
+    sort:
+      name: "#2EE6D6&lSort &f: %sort%"
+      lore:
+        - "&8> &eClick to cycle."
+    onlymine:
+      name: "#2EE6D6&lMy reports &f: %state%"
+    detail:
+      title: "#0E6F7D&lReport &f#2EE6D6%id%"
+      info:
+        name: "#2EE6D6&l%reported%"
+      status:
+        name: "#2EE6D6&lStatus &f: %status%"
+      handler:
+        name: "#2EE6D6&lHandler &f: %handler%"
+      teleport:
+        name: "#2EE6D6&lTeleport"
+        lore: "&7Location: %world% %x% %y% %z%"
+      accept:
+        name: "#2EE6D6&lAccept"
+        lore:
+          - "&fTeleport to the reported player"
+          - "&fand resolve as accepted."
+      reject:
+        name: "&c&lReject"
+        lore:
+          - "&fResolve as rejected."
+    resolve-failed: "&cResolve failed (store ?) — check the server console."
+    write-failed: "&cWrite failed (store ?) — check the server console."
+    location-unavailable: "&cLocation unavailable (unloaded world ?)."
+    empty: "&fNo pending report."
+    store-error: "&cReport store unreachable — check the console."
+    accepted: "&aReport #%id% accepted."
+    rejected: "&cReport #%id% rejected."
   dashboard:
     title: "#0E6F7D&lGuard &fDashboard"
     players:
@@ -205,22 +271,10 @@ menu:
         - "&fX-Ray, LookUp, Settings."
         - "&8> &eClick here."
   reports:
-    filter:
-      name: "#2EE6D6&lFilter &f: %filter%"
-      lore:
-        - "&8> &eClick to cycle."
-    sort:
-      name: "#2EE6D6&lSort &f: %sort%"
-      lore:
-        - "&8> &eClick to cycle."
-    onlymine:
-      name: "#2EE6D6&lMy reports &f: %state%"
     title: "#0E6F7D&lReports"
     empty: "&fNo pending report."
     store-error: "&cReport store unreachable — check the console."
     resolve-failed: "&cResolve failed (store ?) — check the server console."
-    write-failed: "&cWrite failed (store ?) — check the server console."
-    location-unavailable: "&cLocation unavailable (unloaded world ?)."
     accepted: "&aReport #%id% accepted."
     rejected: "&cReport #%id% rejected."
     item:
@@ -234,17 +288,7 @@ menu:
         - ""
         - "&8> &eClick to handle."
     detail:
-      title: "#0E6F7D&lReport &f#2EE6D6%id%"
-      info:
-        name: "#2EE6D6&l%reported%"
-      status:
-        name: "#2EE6D6&lStatus &f: %status%"
-      handler:
-        name: "#2EE6D6&lHandler &f: %handler%"
-      teleport:
-        name: "#2EE6D6&lTeleport"
-        lore: "&7Location: %world% %x% %y% %z%"
-      accept:
+      title: "#0E6F7D&lReport &f> #2EE6D6%reported%"
       accept:
         name: "#2EE6D6&lAccept"
         lore:

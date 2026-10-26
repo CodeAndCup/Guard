@@ -25,8 +25,28 @@ public final class DatabaseManager {
 
     private static final String DDL_REPORTS =
             "CREATE TABLE IF NOT EXISTS reports (id VARCHAR(36) PRIMARY KEY, reporter VARCHAR(16) NOT NULL, " +
-            "reported VARCHAR(16) NOT NULL, reason VARCHAR(255) NOT NULL, server_name VARCHAR(64) NOT NULL, " +
-            "created BIGINT NOT NULL, status VARCHAR(16) NOT NULL, resolved_by VARCHAR(16))";
+            "reporter_uuid VARCHAR(36), reported VARCHAR(16) NOT NULL, reported_uuid VARCHAR(36), " +
+            "reason VARCHAR(255) NOT NULL, server_name VARCHAR(64) NOT NULL, " +
+            "created BIGINT NOT NULL, status VARCHAR(16) NOT NULL, resolved_by VARCHAR(16), " +
+            "outcome VARCHAR(16), handler VARCHAR(16), handler_uuid VARCHAR(36), resolved_at BIGINT, " +
+            "location_world VARCHAR(64), location_x DOUBLE, location_y DOUBLE, location_z DOUBLE, " +
+            "location_yaw FLOAT, location_pitch FLOAT)";
+
+    /** Colonnes ajoutées par les signalements v2 : ALTER best-effort (silencieux si déjà là). */
+    private static final String[] REPORTS_V2_COLUMNS = {
+            "ALTER TABLE reports ADD COLUMN reporter_uuid VARCHAR(36)",
+            "ALTER TABLE reports ADD COLUMN reported_uuid VARCHAR(36)",
+            "ALTER TABLE reports ADD COLUMN outcome VARCHAR(16)",
+            "ALTER TABLE reports ADD COLUMN handler VARCHAR(16)",
+            "ALTER TABLE reports ADD COLUMN handler_uuid VARCHAR(36)",
+            "ALTER TABLE reports ADD COLUMN resolved_at BIGINT",
+            "ALTER TABLE reports ADD COLUMN location_world VARCHAR(64)",
+            "ALTER TABLE reports ADD COLUMN location_x DOUBLE",
+            "ALTER TABLE reports ADD COLUMN location_y DOUBLE",
+            "ALTER TABLE reports ADD COLUMN location_z DOUBLE",
+            "ALTER TABLE reports ADD COLUMN location_yaw FLOAT",
+            "ALTER TABLE reports ADD COLUMN location_pitch FLOAT",
+    };
 
     private final HikariDataSource dataSource;
     private final ExecutorService executor;
@@ -42,6 +62,13 @@ public final class DatabaseManager {
             try (java.sql.Connection c = dataSource.getConnection(); java.sql.Statement st = c.createStatement()) {
                 st.execute(DDL_VANISH);
                 st.execute(DDL_REPORTS);
+                // colonnes v2 sur une table préexistante : on tente, on ignore l'échec (déjà là)
+                for (String ddl : REPORTS_V2_COLUMNS) {
+                    try {
+                        st.execute(ddl);
+                    } catch (SQLException ignored) {
+                    }
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }

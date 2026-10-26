@@ -10,6 +10,7 @@ import fr.perrier.guard.network.Codec;
 import fr.perrier.guard.network.MessengerHolder;
 import fr.perrier.guard.reports.ReportCache;
 import fr.perrier.guard.reports.ReportFlash;
+import fr.perrier.guard.reports.ReportNotifications;
 import fr.perrier.guard.manager.listener.commands.*;
 import fr.perrier.guard.manager.listener.hotbar.*;
 import fr.perrier.guard.manager.xray.XrayManager;
@@ -113,6 +114,7 @@ public class Guard extends JavaPlugin {
 
         // cache des reports (les menus le lisent en synchrone : plus d'affichage intermittent)
         ReportCache.startPeriodicRefresh();
+        ReportNotifications.init(); // toggle staff (/reports on|off), fichier local
 
         menuAPI = new MenuAPI(instance);
         commandHandler = new CommandHandler(this);
@@ -145,6 +147,7 @@ public class Guard extends JavaPlugin {
         commandHandler.registerCommands(LookUp.class);
         commandHandler.registerCommands(StaffChat.class);
         commandHandler.registerCommands(Report.class);
+        commandHandler.registerCommands(Reports.class);
     }
 
     public void loadListener() {

@@ -350,6 +350,7 @@ public class CommandHandler implements Listener {
         registerCommands(LookUp.class);
         registerCommands(StaffChat.class);
         registerCommands(Report.class);
+        registerCommands(fr.perrier.guard.manager.commands.Reports.class);
     }
 
     /**

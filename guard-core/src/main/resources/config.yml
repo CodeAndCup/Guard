@@ -43,6 +43,15 @@ network:
 reports:
   enable: true
   cooldown-seconds: 60
+  # --- signalements v2 (flux de modération) ---
+  reason-mode: BOTH           # FREETEXT (raison tapée) | PREDEFINED (GUI obligatoire) | BOTH
+  max-open-per-reporter: 5    # plafond de rapports ouverts par signalant (-1 = illimité)
+  target-cooldown-seconds: 300 # un joueur ne peut pas être signalé 2 fois de suite avant ce délai
+  require-online-target: true # la cible doit être connectée
+  save-location: true         # sauvegarde la position du signalé (bouton de tp)
+  retention-days: 30          # /reports clear nettoie les rapports clos au-delà
+  delete-mode: TAG            # TAG (marque supprimé) | PURGE (supprime réellement)
+  notify-default: true        # état initial du toggle staff (/reports on|off)
 #
 #▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 #
