@@ -3,15 +3,27 @@ package fr.perrier.guard.reports;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-/** Persistance des reports. Toutes les méthodes sont asynchrones ; la DB/YAML est source de vérité. */
+/**
+ * Persistance des rapports (source de vérité). Toutes les méthodes sont asynchrones ;
+ * la DB/YAML est lue en ASYNC puis exposée en synchrone via {@link ReportCache}.
+ */
 public interface ReportStore {
 
-    /** Persiste et remplit l'id UUID (appelant passe id=null). */
+    /** Persiste (l'id UUID est assigné ici, appelant passe id=null) et remplit le modèle. */
     CompletableFuture<Report> submit(Report report);
 
-    /** Reports ouverts, du plus récent au plus ancien. */
-    CompletableFuture<List<Report>> listOpen();
+    /** Tous les rapports, du plus récent au plus ancien (filtrage côté appelant). */
+    CompletableFuture<List<Report>> listAll();
 
-    /** outcome = Report.STATUS_ACCEPTED ou STATUS_REJECTED. */
+    /** Clôture avec verdict : status=CLOSED, outcome=ACCEPTED|REJECTED. */
     CompletableFuture<Void> resolve(String id, String by, String outcome);
+
+    /** Change le statut (OPEN / IN_PROGRESS / CLOSED / DELETED) ; efface le verdict si non CLOSED. */
+    CompletableFuture<Void> setStatus(String id, String status, String by);
+
+    /** Assigne (ou retire avec name=null) le modo responsable. */
+    CompletableFuture<Void> setHandler(String id, String name, String uuid);
+
+    /** Supprime les rapports CLOSED au-delà de la rétention ; retourne le nombre traités. */
+    CompletableFuture<Integer> clearClosed(int retentionDays);
 }

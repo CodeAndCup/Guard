@@ -33,10 +33,13 @@ public class ReportsMenu extends PaginatedMenu {
         if (Report.STATUS_OPEN.equals(status)) {
             return "●";
         }
-        if (Report.STATUS_ACCEPTED.equals(status)) {
+        if (Report.STATUS_IN_PROGRESS.equals(status)) {
+            return "★";
+        }
+        if (Report.STATUS_CLOSED.equals(status)) {
             return "✔";
         }
-        if (Report.STATUS_REJECTED.equals(status)) {
+        if (Report.STATUS_DELETED.equals(status)) {
             return "✘";
         }
         return "?";

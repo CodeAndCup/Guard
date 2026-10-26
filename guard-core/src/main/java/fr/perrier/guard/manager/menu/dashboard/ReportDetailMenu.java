@@ -82,7 +82,7 @@ public class ReportDetailMenu extends GlassMenu {
                         p.teleport(target.getLocation());
                     }
                 }
-                resolve(p, Report.STATUS_ACCEPTED, "menu.reports.accepted");
+                resolve(p, Report.OUTCOME_ACCEPTED, "menu.reports.accepted");
             }
         });
 
@@ -99,7 +99,7 @@ public class ReportDetailMenu extends GlassMenu {
                 }
                 decided = true;
                 p.closeInventory();
-                resolve(p, Report.STATUS_REJECTED, "menu.reports.rejected");
+                resolve(p, Report.OUTCOME_REJECTED, "menu.reports.rejected");
             }
         });
 

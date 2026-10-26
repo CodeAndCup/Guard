@@ -14,8 +14,9 @@ public class ReportsMenuTest {
     @Test
     public void statusGlyphIsDeterministicPerStatus() {
         assertEquals("●", ReportsMenu.statusGlyph(Report.STATUS_OPEN));
-        assertEquals("✔", ReportsMenu.statusGlyph(Report.STATUS_ACCEPTED));
-        assertEquals("✘", ReportsMenu.statusGlyph(Report.STATUS_REJECTED));
+        assertEquals("★", ReportsMenu.statusGlyph(Report.STATUS_IN_PROGRESS));
+        assertEquals("✔", ReportsMenu.statusGlyph(Report.STATUS_CLOSED));
+        assertEquals("✘", ReportsMenu.statusGlyph(Report.STATUS_DELETED));
         assertEquals("?", ReportsMenu.statusGlyph("whatever"));
         assertEquals("?", ReportsMenu.statusGlyph(null));
     }
