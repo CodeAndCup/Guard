@@ -51,6 +51,9 @@ permissions:
       guard.xray: true
       guard.staffchat: true
       guard.reports.view: true
+      guard.reports.manage: true
+      guard.reports.clear: true
+      guard.reports.notify: true
   guard.helper:
     description: "Recommanded permission for a helper"
     children:
@@ -97,6 +100,14 @@ permissions:
     description: "Access to staff chat commands"
   guard.reports.view:
     description: "Receive report alerts (flash + menu)"
+  guard.reports.manage:
+    description: "Assign report handlers (/reports sethandler)"
+  guard.reports.clear:
+    description: "Clean up old closed reports (/reports clear)"
+  guard.reports.notify:
+    description: "May mute report notifications (/reports on|off) — without it, alerts always arrive"
+  guard.reports.immune:
+    description: "Cannot be reported by players"
   guard.xray:
     description: "Access to XRay look up commands / panel"
   guard.lookup:

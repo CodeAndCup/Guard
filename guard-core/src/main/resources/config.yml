@@ -112,6 +112,9 @@ commands:
   report:
     active: true
     name: ["report","guard:report"]
+  reports:
+    active: true
+    name: ["reports","guard:reports"]
   lookup:
     active: true
     name: ["lookup","guard:lookup"]

@@ -3,7 +3,6 @@ package fr.perrier.guard.manager.menu.dashboard;
 import com.cryptomorin.xseries.XMaterial;
 import fr.perrier.guard.Guard;
 import fr.perrier.guard.manager.menu.dashboard.DashboardMenu;
-import fr.perrier.guard.manager.menu.profile.ProfileMenu;
 import fr.perrier.guard.menu.Button;
 import fr.perrier.guard.menu.Menu;
 import fr.perrier.guard.menu.pagination.PaginatedMenu;
@@ -96,13 +95,17 @@ public class ReportsMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player p0) {
-        String suffix = " &8(&7" + filterLabel() + " &8| &7" + (onlyMine ? "mes" : "tous")
+        String scope = Guard.getLangConfig().getString(
+                onlyMine ? "menu.reports.scope.mine" : "menu.reports.scope.all", onlyMine ? "mes" : "tous");
+        String suffix = " &8(&7" + filterLabel() + " &8| &7" + scope
                 + " &8| &7" + getPage() + "/" + getPages(p0) + "&8)";
         return ChatUtil.translate(Guard.getLangConfig().getString("menu.reports.title", "&2Reports") + suffix);
     }
 
     private String filterLabel() {
-        return filter == null ? "TOUS" : filter;
+        return filter == null
+                ? Guard.getLangConfig().getString("menu.reports.filter.all", "TOUS")
+                : filter;
     }
 
     @Override
@@ -238,13 +241,8 @@ public class ReportsMenu extends PaginatedMenu {
         @Override
         public void clicked(Player p0, int slot, ClickType clickType, int hotbarButton) {
             Button.playNeutral(p0);
-            if (report.getReported() != null && p0.getUniqueId() != null) {
-                Player reported = org.bukkit.Bukkit.getPlayerExact(report.getReported());
-                if (reported != null && reported.isOnline()) {
-                    new ProfileMenu(reported).openMenu(p0);
-                    return;
-                }
-            }
+            // toujours l'écran de détail : c'est là que se fait le traitement
+            // (le tp vers le signalé est sur le bouton "accepter")
             new ReportDetailMenu(report, new ReportsMenu(filter, sort, onlyMine, query)).openMenu(p0);
         }
     }

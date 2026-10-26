@@ -61,7 +61,7 @@ public final class ReportGuard {
             }
             String reporterId = report.getReporterUuid() != null ? report.getReporterUuid() : report.getReporter();
             String reportedId = report.getReportedUuid() != null ? report.getReportedUuid() : report.getReported();
-            boolean live = !STATUS_CLOSED.equals(report.getStatus());
+            boolean live = STATUS_OPEN.equals(report.getStatus()) || STATUS_IN_PROGRESS.equals(report.getStatus());
             if (reporterId != null && reporterId.equals(reporterUuid)) {
                 reporterLast = Math.max(reporterLast, report.getCreatedAt());
                 if (live) {
@@ -72,7 +72,8 @@ public final class ReportGuard {
                 targetLast = Math.max(targetLast, report.getCreatedAt());
             }
         }
-        if (openCount >= s.maxOpenPerReporter) {
+        // -1 (ou négatif) = illimité, cf. config.yml max-open-per-reporter
+        if (s.maxOpenPerReporter >= 0 && openCount >= s.maxOpenPerReporter) {
             return "reports.refus.limit";
         }
         // 5. cooldown du signalant

@@ -164,6 +164,7 @@ reports:
   not-found: "&cReport not found: %id%"
   cleared: "&aCleared %count% report(s)."
   clear-failed: "&cClear failed (store ?)."
+  no-perm: "&cMissing permission."
 
 menu:
   reports:
@@ -190,6 +191,7 @@ menu:
           name: "&c&lCancel"
     filter:
       name: "#2EE6D6&lFilter &f: %filter%"
+      all: "ALL"
       lore:
         - "&8> &eClick to cycle."
     sort:
@@ -198,17 +200,35 @@ menu:
         - "&8> &eClick to cycle."
     onlymine:
       name: "#2EE6D6&lMy reports &f: %state%"
+    scope:
+      all: "all"
+      mine: "mine"
+    title: "#0E6F7D&lReports"
+    item:
+      name: "#2EE6D6&l#%id% %reported%"
+      lore:
+        - "#0E6F7D#%id% %status%"
+        - "&fFrom: %reporter%"
+        - "&fReason: %reason%"
+        - "&fServer: %server%"
+        - "&fAt: %date%"
+        - ""
+        - "&8> &eClick to handle."
     detail:
       title: "#0E6F7D&lReport &f#2EE6D6%id%"
       info:
         name: "#2EE6D6&l%reported%"
       status:
         name: "#2EE6D6&lStatus &f: %status%"
+        take: "&8> &eTake it (IN_PROGRESS)"
       handler:
         name: "#2EE6D6&lHandler &f: %handler%"
+        claim: "&8> &eAssign to me"
       teleport:
         name: "#2EE6D6&lTeleport"
         lore: "&7Location: %world% %x% %y% %z%"
+        go: "&8> &eClick to go there"
+        wrong-world: "&cDifferent world than yours"
       accept:
         name: "#2EE6D6&lAccept"
         lore:
@@ -270,34 +290,6 @@ menu:
       lore:
         - "&fX-Ray, LookUp, Settings."
         - "&8> &eClick here."
-  reports:
-    title: "#0E6F7D&lReports"
-    empty: "&fNo pending report."
-    store-error: "&cReport store unreachable — check the console."
-    resolve-failed: "&cResolve failed (store ?) — check the server console."
-    accepted: "&aReport #%id% accepted."
-    rejected: "&cReport #%id% rejected."
-    item:
-      name: "#2EE6D6&l#%id% %reported%"
-      lore:
-        - "#0E6F7D#%id% %status%"
-        - "&fFrom: %reporter%"
-        - "&fReason: %reason%"
-        - "&fServer: %server%"
-        - "&fAt: %date%"
-        - ""
-        - "&8> &eClick to handle."
-    detail:
-      title: "#0E6F7D&lReport &f> #2EE6D6%reported%"
-      accept:
-        name: "#2EE6D6&lAccept"
-        lore:
-          - "&fTeleport to the reported player"
-          - "&fand resolve as accepted."
-      reject:
-        name: "&c&lReject"
-        lore:
-          - "&fResolve as rejected."
   tools:
     title: "#0E6F7D&lTools"
     xray:

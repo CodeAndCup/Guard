@@ -153,6 +153,18 @@ reports:
       name: "Grief"
     spam:
       name: "Spam / Publicité"
+  notify-on: "&aNotifications de signalements activées."
+  notify-off: "&cNotifications de signalements désactivées."
+  search-set: "&fRecherche : &b%value%"
+  usage: "&c/reports | search <user|id|reason|handler> <valeur> | sethandler <id> <joueur|none> | on|off | clear"
+  usage-sethandler: "&c/reports sethandler <id> <joueur|none>"
+  handler-set: "&aResponsable attribué."
+  handler-cleared: "&eResponsable retiré."
+  handler-offline: "&cCe modo n'est pas connecté."
+  not-found: "&cRapport introuvable : %id%"
+  cleared: "&a%count% rapport(s) nettoyé(s)."
+  clear-failed: "&cNettoyage impossible (store ?)."
+  no-perm: "&cPermission insuffisante."
 
 menu:
   reports:
@@ -177,6 +189,63 @@ menu:
           name: "#2EE6D6&lConfirmer"
         no:
           name: "&c&lAnnuler"
+    filter:
+      name: "#2EE6D6&lFiltre &f: %filter%"
+      all: "TOUS"
+      lore:
+        - "&8> &eClique pour changer."
+    sort:
+      name: "#2EE6D6&lTri &f: %sort%"
+      lore:
+        - "&8> &eClique pour changer."
+    onlymine:
+      name: "#2EE6D6&lMes rapports &f: %state%"
+    scope:
+      all: "tous"
+      mine: "mes"
+    title: "#0E6F7D&lReports"
+    empty: "&fAucun report en attente."
+    store-error: "&cStore des reports injoignable - voir la console."
+    resolve-failed: "&cÉchec du resolve (store ?) — voir la console du serveur."
+    write-failed: "&cÉcriture impossible (store ?) — voir la console du serveur."
+    location-unavailable: "&cPosition indisponible (monde déchargé ?)."
+    accepted: "&aReport #%id% accepté."
+    rejected: "&cReport #%id% rejeté."
+    item:
+      name: "#2EE6D6&l#%id% %reported%"
+      lore:
+        - "#0E6F7D#%id% %status%"
+        - "&fDe: %reporter%"
+        - "&fRaison: %reason%"
+        - "&fServeur: %server%"
+        - "&fLe: %date%"
+        - ""
+        - "&8> &eCliquez-ici pour traiter."
+    detail:
+      title: "#0E6F7D&lReport &f#2EE6D6%id%"
+      info:
+        name: "#2EE6D6&l%reported%"
+      status:
+        name: "#2EE6D6&lStatut &f: %status%"
+        take: "&8> &ePrendre en charge (IN_PROGRESS)"
+      handler:
+        name: "#2EE6D6&lResponsable &f: %handler%"
+        claim: "&8> &eM'attribuer ce rapport"
+      teleport:
+        name: "#2EE6D6&lSe téléporter"
+        lore: "&7Position : %world% %x% %y% %z%"
+        go: "&8> &eClique pour y aller"
+        wrong-world: "&cMonde différent du vôtre"
+      accept:
+        name: "#2EE6D6&lAccepter"
+        lore:
+          - "&fTp au joueur signalé"
+          - "&fet résout en accepté."
+      reject:
+        name: "&c&lRejeter"
+        lore:
+          - "&fRésout en rejeté."
+  dashboard:
     title: "#0E6F7D&lGuard &fDashboard"
     players:
       name: "#2EE6D6&lJoueurs"
@@ -221,56 +290,6 @@ menu:
       lore:
         - "&fX-Ray, LookUp, Paramètres."
         - "&8> &eCliquez-ici."
-  reports:
-    filter:
-      name: "#2EE6D6&lFiltre &f: %filter%"
-      lore:
-        - "&8> &eClique pour changer."
-    sort:
-      name: "#2EE6D6&lTri &f: %sort%"
-      lore:
-        - "&8> &eClique pour changer."
-    onlymine:
-      name: "#2EE6D6&lMes rapports &f: %state%"
-    title: "#0E6F7D&lReports"
-    empty: "&fAucun report en attente."
-    store-error: "&cStore des reports injoignable - voir la console."
-    resolve-failed: "&cÉchec du resolve (store ?) — voir la console du serveur."
-    write-failed: "&cÉcriture impossible (store ?) — voir la console du serveur."
-    location-unavailable: "&cPosition indisponible (monde déchargé ?)."
-    accepted: "&aReport #%id% accepté."
-    rejected: "&cReport #%id% rejeté."
-    item:
-      name: "#2EE6D6&l#%id% %reported%"
-      lore:
-        - "#0E6F7D#%id% %status%"
-        - "&fDe: %reporter%"
-        - "&fRaison: %reason%"
-        - "&fServeur: %server%"
-        - "&fLe: %date%"
-        - ""
-        - "&8> &eCliquez-ici pour traiter."
-    detail:
-      title: "#0E6F7D&lReport &f#2EE6D6%id%"
-      info:
-        name: "#2EE6D6&l%reported%"
-      status:
-        name: "#2EE6D6&lStatut &f: %status%"
-      handler:
-        name: "#2EE6D6&lResponsable &f: %handler%"
-      teleport:
-        name: "#2EE6D6&lSe téléporter"
-        lore: "&7Position : %world% %x% %y% %z%"
-      accept:
-      accept:
-        name: "#2EE6D6&lAccepter"
-        lore:
-          - "&fTp au joueur signalé"
-          - "&fet résout en accepté."
-      reject:
-        name: "&c&lRejeter"
-        lore:
-          - "&fRésout en rejeté."
   tools:
     title: "#0E6F7D&lOutils"
     xray:

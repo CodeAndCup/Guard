@@ -25,14 +25,17 @@ import java.util.Locale;
  */
 public class Reports {
 
+    /** Sentinelle = paramètre non fourni (le framework ne différencie pas "" vide de "absent"). */
+    private static final String ABSENT = "\u00A7";
+
     @Command(names = CommandsUtils.REPORTS, perm = "guard.reports.view")
     public static void onReports(Player player,
-                                 @Param(name = "action", baseValue = "") String action,
+                                 @Param(name = "action", baseValue = ABSENT) String action,
                                  @Param(name = "value", baseValue = "") String value,
                                  @Param(name = "value2", baseValue = "") String value2) {
         String a = action.toLowerCase(Locale.ROOT);
         switch (a) {
-            case "":
+            case ABSENT:
             case "list":
                 new ReportsMenu().openMenu(player);
                 break;
@@ -40,19 +43,28 @@ public class Reports {
                 search(player, value, value2);
                 break;
             case "sethandler":
+                if (!player.hasPermission("guard.reports.manage")) {
+                    noPerm(player);
+                    return;
+                }
                 setHandler(player, value, value2);
                 break;
             case "on":
-                ReportNotifications.setEnabled(player.getUniqueId(), true);
-                player.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
-                        .getString("reports.notify-on", "&aNotifications activées."))));
-                break;
             case "off":
-                ReportNotifications.setEnabled(player.getUniqueId(), false);
+                if (!player.hasPermission("guard.reports.notify")) {
+                    noPerm(player);
+                    return;
+                }
+                ReportNotifications.setEnabled(player.getUniqueId(), a.equals("on"));
                 player.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
-                        .getString("reports.notify-off", "&cNotifications désactivées."))));
+                        .getString(a.equals("on") ? "reports.notify-on" : "reports.notify-off",
+                                a.equals("on") ? "&aNotifications activées." : "&cNotifications désactivées."))));
                 break;
             case "clear":
+                if (!player.hasPermission("guard.reports.clear")) {
+                    noPerm(player);
+                    return;
+                }
                 clear(player);
                 break;
             default:
@@ -79,8 +91,9 @@ public class Reports {
             return;
         }
         // la recherche cible le champ demandé ; on la traduit en requête multi-champs
-        // (la requête "user" couvre signalant ET signalé, cf. ReportFilters)
-        new ReportsMenu(Report.STATUS_OPEN, fr.perrier.guard.reports.ReportFilters.SORT_NEWEST, false, value)
+        // (la requête "user" couvre signalant ET signalé, "id" matche aussi l'UUID, cf. ReportFilters)
+        // aucun filtre de statut : un rapport ancien/fermé doit rester trouvable
+        new ReportsMenu(null, fr.perrier.guard.reports.ReportFilters.SORT_NEWEST, false, value)
                 .openMenu(player);
         player.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
                 .getString("reports.search-set", "&fFiltre de recherche : &b%value%")
@@ -152,6 +165,11 @@ public class Reports {
             }
         }
         return prefix; // l'appelant a peut-être collé l'UUID complet
+    }
+
+    private static void noPerm(Player player) {
+        player.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
+                .getString("reports.no-perm", "&cPermission insuffisante."))));
     }
 
     private static void usage(Player player) {

@@ -5,7 +5,6 @@ import fr.perrier.guard.commands.annotations.Command;
 import fr.perrier.guard.commands.annotations.Param;
 import fr.perrier.guard.manager.menu.reports.ReportReasonMenu;
 import fr.perrier.guard.reports.ReportCache;
-import fr.perrier.guard.reports.ReportCooldown;
 import fr.perrier.guard.reports.ReportFlash;
 import fr.perrier.guard.reports.ReportGuard;
 import fr.perrier.guard.reports.ReportStores;
@@ -60,9 +59,15 @@ public class Report {
         }
         boolean freetext = !"\u00A7".equals(reason) && reason != null && !reason.isEmpty();
 
-        if (!freetext) {
-            // pas de raison tapée : GUI de choix sauf si le mode est FREETEXT (libre obligatoire)
-            String mode = Guard.getDefaultConfig().getString("reports.reason-mode", "BOTH");
+        Player target = Bukkit.getPlayerExact(starget);
+        if (target == null) {
+            Messages.send(reporter, Messages.PLAYERNOTFOUND);
+            return;
+        }
+
+        String mode = Guard.getDefaultConfig().getString("reports.reason-mode", "BOTH");
+        if (!freetext || "PREDEFINED".equalsIgnoreCase(mode)) {
+            // PREDEFINED = GUI obligatoire (pas de texte libre), BOTH = GUI si rien tapé
             if (!"FREETEXT".equalsIgnoreCase(mode)) {
                 new ReportReasonMenu(reporter, starget).openMenu(reporter);
                 return;
@@ -72,25 +77,26 @@ public class Report {
             return;
         }
 
-        Player target = Bukkit.getPlayerExact(starget);
-        if (target == null) {
-            Messages.send(reporter, Messages.PLAYERNOTFOUND);
-            return;
-        }
         String refusal = ReportGuard.check(reporter.getName(), target.getName(),
                 reporter.getUniqueId().toString(), target.getUniqueId().toString(),
                 true, target.hasPermission("guard.reports.immune"),
                 System.currentTimeMillis(), guardContext(reporter.getUniqueId().toString(),
                         target.getUniqueId().toString()), settings());
         if (refusal != null) {
-            reporter.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
-                    .getString(refusal, "&cVous ne pouvez pas signaler ce joueur."))));
+            refuse(reporter, refusal);
             return;
         }
         if (reason.length() > 255) {
             reason = reason.substring(0, 255); // colonne reason VARCHAR(255)
         }
         submit(reporter, target, reason);
+    }
+
+    /** Message de refus du garde, avec substitution des placeholders de seuil (%seconds%). */
+    private static void refuse(Player reporter, String refusal) {
+        reporter.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
+                .getString(refusal, "&cVous ne pouvez pas signaler ce joueur.")
+                .replace("%seconds%", String.valueOf(settings().cooldownSeconds)))));
     }
 
     /**
@@ -104,8 +110,7 @@ public class Report {
                 System.currentTimeMillis(), guardContext(reporter.getUniqueId().toString(),
                         target.getUniqueId().toString()), settings());
         if (refusal != null) {
-            reporter.sendMessage(ChatUtil.prefix(ChatUtil.translate(Guard.getLangConfig()
-                    .getString(refusal, "&cVous ne pouvez pas signaler ce joueur."))));
+            refuse(reporter, refusal);
             return;
         }
         fr.perrier.guard.reports.Report report = new fr.perrier.guard.reports.Report(null, reporter.getName(), target.getName(), reason,

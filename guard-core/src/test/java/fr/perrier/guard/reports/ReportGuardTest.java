@@ -96,6 +96,25 @@ public class ReportGuardTest {
     }
 
     @Test
+    public void negativeMaxOpenMeansUnlimited() {
+        List<Report> many = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            many.add(report(ME, "autre" + i, 1_000L, Report.STATUS_OPEN));
+        }
+        assertNull(ReportGuard.check("Moi", "Cible", ME, TARGET, true, false,
+                NOW, many, settings(0, -1, 300, true)));
+    }
+
+    @Test
+    public void deletedReportsDontCountAsOpen() {
+        List<Report> deleted = new ArrayList<>(Arrays.asList(
+                report(ME, "autre1", 1_000L, Report.STATUS_DELETED),
+                report(ME, "autre2", 1_001L, Report.STATUS_DELETED)));
+        assertNull(ReportGuard.check("Moi", "Cible", ME, TARGET, true, false,
+                NOW, deleted, settings(0, 2, 300, true)));
+    }
+
+    @Test
     public void cleanCaseAllowed() {
         assertNull(ReportGuard.check("Moi", "Cible", ME, TARGET, true, false,
                 NOW, new ArrayList<>(), settings(30, 5, 300, true)));

@@ -81,7 +81,8 @@ public class ReportDetailMenu extends GlassMenu {
                         .setName(ChatUtil.translate(Guard.getLangConfig()
                                 .getString("menu.reports.detail.status.name", "&bStatut &f: %status%")
                                 .replace("%status%", String.valueOf(report.getStatus()))))
-                        .addLoreLine(ChatUtil.translate("&8> &ePrendre en charge (IN_PROGRESS)"))
+                        .addLoreLine(ChatUtil.translate(Guard.getLangConfig()
+                                .getString("menu.reports.detail.status.take", "&8> &ePrendre en charge (IN_PROGRESS)")))
                         .toItemStack();
             }
 
@@ -100,7 +101,8 @@ public class ReportDetailMenu extends GlassMenu {
                         .setName(ChatUtil.translate(Guard.getLangConfig()
                                 .getString("menu.reports.detail.handler.name", "&bResponsable &f: %handler%")
                                 .replace("%handler%", handler)))
-                        .addLoreLine(ChatUtil.translate("&8> &eM'attribuer ce rapport"))
+                        .addLoreLine(ChatUtil.translate(Guard.getLangConfig()
+                                .getString("menu.reports.detail.handler.claim", "&8> &eM'attribuer ce rapport")))
                         .toItemStack();
             }
 
@@ -128,8 +130,8 @@ public class ReportDetailMenu extends GlassMenu {
                                     .replace("%y%", String.valueOf((int) location.y()))
                                     .replace("%z%", String.valueOf((int) location.z()))))
                             .addLoreLine(ChatUtil.translate(usable
-                                    ? "&8> &eClique pour y aller"
-                                    : "&cMonde différent du vôtre"))
+                                    ? Guard.getLangConfig().getString("menu.reports.detail.teleport.go", "&8> &eClique pour y aller")
+                                    : Guard.getLangConfig().getString("menu.reports.detail.teleport.wrong-world", "&cMonde différent du vôtre")))
                             .toItemStack();
                 }
 

@@ -67,7 +67,7 @@ public final class ReportFilters {
     }
 
     private static boolean contains(Report report, String q) {
-        return hay(report.getReporter(), q) || hay(report.getReporterUuid(), q)
+        return hay(report.getId(), q) || hay(report.getReporter(), q) || hay(report.getReporterUuid(), q)
                 || hay(report.getReported(), q) || hay(report.getReportedUuid(), q)
                 || hay(report.getReason(), q) || hay(report.getHandler(), q);
     }
