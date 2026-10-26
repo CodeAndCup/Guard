@@ -155,7 +155,9 @@ public class YamlReportStore implements ReportStore {
 
     private void write(YamlConfiguration yml, String p, Report report) {
         yml.set(p + "reporter", report.getReporter());
+        yml.set(p + "reporter_uuid", report.getReporterUuid());
         yml.set(p + "reported", report.getReported());
+        yml.set(p + "reported_uuid", report.getReportedUuid());
         yml.set(p + "reason", report.getReason());
         yml.set(p + "server", report.getServerName());
         yml.set(p + "created", report.getCreatedAt());
@@ -182,6 +184,8 @@ public class YamlReportStore implements ReportStore {
                 yml.getLong(p + "created"),
                 yml.getString(p + "status"),
                 yml.getString(p + "resolved_by"));
+        report.setReporterUuid(yml.getString(p + "reporter_uuid"));
+        report.setReportedUuid(yml.getString(p + "reported_uuid"));
         report.setOutcome(yml.getString(p + "outcome"));
         report.setHandler(yml.getString(p + "handler"));
         report.setHandlerUuid(yml.getString(p + "handler_uuid"));

@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 public class Report {
 
-    /** Champs d'origine ; les champs v2 (verdict, responsable, positions) se posent via setters. */
+    /** Champs d'origine ; les champs v2 (verdict, responsable, positions, uuid) se posent via setters. */
     public Report(String id, String reporter, String reported, String reason,
                   String serverName, long createdAt, String status, String resolvedBy) {
         this.id = id;
@@ -38,7 +38,9 @@ public class Report {
 
     private String id;
     private String reporter;
+    private String reporterUuid;
     private String reported;
+    private String reportedUuid;
     private String reason;
     private String serverName;
     private long createdAt;

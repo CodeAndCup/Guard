@@ -20,7 +20,7 @@ public class MySqlReportStore implements ReportStore {
     }
 
     private static final String COLUMNS =
-            "id, reporter, reported, reason, server_name, created, status, resolved_by, "
+            "id, reporter, reporter_uuid, reported, reported_uuid, reason, server_name, created, status, resolved_by, "
             + "outcome, handler, handler_uuid, resolved_at, location_world, location_x, location_y, "
             + "location_z, location_yaw, location_pitch";
 
@@ -29,7 +29,7 @@ public class MySqlReportStore implements ReportStore {
         report.setId(UUID.randomUUID().toString());
         return db.query(c -> {
             try (PreparedStatement ps = c.prepareStatement(
-                    "INSERT INTO reports (" + COLUMNS + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+                    "INSERT INTO reports (" + COLUMNS + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
                 bind(ps, report);
                 if (ps.executeUpdate() == 0) {
                     throw new IllegalStateException("insert report: aucune ligne insérée");
@@ -127,40 +127,50 @@ public class MySqlReportStore implements ReportStore {
         });
     }
 
+    /**
+     * Écriture : JDBC n'a PAS de paramètres nommés côté PreparedStatement — les index
+     * suivent STRICTEMENT l'ordre de {@link #COLUMNS} (la liste juste au-dessus).
+     * Toute colonne ajoutée doit être ajoutée aux deux endroits en même temps.
+     */
     private static void bind(PreparedStatement ps, Report r) throws SQLException {
         ps.setString(1, r.getId());
         ps.setString(2, r.getReporter());
-        ps.setString(3, r.getReported());
-        ps.setString(4, r.getReason());
-        ps.setString(5, r.getServerName());
-        ps.setLong(6, r.getCreatedAt());
-        ps.setString(7, r.getStatus());
-        ps.setString(8, r.getResolvedBy());
-        ps.setString(9, r.getOutcome());
-        ps.setString(10, r.getHandler());
-        ps.setString(11, r.getHandlerUuid());
-        ps.setLong(12, r.getResolvedAt());
-        ps.setString(13, r.getLocationWorld());
-        ps.setDouble(14, r.getLocationX());
-        ps.setDouble(15, r.getLocationY());
-        ps.setDouble(16, r.getLocationZ());
-        ps.setFloat(17, r.getLocationYaw());
-        ps.setFloat(18, r.getLocationPitch());
+        ps.setString(3, r.getReporterUuid());
+        ps.setString(4, r.getReported());
+        ps.setString(5, r.getReportedUuid());
+        ps.setString(6, r.getReason());
+        ps.setString(7, r.getServerName());
+        ps.setLong(8, r.getCreatedAt());
+        ps.setString(9, r.getStatus());
+        ps.setString(10, r.getResolvedBy());
+        ps.setString(11, r.getOutcome());
+        ps.setString(12, r.getHandler());
+        ps.setString(13, r.getHandlerUuid());
+        ps.setLong(14, r.getResolvedAt());
+        ps.setString(15, r.getLocationWorld());
+        ps.setDouble(16, r.getLocationX());
+        ps.setDouble(17, r.getLocationY());
+        ps.setDouble(18, r.getLocationZ());
+        ps.setFloat(19, r.getLocationYaw());
+        ps.setFloat(20, r.getLocationPitch());
     }
 
     private static Report read(ResultSet rs) throws SQLException {
-        Report r = new Report(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-                rs.getString(5), rs.getLong(6), rs.getString(7), rs.getString(8));
-        r.setOutcome(rs.getString(9));
-        r.setHandler(rs.getString(10));
-        r.setHandlerUuid(rs.getString(11));
-        r.setResolvedAt(rs.getLong(12));
-        r.setLocationWorld(rs.getString(13));
-        r.setLocationX(rs.getDouble(14));
-        r.setLocationY(rs.getDouble(15));
-        r.setLocationZ(rs.getDouble(16));
-        r.setLocationYaw(rs.getFloat(17));
-        r.setLocationPitch(rs.getFloat(18));
+        Report r = new Report(rs.getString("id"), rs.getString("reporter"), rs.getString("reported"),
+                rs.getString("reason"), rs.getString("server_name"), rs.getLong("created"),
+                rs.getString("status"), rs.getString("resolved_by"));
+        r.setReporterUuid(rs.getString("reporter_uuid"));
+        r.setReportedUuid(rs.getString("reported_uuid"));
+        r.setOutcome(rs.getString("outcome"));
+        r.setHandler(rs.getString("handler"));
+        r.setHandlerUuid(rs.getString("handler_uuid"));
+        r.setResolvedAt(rs.getLong("resolved_at"));
+        r.setLocationWorld(rs.getString("location_world"));
+        r.setLocationX(rs.getDouble("location_x"));
+        r.setLocationY(rs.getDouble("location_y"));
+        r.setLocationZ(rs.getDouble("location_z"));
+        r.setLocationYaw(rs.getFloat("location_yaw"));
+        r.setLocationPitch(rs.getFloat("location_pitch"));
         return r;
     }
 }
