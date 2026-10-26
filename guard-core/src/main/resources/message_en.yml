@@ -137,6 +137,28 @@ lookup:
 # Menu message configuration
 #
 menu:
+  reports:
+    reason:
+      title: "#0E6F7D&lReport &f%target%"
+      item:
+        name: "#2EE6D6&l%reason%"
+        lore:
+          - "&fReport %target% for: &b%reason%"
+          - ""
+          - "&8> &eClick to continue."
+      free:
+        name: "&eCustom reason"
+        hint: "&fType &b/report %target% <reason>"
+      confirm:
+        title: "#0E6F7D&lConfirm report of &f%target%"
+        info:
+          name: "#2EE6D6&l%target%"
+          lore:
+            - "&fReason: &b%reason%"
+        yes:
+          name: "#2EE6D6&lConfirm"
+        no:
+          name: "&c&lCancel"
   dashboard:
     title: "#0E6F7D&lGuard &fDashboard"
     players:

@@ -136,8 +136,47 @@ lookup:
 #
 # Menu message configuration
 #
+reports:
+  refus:
+    self: "&cVous ne pouvez pas vous signaler vous-même."
+    immune: "&cCe joueur ne peut pas être signalé."
+    offline: "&cCe joueur doit être connecté pour être signalé."
+    limit: "&cVous avez trop de signalements en cours."
+    cooldown: "&cAttendez %seconds% s avant un nouveau signalement."
+    target-cooldown: "&cCe joueur vient d'être signalé, réessayez plus tard."
+  reasons:
+    cheat:
+      name: "Triche / Hacked Client"
+    toxic:
+      name: "Toxicité / Insultes"
+    grief:
+      name: "Grief"
+    spam:
+      name: "Spam / Publicité"
+
 menu:
-  dashboard:
+  reports:
+    reason:
+      title: "#0E6F7D&lSignalement &f%target%"
+      item:
+        name: "#2EE6D6&l%reason%"
+        lore:
+          - "&fSignaler %target% pour : &b%reason%"
+          - ""
+          - "&8> &eClique pour continuer."
+      free:
+        name: "&eRaison libre"
+        hint: "&fTapez &b/report %target% <raison>"
+      confirm:
+        title: "#0E6F7D&lConfirmer le signalement de &f%target%"
+        info:
+          name: "#2EE6D6&l%target%"
+          lore:
+            - "&fRaison : &b%reason%"
+        yes:
+          name: "#2EE6D6&lConfirmer"
+        no:
+          name: "&c&lAnnuler"
     title: "#0E6F7D&lGuard &fDashboard"
     players:
       name: "#2EE6D6&lJoueurs"
