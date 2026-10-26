@@ -13,7 +13,11 @@ public abstract class GlassMenu extends Menu {
 
         final HashMap<Integer, Button> buttons = new HashMap<>(getAllButtons(paramPlayer));
 
-        int size = size(buttons);
+        // taille RÉELLE de l'inventaire : getSize() déclaré, sinon déduite des boutons
+        // (même formule que Menu.openMenu). Sans ça, un menu de 27 slots dont les boutons
+        // s'arrêtent en rangée 2 calcule size=18, et les bords size-10 / size-2 écrasent
+        // le contenu de la rangée du milieu — les tuiles disparaissent sous le glass.
+        int size = (getSize() == -1) ? size(buttons) : getSize();
 
         for (int i : new int[]{0, 1, 7, 8, 9, 17, size - 18, size - 10, size - 9, size - 8, size - 2, size - 1}) {
             buttons.put(i, new Glass(getGlassColor()));

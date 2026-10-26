@@ -217,6 +217,9 @@ public class ProfileMenu extends GlassMenu {
                 if (!target.getName().equalsIgnoreCase(String.valueOf(report.getReported()))) {
                     continue;
                 }
+                if (slot >= 17 && slot <= 19) {
+                    slot = 20; // 17-19 sont des slots de bordure (size 27) : jamais un contenu dessus
+                }
                 final int s = slot++;
                 buttons.put(s, new Button() {
                     @Override

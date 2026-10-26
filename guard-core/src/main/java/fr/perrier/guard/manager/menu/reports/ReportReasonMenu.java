@@ -58,12 +58,26 @@ public class ReportReasonMenu extends GlassMenu {
         return 9;
     }
 
+    /** 27 slots : la bordure GlassMenu réserve {0,1,7,8,9,17,18,19,25,26}, contenu utile = 10-16 / 20-24. */
+    @Override
+    public int getSize() {
+        return 27;
+    }
+
+    /** Slots de la rangée 2/3 occupés par la bordure (size 27) — un raisonnement dessus serait avalé par le glass. */
+    private static boolean reserved(int slot) {
+        return slot == 17 || slot == 18 || slot == 19 || slot == 25 || slot == 26;
+    }
+
     @Override
     public Map<Integer, Button> getAllButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
         int slot = 10; // hors slots de bordure GlassMenu
 
         for (final String key : reasonKeys(Guard.getLangConfig())) {
+            while (reserved(slot)) {
+                slot++;
+            }
             final String label = Guard.getLangConfig().getString("reports.reasons." + key + ".name", key);
             buttons.put(slot++, new Button() {
                 @Override
@@ -92,6 +106,9 @@ public class ReportReasonMenu extends GlassMenu {
         // raison libre (commande) si le mode le permet
         String mode = Guard.getDefaultConfig().getString("reports.reason-mode", "BOTH");
         if (!"PREDEFINED".equalsIgnoreCase(mode)) {
+            while (reserved(slot)) {
+                slot++;
+            }
             buttons.put(slot, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player p) {

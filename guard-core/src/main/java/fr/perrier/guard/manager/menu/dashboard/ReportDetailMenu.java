@@ -114,9 +114,10 @@ public class ReportDetailMenu extends GlassMenu {
         });
 
         // tp à la position sauvegardée (bouton absent s'il n'y a pas de position utilisable)
+        // slot 16, PAS 17 : la rangée 2 utile s'arrête à 16 (17 est un slot de bordure GlassMenu)
         ReportLocation location = ReportLocation.of(report);
         if (location != null) {
-            buttons.put(17, new Button() {
+            buttons.put(16, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player p) {
                     boolean usable = p.getWorld().getName().equals(location.world());
