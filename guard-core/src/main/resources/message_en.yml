@@ -219,6 +219,8 @@ menu:
     empty: "&fNo pending report."
     store-error: "&cReport store unreachable — check the console."
     resolve-failed: "&cResolve failed (store ?) — check the server console."
+    write-failed: "&cWrite failed (store ?) — check the server console."
+    location-unavailable: "&cLocation unavailable (unloaded world ?)."
     accepted: "&aReport #%id% accepted."
     rejected: "&cReport #%id% rejected."
     item:
@@ -232,7 +234,17 @@ menu:
         - ""
         - "&8> &eClick to handle."
     detail:
-      title: "#0E6F7D&lReport &f> #2EE6D6%reported%"
+      title: "#0E6F7D&lReport &f#2EE6D6%id%"
+      info:
+        name: "#2EE6D6&l%reported%"
+      status:
+        name: "#2EE6D6&lStatus &f: %status%"
+      handler:
+        name: "#2EE6D6&lHandler &f: %handler%"
+      teleport:
+        name: "#2EE6D6&lTeleport"
+        lore: "&7Location: %world% %x% %y% %z%"
+      accept:
       accept:
         name: "#2EE6D6&lAccept"
         lore:

@@ -236,6 +236,8 @@ menu:
     empty: "&fAucun report en attente."
     store-error: "&cStore des reports injoignable - voir la console."
     resolve-failed: "&cÉchec du resolve (store ?) — voir la console du serveur."
+    write-failed: "&cÉcriture impossible (store ?) — voir la console du serveur."
+    location-unavailable: "&cPosition indisponible (monde déchargé ?)."
     accepted: "&aReport #%id% accepté."
     rejected: "&cReport #%id% rejeté."
     item:
@@ -249,7 +251,17 @@ menu:
         - ""
         - "&8> &eCliquez-ici pour traiter."
     detail:
-      title: "#0E6F7D&lReport &f> #2EE6D6%reported%"
+      title: "#0E6F7D&lReport &f#2EE6D6%id%"
+      info:
+        name: "#2EE6D6&l%reported%"
+      status:
+        name: "#2EE6D6&lStatut &f: %status%"
+      handler:
+        name: "#2EE6D6&lResponsable &f: %handler%"
+      teleport:
+        name: "#2EE6D6&lSe téléporter"
+        lore: "&7Position : %world% %x% %y% %z%"
+      accept:
       accept:
         name: "#2EE6D6&lAccepter"
         lore:
