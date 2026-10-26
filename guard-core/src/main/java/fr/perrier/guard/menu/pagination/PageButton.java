@@ -21,13 +21,17 @@ public class PageButton extends Button {
 
     @Override
     public ItemStack getButtonItem(final Player player) {
-        ItemBuilder item = (this.mod > 0) ? new ItemBuilder(Heads.NEXT_PAGE.toItemStack()) : new ItemBuilder(Heads.PREVIOUS_PAGE.toItemStack());
-        if (this.hasNext(player)) {
-            item.setName(ChatColor.translateAlternateColorCodes('&', (this.mod > 0) ? "&8&l» &f&lNext" : "&8&l« &f&lPrevious"));
-        } else {
-            item = new ItemBuilder(Material.AIR);
+        // flèches VANILLA (ARROW existe depuis 1.8) : plus aucune dépendance aux textures
+        // custom (authlib/PropertySet) — elles provoquaient des NoSuchMethodError/NoSuchMethodException
+        // sur chaque version de Paper qui changeait son API profile.
+        if (!this.hasNext(player)) {
+            return new ItemBuilder(Material.AIR).toItemStack();
         }
-        return item.toItemStack();
+        return new ItemBuilder(Material.ARROW)
+                .setName(ChatUtil.translate(this.mod > 0
+                        ? "#2EE6D6&lPage suivante &8&l»"
+                        : "&8&l« #2EE6D6&lPage précédente"))
+                .toItemStack();
     }
 
     @Override
