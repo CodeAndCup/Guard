@@ -6,6 +6,7 @@ import fr.perrier.guard.manager.menu.moderation.Parametres;
 import fr.perrier.guard.manager.menu.xray.XrayMenu;
 import fr.perrier.guard.menu.Button;
 import fr.perrier.guard.menu.GlassMenu;
+import fr.perrier.guard.menu.buttons.BackButton;
 import fr.perrier.guard.menu.buttons.ConversationButton;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
@@ -84,6 +85,9 @@ public class ToolsMenu extends GlassMenu {
                 new Parametres().openMenu(p);
             }
         });
+
+        // retour dashboard (rangée 3 centre, hors bordure size 27)
+        buttons.put(22, new BackButton(new DashboardMenu()));
 
         return buttons;
     }

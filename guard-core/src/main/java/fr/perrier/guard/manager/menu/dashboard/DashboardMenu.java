@@ -8,6 +8,7 @@ import fr.perrier.guard.manager.commands.StaffChat;
 import fr.perrier.guard.manager.commands.Vanish;
 import fr.perrier.guard.menu.Button;
 import fr.perrier.guard.menu.GlassMenu;
+import fr.perrier.guard.menu.buttons.BackButton;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
 import fr.perrier.guard.utils.Messages;
@@ -167,6 +168,8 @@ public class DashboardMenu extends GlassMenu {
             put(buttons, player, 12, XMaterial.PAPER, "chatlock", "guard.chatlock", () -> ChatLock.onChatLock(player));
             put(buttons, player, 14, XMaterial.OAK_SIGN, "staffchat", "guard.staffchat", () -> StaffChat.onStaffChat(player));
             put(buttons, player, 16, XMaterial.BARRIER, "noclip", "guard.noclip", () -> NoClip.onNoClip(player));
+            // retour dashboard (rangée 3 centre, hors bordure size 27)
+            buttons.put(22, new BackButton(new DashboardMenu()));
             return buttons;
         }
 

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Mapping pur slot de tuile → clé lang du dashboard (le rendu Bukkit est vérifié en jeu + à la review). */
 public class DashboardMenuTest {
@@ -21,5 +22,12 @@ public class DashboardMenuTest {
         assertNull(DashboardMenu.tileKey(0));
         assertNull(DashboardMenu.tileKey(11));
         assertNull(DashboardMenu.tileKey(99));
+    }
+
+    /** La tuile Joueurs doit offrir un retour au dashboard (même mécanique que ReportsMenu). */
+    @Test
+    public void playersMenuBackGoesToDashboard() {
+        assertTrue(new PlayersMenu().backButton() instanceof DashboardMenu,
+                "PlayersMenu sans retour dashboard (backButton() = null ?)");
     }
 }

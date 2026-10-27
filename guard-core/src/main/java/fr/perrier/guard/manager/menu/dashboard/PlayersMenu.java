@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import fr.perrier.guard.Guard;
 import fr.perrier.guard.manager.menu.profile.ProfileMenu;
 import fr.perrier.guard.menu.Button;
+import fr.perrier.guard.menu.Menu;
 import fr.perrier.guard.menu.pagination.PaginatedMenu;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
@@ -30,6 +31,12 @@ public class PlayersMenu extends PaginatedMenu {
             buttons.put(buttons.size(), new PlayerButton(player));
         }
         return buttons;
+    }
+
+    /** Retour au dashboard (slot 40 posé par PaginatedMenu) — même mécanique que ReportsMenu. */
+    @Override
+    public Menu backButton() {
+        return new DashboardMenu();
     }
 
     public static class PlayerButton extends Button {
