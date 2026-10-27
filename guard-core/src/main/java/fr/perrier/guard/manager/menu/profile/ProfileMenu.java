@@ -2,7 +2,8 @@ package fr.perrier.guard.manager.menu.profile;
 
 import com.cryptomorin.xseries.XMaterial;
 import fr.perrier.guard.Guard;
-import fr.perrier.guard.manager.commands.Cps;
+import fr.perrier.guard.manager.cps.CpsService;
+import fr.perrier.guard.manager.cps.CpsTracker;
 import fr.perrier.guard.manager.listener.PluginMessage;
 import fr.perrier.guard.manager.menu.dashboard.ReportsMenu;
 import fr.perrier.guard.manager.menu.moderation.ViewInventoryMenu;
@@ -133,8 +134,9 @@ public class ProfileMenu extends GlassMenu {
         buttons.put(22, new Button() {
             @Override
             public ItemStack getButtonItem(Player p) {
-                Double left = Cps.saveG.get(target.getUniqueId());
-                Double right = Cps.saveD.get(target.getUniqueId());
+                CpsTracker flux = CpsService.peek(target.getUniqueId());
+                Double left = flux == null ? null : flux.leftCps();
+                Double right = flux == null ? null : flux.rightCps();
                 return new ItemBuilder(XMaterial.CLOCK.parseItem())
                         .setName(ChatUtil.translate(Guard.getLangConfig()
                                 .getString("menu.profile.cps.name", "&fCPS")))

@@ -2,6 +2,7 @@ package fr.perrier.guard.manager.listener;
 
 import fr.perrier.guard.*;
 import fr.perrier.guard.manager.commands.*;
+import fr.perrier.guard.manager.cps.CpsService;
 import fr.perrier.guard.utils.*;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -21,6 +22,9 @@ public class PlayerLeave implements Listener {
 
         // brand client régénéré à chaque join (PluginMessage) — ce joueur-là n'en a plus
         PluginMessage.forget(p);
+
+        // flux CPS du joueur (fenêtre glissante + relevés /cps en cours)
+        CpsService.forget(p.getUniqueId());
 
         //TODO FREEZE
         if(p.hasPotionEffect(PotionEffectType.BLINDNESS)) {

@@ -61,6 +61,12 @@ public class LangResourcesTest {
         path(root, "reports.reasons.cheat.name");
         path(root, "reports.usage");
         path(root, "reports.no-perm");
+        // clés CPS : lues en "commands.cps.*" par Messages/ReportFlash/CpsService
+        path(root, "commands.cps.running");
+        path(root, "commands.cps.format");
+        path(root, "commands.cps.flash");
+        path(root, "commands.cps.alert.peak");
+        path(root, "commands.cps.alert.stable");
     }
 
     @Test
@@ -80,5 +86,7 @@ public class LangResourcesTest {
         Object value = path(root, "reports.notify-default");
         assertEquals(Boolean.TRUE, value);
         path(root, "commands.reports.name"); // sans ça, l'enregistrement plante au boot
+        path(root, "cps.limit"); // scan CPS h24 (seuil, plancher, fenêtre, cooldown)
+        path(root, "cps.cooldown");
     }
 }

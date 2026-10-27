@@ -76,16 +76,20 @@ commands:
       flash: "#2EE6D6[Report] &f%text%"
       xray-flash: "#2EE6D6[Guard] &f%text%"
       cross-freeze: "#2EE6D6[Guard] &c%text% a été gelé sur un autre serveur."
+    cps:
+      missargs: "&c/cps <player>"
+      running: "&fCompteur de CPS &aactive &fsur : #2EE6D6%target%"
+      format: "#17A1B2%target% &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
+      end: "&fAverage #2EE6D6%target% &fcps &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
+      flash: "#2EE6D6[Guard] &f%text%"
+      alert:
+        peak: "#2EE6D6%target% &fpic à &2%cps% &fcps !"
+        stable: "#2EE6D6%target% &fà &2%cps% &fcps — cadence anormalement stable !"
 freeze:
   missargs: "&c/freeze <player>"
   activated: "#17A1B2%target% a été freeze."
   desactivated: "#17A1B2%target% a été unfreeze."
   disconnect: "&c%player% a déconnecté en freeze."
-cps:
-  missargs: "&c/cps <player>"
-  running: "&fCompteur de CPS &aactive &fsur : #2EE6D6%target%"
-  format: "#17A1B2%target% &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
-  end: "&fAverage #2EE6D6%target% &fcps &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
 vanish:
   activated: "&fVanish &aactivé"
   desactivated: "&fVanish &cdesactivé"

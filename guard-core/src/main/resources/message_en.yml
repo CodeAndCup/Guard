@@ -76,16 +76,20 @@ commands:
       flash: "#2EE6D6[Report] &f%text%"
       xray-flash: "#2EE6D6[Guard] &f%text%"
       cross-freeze: "#2EE6D6[Guard] &c%text% got frozen on another server."
+    cps:
+      missargs: "&c/cps <player>"
+      running: "&fCPS checker apply to #2EE6D6%target%"
+      format: "#17A1B2%target% &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
+      end: "&fAverage #2EE6D6%target% &fcps &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
+      flash: "#2EE6D6[Guard] &f%text%"
+      alert:
+        peak: "#2EE6D6%target% &fpeaked at &2%cps% &fcps !"
+        stable: "#2EE6D6%target% &fat &2%cps% &fcps — unnaturally steady cadence !"
 freeze:
   missargs: "&c/freeze <player>"
   activated: "#17A1B2%target% was frozen."
   desactivated: "#17A1B2%target% was unfreeze."
   disconnect: "&c%player% disconnected in freeze."
-cps:
-  missargs: "&c/cps <player>"
-  running: "&fCPS checker apply to #2EE6D6%target%"
-  format: "#17A1B2%target% &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
-  end: "&fAverage #2EE6D6%target% &fcps &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
 vanish:
   activated: "[ACTION][CHAT]&fVanish &aactivated"
   desactivated: "[ACTION][CHAT]&fVanish &cdesactivated"

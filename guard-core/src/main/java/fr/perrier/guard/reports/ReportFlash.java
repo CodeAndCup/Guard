@@ -13,13 +13,15 @@ import java.util.function.Consumer;
 
 /**
  * Flash inter-serveurs du canal TYPE_NOTIFY : payload "kind\u0000server\u0000text".
- * Kinds : REPORT (alerte staff reports), XRAY (alerte staff xray), FREEZE / UNFREEZE (réplication du gel).
+ * Kinds : REPORT (alerte staff reports), XRAY (alerte staff xray), CPS (alerte scan CPS),
+ * FREEZE / UNFREEZE (réplication du gel).
  * Wiring au boot (tâche 6) ; émission statique pour émetteurs locaux.
  */
 public class ReportFlash {
 
     public static final String KIND_REPORT = "REPORT";
     public static final String KIND_XRAY = "XRAY";
+    public static final String KIND_CPS = "CPS";
     public static final String KIND_FREEZE = "FREEZE";
     public static final String KIND_UNFREEZE = "UNFREEZE";
 
@@ -33,6 +35,8 @@ public class ReportFlash {
         if (KIND_REPORT.equals(kind) || KIND_XRAY.equals(kind)) {
             alert(KIND_REPORT.equals(kind) ? "guard.reports.view" : "guard.xray",
                     KIND_REPORT.equals(kind) ? "commands.report.flash" : "commands.report.xray-flash", text);
+        } else if (KIND_CPS.equals(kind)) {
+            alert("guard.cps", "commands.cps.flash", text);
         }
         // pour FREEZE/UNFREEZE : pas d'affichage local (le staff local qui a gelé est déjà informé par Freeze.onFreeze)
         MessengerHolder.get().broadcast(Codec.TYPE_NOTIFY, payload);
@@ -58,6 +62,9 @@ public class ReportFlash {
                     break;
                 case KIND_XRAY:
                     alert("guard.xray", "commands.report.xray-flash", text);
+                    break;
+                case KIND_CPS:
+                    alert("guard.cps", "commands.cps.flash", text);
                     break;
                 case KIND_FREEZE:
                     applyFreeze(text, true);

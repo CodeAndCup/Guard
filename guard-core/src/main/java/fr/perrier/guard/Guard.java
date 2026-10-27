@@ -19,6 +19,7 @@ import fr.perrier.guard.utils.lang.LangMigrator;
 import fr.perrier.guard.commands.*;
 import fr.perrier.guard.manager.commands.*;
 import fr.perrier.guard.manager.commands.ChatColor;
+import fr.perrier.guard.manager.cps.CpsService;
 import fr.perrier.guard.menu.*;
 import fr.perrier.guard.utils.*;
 import fr.perrier.guard.utils.item.*;
@@ -115,6 +116,7 @@ public class Guard extends JavaPlugin {
         // cache des reports (les menus le lisent en synchrone : plus d'affichage intermittent)
         ReportCache.startPeriodicRefresh();
         ReportNotifications.init(); // toggle staff (/reports on|off), fichier local
+        CpsService.start(); // scan CPS h24 (roll main thread + analyse async)
 
         menuAPI = new MenuAPI(instance);
         commandHandler = new CommandHandler(this);

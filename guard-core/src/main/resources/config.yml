@@ -125,6 +125,19 @@ commands:
 cps_check: 10
 
 #
+# CPS scan (auto-clicker) : analyse continue de la fenêtre glissante de tous les joueurs.
+#   limit: pic (cps) déclenchant une alerte / floor: plancher anti faux positifs de la stabilité
+#   tolerance: variance max des cps sur la fenêtre pour "stable" / window: fenêtre en secondes
+#   cooldown: délai (s) entre deux alertes du même joueur
+#
+cps:
+  limit: 20
+  floor: 8
+  tolerance: 0.1
+  window: 5
+  cooldown: 30
+
+#
 # Instant Ban when a player disconnect in freeze.
 #
 freeze_ban:
