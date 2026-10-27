@@ -6,6 +6,7 @@ import fr.perrier.guard.network.Codec;
 import fr.perrier.guard.network.GuardFrame;
 import fr.perrier.guard.network.MessengerHolder;
 import fr.perrier.guard.utils.ChatUtil;
+import fr.perrier.guard.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -79,8 +80,8 @@ public class ReportFlash {
     }
 
     private static void alert(String perm, String langKey, String text) {
-        String rendered = ChatUtil.translate(Guard.getLangConfig().getString(langKey,
-                "&b[Guard] &f" + text).replace("%text%", text));
+        String rendered = render(Messages.prefix(),
+                Guard.getLangConfig().getString(langKey, "%text%"), text);
         for (Player staff : Bukkit.getOnlinePlayers()) {
             // perm OU (pas la perm notify et désabonné) → pas de flash : le toggle réseau s'applique
             // aussi à la réception, pas seulement aux événements locaux
@@ -88,6 +89,12 @@ public class ReportFlash {
                 staff.sendMessage(rendered);
             }
         }
+    }
+
+    /** Rendu d'une alerte : le préfixe du plugin (clé prefix, déjà traduit) + le contenu de la
+     *  clé flash. Les clés ne portent plus de marqueur [Report]/[Guard] : il vient d'ici. */
+    static String render(String prefix, String template, String text) {
+        return prefix + ChatUtil.translate(template.replace("%text%", text));
     }
 
     /** Vrai si ce staff veut recevoir les alertes (désinscription via /reports off).
