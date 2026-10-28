@@ -129,6 +129,16 @@ public class Guard extends JavaPlugin {
 
         new NoClipManager().everyTick();
 
+        if (Guard.getDefaultConfig().getBoolean("anticheat_encryption.enabled")) {
+            EncryptionAC.setProtocolManager(EncryptionAC.resolveProtocolManager());
+            if (EncryptionAC.getProtocolManager() != null) {
+                new EncryptionAC().registerPacketListener();
+                getLogger().info("Guard: AntiCheat Encryption (packet obfuscation) active.");
+            } else {
+                getLogger().warning("Guard: anticheat_encryption.enabled=true but ProtocolLib is not installed - disabled.");
+            }
+        }
+
         Bukkit.getMessenger().registerIncomingPluginChannel(instance, "minecraft:brand", new PluginMessage());
     }
 

@@ -152,3 +152,9 @@ freeze_ban:
 automod:
   banned_word: ["gueule","pute","fdp","connard","tg","ez","nigger","salope","tgl","slp","tdc","pd","卐","hitler","adolf","batard","ntm","merde","negro","con","ftg","izi","cheh","stfu","fuck","porn","puta","dick","fck"]
   number_warn: 3 #Number of warn before auto mute. (-1 = mute desactivate)
+
+#
+# AntiCheat Encryption (packet obfuscation) - requires ProtocolLib installed
+#
+anticheat_encryption:
+  enabled: false
