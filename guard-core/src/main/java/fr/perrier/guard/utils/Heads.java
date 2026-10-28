@@ -1,19 +1,21 @@
 package fr.perrier.guard.utils;
 
 import com.cryptomorin.xseries.*;
-
-import java.lang.Class;
-
+import com.cryptomorin.xseries.profiles.builder.XSkull;
+import com.cryptomorin.xseries.profiles.gameprofile.MojangGameProfile;
+import com.cryptomorin.xseries.profiles.gameprofile.XGameProfile;
+import com.cryptomorin.xseries.profiles.objects.Profileable;
+import com.mojang.authlib.properties.Property;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
+
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+import java.util.function.BiFunction;
 
 /**
  * Utilitaires de têtes de joueur (pseudo -> ItemStack), SANS aucune requête Mojang et sans
  * texture custom : compatible serveur online comme crack.
- *
- * NOTE : les anciennes textures custom (flèches de pagination...) ont été retirées — elles
- * dépendaient d'authlib/PropertySet, dont les signatures changent à chaque version de Paper
- * (NoSuchMethodError/NoSuchMethodException). Les items vanilla (ARROW...) les remplacent.
  */
 public final class Heads {
 
@@ -68,6 +70,23 @@ public final class Heads {
                     .invoke(meta, profile);
             head.setItemMeta(meta);
             return head;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return XMaterial.PLAYER_HEAD.parseItem();
+        }
+    }
+
+    public static ItemStack textured(String key) {
+        String[] texture = GuardHeads.texture(key);
+
+        if (texture == null) {
+            return XMaterial.STRUCTURE_VOID.parseItem();
+        }
+
+        try {
+            String value = texture[0];
+
+            return XSkull.createItem().profile(Profileable.detect(value)).apply();
         } catch (Exception e) {
             e.printStackTrace();
             return XMaterial.PLAYER_HEAD.parseItem();

@@ -5,6 +5,7 @@ import fr.perrier.guard.Guard;
 import fr.perrier.guard.manager.cps.CpsService;
 import fr.perrier.guard.manager.cps.CpsTracker;
 import fr.perrier.guard.manager.listener.PluginMessage;
+import fr.perrier.guard.manager.menu.dashboard.PlayersMenu;
 import fr.perrier.guard.manager.menu.dashboard.ReportsMenu;
 import fr.perrier.guard.manager.menu.moderation.ViewInventoryMenu;
 import fr.perrier.guard.manager.menu.sanctionset.SanctionScreen;
@@ -21,10 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Profil joueur : tête au centre (ping/adresse/brand), 3 onglets centrés en haut,
@@ -56,6 +54,42 @@ public class ProfileMenu extends GlassMenu {
         } catch (Exception ignored) {
         }
         return -1;
+    }
+
+    /**
+     * Version du client : ViaVersion si présent (réflexion, dépendance optionnelle),
+     * sinon la version du serveur (sans ViaVersion un client ne peut pas être d'une autre version).
+     */
+    public static String clientVersion(Player p) {
+        Integer protocol = viaProtocol(p.getUniqueId());
+        if (protocol != null) {
+            return fr.perrier.guard.utils.ProtocolVersion.of(protocol);
+        }
+        return serverVersion();
+    }
+
+    /** Réflexion ViaVersion : protocol du joueur, ou null si le plugin est absent. */
+    private static Integer viaProtocol(java.util.UUID uuid) {
+        try {
+            Class<?> via = Class.forName("com.viaversion.viaversion.api.Via");
+            Object api = via.getMethod("getAPI").invoke(null);
+            Object version = api.getClass().getMethod("getPlayerVersion", java.util.UUID.class)
+                    .invoke(api, uuid);
+            return ((Number) version).intValue();
+        } catch (Throwable absent) {
+            return null; // plugin non installé (Throwable : NoClassDefFoundError inclus)
+        }
+    }
+
+    /** Version du serveur "1.x.y", ou "?" si indéterminable. */
+    private static String serverVersion() {
+        try {
+            String bukkit = org.bukkit.Bukkit.getBukkitVersion(); // "1.21.5-R0.1-SNAPSHOT"
+            int dash = bukkit.indexOf('-');
+            return dash > 0 ? bukkit.substring(0, dash) : bukkit;
+        } catch (Throwable ignored) {
+            return "?";
+        }
     }
 
     /** Pur : couleur du ping (< 50 vert, <= 150 jaune, sinon rouge). */
@@ -102,7 +136,7 @@ public class ProfileMenu extends GlassMenu {
             buttons.put(slot, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player p) {
-                    return new ItemBuilder(tabItem(tab))
+                    return new ItemBuilder(tabItem(tab, p))
                             .setName(ChatUtil.translate(Guard.getLangConfig()
                                     .getString("menu.profile.tab." + tab.toLowerCase(), tab)))
                             .toItemStack();
@@ -130,38 +164,35 @@ public class ProfileMenu extends GlassMenu {
                         .toItemStack();
             }
         });
-        // CPS centré en rangée 3 (utile 20-24 : centre = 22)
-        buttons.put(22, new Button() {
-            @Override
-            public ItemStack getButtonItem(Player p) {
-                CpsTracker flux = CpsService.peek(target.getUniqueId());
-                Double left = flux == null ? null : flux.leftCps();
-                Double right = flux == null ? null : flux.rightCps();
-                return new ItemBuilder(XMaterial.CLOCK.parseItem())
-                        .setName(ChatUtil.translate(Guard.getLangConfig()
-                                .getString("menu.profile.cps.name", "&fCPS")))
-                        .addLoreLine(ChatUtil.translate(Guard.getLangConfig()
-                                .getString("menu.profile.cps.lore", "&f%left% / %right%")
-                                .replace("%left%", left == null ? "?" : String.format("%.1f", left))
-                                .replace("%right%", right == null ? "?" : String.format("%.1f", right))))
-                        .toItemStack();
-            }
-        });
 
         // le cadre glass est posé par GlassMenu (pattern documenté de la lib)
+
+        // back vers la liste des joueurs (seul écran d'ouverture du profil), hors bordure (2-6)
+        buttons.put(20, new BackButton(new PlayersMenu()));
+
         return buttons;
     }
 
     private List<String> lore(String pingText) {
         String brand = PluginMessage.brandOf(target);
+        String version = clientVersion(target);
         String address = target.getAddress() == null ? "?"
                 : target.getAddress().getAddress().getHostAddress();
-        java.util.List<String> out = new java.util.ArrayList<>();
+        List<String> out = new ArrayList<>();
+
+        CpsTracker flux = CpsService.peek(target.getUniqueId());
+        Double left = flux == null ? null : flux.leftCps();
+        Double right = flux == null ? null : flux.rightCps();
+
         for (String line : Guard.getLangConfig().getStringList("menu.profile.info.lore")) {
             out.add(ChatUtil.translate(line
                     .replace("%ping%", pingText)
                     .replace("%address%", address)
-                    .replace("%brand%", brand)));
+                    .replace("%brand%", brand)
+                    .replace("%version%", version))
+                    .replace("%left%", left == null ? "?" : String.format("%.1f", left))
+                    .replace("%right%", right == null ? "?" : String.format("%.1f", right))
+            );
         }
         return out;
     }
@@ -190,14 +221,14 @@ public class ProfileMenu extends GlassMenu {
         }
     }
 
-    private ItemStack tabItem(String tab) {
+    private ItemStack tabItem(String tab, Player p) {
         switch (tab) {
             case TAB_SANCTIONS:
-                return XMaterial.BOOK.parseItem();
+                return Heads.textured("profile_sanctions");
             case TAB_INVENTORY:
-                return XMaterial.CHEST.parseItem();
+                return Heads.textured("profile_inventory");
             case TAB_HISTORY:
-                return XMaterial.CLOCK.parseItem();
+                return Heads.textured("profile_history");
             default:
                 return XMaterial.PLAYER_HEAD.parseItem();
         }
@@ -227,9 +258,11 @@ public class ProfileMenu extends GlassMenu {
                 if (!target.getName().equalsIgnoreCase(String.valueOf(report.getReported()))) {
                     continue;
                 }
+
                 if (slot >= 17 && slot <= 19) {
                     slot = 20; // 17-19 sont des slots de bordure (size 27) : jamais un contenu dessus
                 }
+
                 final int s = slot++;
                 buttons.put(s, new Button() {
                     @Override
@@ -239,7 +272,9 @@ public class ProfileMenu extends GlassMenu {
                                         .getString("menu.reports.item.name", "&f%reported%")
                                         .replace("%id%", String.valueOf(report.getId()))
                                         .replace("%reported%", String.valueOf(report.getReported()))
-                                        .replace("%reporter%", String.valueOf(report.getReporter()))))
+                                        .replace("%reporter%", String.valueOf(report.getReporter()))
+
+                                ))
                                 .setLore(ReportsMenu.loreLines(report,
                                         Guard.getLangConfig().getStringList("menu.reports.item.lore")))
                                 .toItemStack();

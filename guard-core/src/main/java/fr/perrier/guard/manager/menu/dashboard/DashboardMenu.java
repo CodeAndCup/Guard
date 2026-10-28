@@ -10,6 +10,7 @@ import fr.perrier.guard.menu.Button;
 import fr.perrier.guard.menu.GlassMenu;
 import fr.perrier.guard.menu.buttons.BackButton;
 import fr.perrier.guard.utils.ChatUtil;
+import fr.perrier.guard.utils.Heads;
 import fr.perrier.guard.utils.ItemBuilder;
 import fr.perrier.guard.utils.Messages;
 import org.bukkit.entity.Player;
@@ -186,7 +187,13 @@ public class DashboardMenu extends GlassMenu {
             buttons.put(slot, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    ItemBuilder builder = new ItemBuilder(material.parseItem())
+                    // texture custom si clé connue, sinon le matériel vanilla (back dashboard)
+                    ItemStack icon = (key.equals("vanish") ? Heads.textured("moderation_vanish")
+                            : key.equals("chatlock") ? Heads.textured("moderation_chatlock")
+                            : key.equals("staffchat") ? Heads.textured("moderation_staffchat")
+                            : key.equals("noclip") ? Heads.textured("moderation_noclip")
+                            : material.parseItem());
+                    ItemBuilder builder = new ItemBuilder(icon)
                             .setName(lang("moderation." + key + ".name", key));
                     for (String lore : langList("moderation." + key + ".lore")) {
                         builder.addLoreLine(lore);

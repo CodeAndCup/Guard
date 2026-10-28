@@ -324,11 +324,10 @@ menu:
       name: "#2EE6D6&l%target%"
       lore:
         - "&fPing: %ping%"
+        - "&fVersion: &7%version%"
         - "&fAdresse: &7%address%"
         - "&fClient: &7%brand%"
-    cps:
-      name: "#2EE6D6&lCPS"
-      lore: "&f%left% / %right% &7(clics/s)"
+        - "&fCPS: &7%left% / %right%"
     history:
       title: "#0E6F7D&lHistorique &f%target%"
   sanction:
