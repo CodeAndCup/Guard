@@ -29,7 +29,6 @@ public class VanishHotbar {
         items.add(ModerationItems.nothing);
         items.add(new ItemBuilder(XMaterial.NAME_TAG.parseItem()).setName(ChatUtil.translate(Guard.getInstance().getLangConfig().getString("items.profile", "&fProfil"))).toItemStack());
         items.add(ModerationItems.parameters.toItemStack());
-        items.add(ModerationItems.nothing);
         items.add(ModerationItems.page2from1.toItemStack());
 
         for(int i =0; i<items.size();i++) {
