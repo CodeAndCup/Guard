@@ -5,10 +5,9 @@ import fr.perrier.guard.Guard;
 import fr.perrier.guard.manager.commands.SanctionSet;
 import fr.perrier.guard.menu.Button;
 import fr.perrier.guard.menu.Menu;
-import fr.perrier.guard.menu.buttons.BackButton;
 import fr.perrier.guard.menu.buttons.ConversationButton;
-import fr.perrier.guard.menu.buttons.Glass;
 import fr.perrier.guard.menu.pagination.ConfirmationMenu;
+import fr.perrier.guard.menu.pagination.PaginatedMenu;
 import fr.perrier.guard.utils.ChatUtil;
 import fr.perrier.guard.utils.ItemBuilder;
 import fr.perrier.guard.utils.Messages;
@@ -27,16 +26,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Sanctions en 1 écran : filtres (Mute/Warn/Ban selon les clés lang + perms), raisons itérées
- * depuis sanction.<cat>.<raison>.name/.duration, durée perso ConversationButton, ConfirmationMenu →
- * execute la commande console de la config via SS.runSanction.
+ * Sanctions : filtres (Mute/Warn/Ban selon les clés lang + perms), raisons paginées
+ * (15/page, le nombre varie par catégorie) itérées depuis sanction.<cat>.<raison>.name/.duration,
+ * durée perso ConversationButton, ConfirmationMenu → execute la commande console de la
+ * config via SS.runSanction. Cadre immutable : un clic sur un filtre/toggle rouvre une
+ * nouvelle instance (reset page 1), même mécanique que ReportsMenu.
  */
-public class SanctionScreen extends Menu {
+public class SanctionScreen extends PaginatedMenu {
 
     private static final List<String> ALL_CATEGORIES = Arrays.asList("Mute", "Warn", "Ban");
-    /** Slots de bordure d'un inventaire 45 (meme set que GlassMenu) : filtres/raisons/back les evitant. */
-    private static final java.util.Set<Integer> BORDER_45 =
-            new java.util.LinkedHashSet<>(Arrays.asList(0, 1, 7, 8, 9, 17, 27, 35, 36, 37, 43, 44));
 
     /** Pur : catégories présentes (Mute/Warn/Ban dans cet ordre), absente si section lang manquante. */
     public static List<String> categories(FileConfiguration lang) {
@@ -81,10 +79,18 @@ public class SanctionScreen extends Menu {
 
     private final Menu oldMenu;
     private final org.bukkit.entity.Player target;
+    private final String category;
+    private final boolean customDuration;
 
     public SanctionScreen(Menu oldMenu, Player target) {
+        this(oldMenu, target, null, false);
+    }
+
+    private SanctionScreen(Menu oldMenu, Player target, String category, boolean customDuration) {
         this.oldMenu = oldMenu;
         this.target = target;
+        this.category = category;
+        this.customDuration = customDuration;
     }
 
     /** Pur : lore enum existante par catégorie (menu.sanctionset.<cat>.lore). */
@@ -99,30 +105,75 @@ public class SanctionScreen extends Menu {
         }
     }
 
-    @Override
-    public String getTitle(Player player) {
-        return ChatUtil.translate(Guard.getLangConfig()
-                .getString("menu.sanction.title", "&2Sanctions &f%target%")
-                .replace("%target%", target.getName()));
-    }
-
-    @Override
-    public Map<Integer, Button> getButtons(Player player) {
-        Map<Integer, Button> buttons = new HashMap<>();
-
+    /** Catégories visibles pour le joueur (perms). */
+    private List<String> visibleCategories(Player player) {
         List<String> visible = new ArrayList<>();
         for (String cat : categories(Guard.getLangConfig())) {
             if (player.hasPermission(categoryPerm(cat))) {
                 visible.add(cat);
             }
         }
-        final String current = visible.contains(selected) ? selected : (visible.isEmpty() ? null : visible.get(0));
+        return visible;
+    }
+
+    /** Catégorie active : celle choisie si toujours visible, sinon la première. */
+    private String currentCategory(Player player) {
+        List<String> visible = visibleCategories(player);
+        return visible.contains(category) ? category : (visible.isEmpty() ? null : visible.get(0));
+    }
+
+    @Override
+    public String getPrePaginatedTitle(Player player) {
+        return ChatUtil.translate(Guard.getLangConfig()
+                .getString("menu.sanction.title", "&2Sanctions &f%target%")
+                .replace("%target%", target.getName()));
+    }
+
+    @Override
+    public Map<Integer, Button> getAllPagesButtons(Player player) {
+        HashMap<Integer, Button> buttons = new HashMap<>();
+        String current = currentCategory(player);
+        if (current == null) {
+            return buttons;
+        }
+        final String category = current;
+        final Menu back = backButton();
+        for (final String key : reasons(Guard.getLangConfig(), category)) {
+            final String name = reasonName(Guard.getLangConfig(), category, key);
+            final String duration = reasonDuration(Guard.getLangConfig(), category, key);
+            buttons.put(buttons.size(), new Button() {
+                @Override
+                public ItemStack getButtonItem(Player p) {
+                    ItemStack item = new ItemBuilder(categoryItem(category)).setName(ChatUtil.translate("&f" + name)).toItemStack();
+                    ItemBuilder builder = new ItemBuilder(item);
+                    for (String lore : categoryLore(category)) {
+                        builder.addLoreLine(ChatUtil.translate(lore
+                                .replace("%type%", category)
+                                .replace("%reason%", name)
+                                .replace("%duration%", duration)));
+                    }
+                    return builder.toItemStack();
+                }
+
+                @Override
+                public void clicked(Player p, int slot, ClickType clickType, int hotbarButton) {
+                    confirm(p, category, name, duration, back);
+                }
+            });
+        }
+        return buttons;
+    }
+
+    @Override
+    public Map<Integer, Button> getGlobalButtons(Player player) {
+        Map<Integer, Button> buttons = new HashMap<>();
+        final String current = currentCategory(player);
 
         // filtres (rangée du haut), catégorie active marquée en palette flash
         int filterSlot = 2;
-        for (final String cat : visible) {
+        for (final String cat : visibleCategories(player)) {
             final boolean active = cat.equals(current);
-            buttons.put(filterSlot, new Button() {
+            buttons.put(filterSlot++, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player p) {
                     String name = Guard.getLangConfig().getString(
@@ -133,20 +184,13 @@ public class SanctionScreen extends Menu {
 
                 @Override
                 public void clicked(Player p, int slot, ClickType clickType, int hotbarButton) {
-                    selected = cat;
-                }
-
-                @Override
-                public boolean shouldUpdate(Player p, int slot, ClickType clickType) {
-                    return true; // sans ça, changer de catégorie ne re-rendait pas le menu (aucun effet visible)
+                    new SanctionScreen(oldMenu, target, cat, customDuration).openMenu(p);
                 }
             });
-            filterSlot++;
         }
 
-        // toggle durée personnalisée
+        // toggle durée personnalisée (rouvre une nouvelle instance : reset page 1)
         if (current != null) {
-            final String category = current;
             buttons.put(6, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player p) {
@@ -159,65 +203,16 @@ public class SanctionScreen extends Menu {
 
                 @Override
                 public void clicked(Player p, int slot, ClickType clickType, int hotbarButton) {
-                    customDuration = !customDuration;
-                }
-
-                @Override
-                public boolean shouldUpdate(Player p, int slot, ClickType clickType) {
-                    return true; // re-render pour refleter le nouvel etat du toggle
+                    new SanctionScreen(oldMenu, target, current, !customDuration).openMenu(p);
                 }
             });
-
-            // raisons de la catégorie active, itérées depuis les clés lang
-            final Menu back = oldMenu != null ? oldMenu : new SelectPlayerSS();
-            int reasonSlot = 19;
-            for (final String key : reasons(Guard.getLangConfig(), category)) {
-                final String name = reasonName(Guard.getLangConfig(), category, key);
-                final String duration = reasonDuration(Guard.getLangConfig(), category, key);
-                if (BORDER_45.contains(reasonSlot)) {
-                    reasonSlot++; // slot réservé à la bordure
-                    continue;
-                }
-                if (reasonSlot >= getSize() - 4) {
-                    break; // 1 page v1 ; pagination si ça déborde (monter en PaginatedMenu si besoin)
-                }
-                buttons.put(reasonSlot++, new Button() {
-                    @Override
-                    public ItemStack getButtonItem(Player p) {
-                        ItemStack item = new ItemBuilder(categoryItem(category)).setName(ChatUtil.translate("&f" + name)).toItemStack();
-                        ItemBuilder builder = new ItemBuilder(item);
-                        for (String lore : categoryLore(category)) {
-                            builder.addLoreLine(ChatUtil.translate(lore
-                                    .replace("%type%", category)
-                                    .replace("%reason%", name)
-                                    .replace("%duration%", duration)));
-                        }
-                        return builder.toItemStack();
-                    }
-
-                    @Override
-                    public void clicked(Player p, int slot, ClickType clickType, int hotbarButton) {
-                        confirm(p, category, name, duration, back);
-                    }
-                });
-            }
-
-            // back hors bordure
-            buttons.put(41, new BackButton(back));
-        }
-
-        // bordure seule (pattern glass de la lib) — plus de remplissage integral
-        for (int i : new int[]{0, 1, 7, 8, 9, 17, 27, 35, 36, 37, 43, 44}) {
-            if (!buttons.containsKey(i)) {
-                buttons.put(i, new Glass(9));
-            }
         }
         return buttons;
     }
 
     @Override
-    public int getSize() {
-        return 45;
+    public Menu backButton() {
+        return oldMenu != null ? oldMenu : new SelectPlayerSS();
     }
 
     private ItemStack confirmItem(Player p, String category, String name, String duration) {
@@ -252,7 +247,4 @@ public class SanctionScreen extends Menu {
                 return Material.BOOK;
         }
     }
-
-    private String selected;
-    private boolean customDuration;
 }
