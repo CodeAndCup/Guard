@@ -52,8 +52,8 @@ public enum Messages {
     COMMANDS_NOCLIP_ACTIVATED("commands.noclip.activated",Guard.getLangConfig().getString("commands.noclip.activated")),
     COMMANDS_NOCLIP_DESACTIVATED("commands.noclip.desactivated",Guard.getLangConfig().getString("commands.noclip.desactivated")),
 
-    COMMANDS_CHATCOLOR_ACTIVATED("COMMANDS_CHATCOLOR_ACTIVATED",Guard.getLangConfig().getString("commands.chatcolor.activated")),
-    COMMANDS_CHATCOLOR_DESACTIVATED("commands.chatcolor.activated",Guard.getLangConfig().getString("commands.chatcolor.desactivated")),
+    COMMANDS_CHATCOLOR_ACTIVATED("commands.chatcolor.activated",Guard.getLangConfig().getString("commands.chatcolor.activated")),
+    COMMANDS_CHATCOLOR_DESACTIVATED("commands.chatcolor.desactivated",Guard.getLangConfig().getString("commands.chatcolor.desactivated")),
     COMMANDS_CHATCOLOR_COLOR("commands.chatcolor.color",Guard.getLangConfig().getString("commands.chatcolor.color")),
 
     COMMANDS_INVENTORY_MISSARGS("commands.inventory.missargs",Guard.getLangConfig().getString("commands.inventory.missargs")),
@@ -78,7 +78,7 @@ public enum Messages {
     MENU_SANCTIONSET_MAIN_WARNTITLE("menu.sanctionset.main.warn",Guard.getLangConfig().getString("menu.sanctionset.main.warn")),
     MENU_SANCTIONSET_MAIN_WARNLORE("menu.sanctionset.main.warn_lore",Guard.getLangConfig().getStringList("menu.sanctionset.main.warn_lore")),
     MENU_SANCTIONSET_MAIN_MUTETITLE("menu.sanctionset.main.mute",Guard.getLangConfig().getString("menu.sanctionset.main.mute")),
-    MENU_SANCTIONSET_MAIN_MUTELORE("menu.sanctionset.main.mutelore",Guard.getLangConfig().getStringList("menu.sanctionset.main.mute_lore")),
+    MENU_SANCTIONSET_MAIN_MUTELORE("menu.sanctionset.main.mute_lore",Guard.getLangConfig().getStringList("menu.sanctionset.main.mute_lore")),
 
     MENU_SANCTIONSET_MUTE_TITLE("menu.sanctionset.mute.title",Guard.getLangConfig().getString("menu.sanctionset.mute.title")),
     MENU_SANCTIONSET_MUTE_LORE("menu.sanctionset.mute.lore", Guard.getLangConfig().getStringList("menu.sanctionset.mute.lore")),

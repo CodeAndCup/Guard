@@ -85,56 +85,56 @@ commands:
       alert:
         peak: "#2EE6D6%target% &fpeaked at &2%cps% &fcps !"
         stable: "#2EE6D6%target% &fat &2%cps% &fcps — unnaturally steady cadence !"
-freeze:
-  missargs: "&c/freeze <player>"
-  activated: "#17A1B2%target% was frozen."
-  desactivated: "#17A1B2%target% was unfreeze."
-  disconnect: "&c%player% disconnected in freeze."
-vanish:
-  activated: "[ACTION][CHAT]&fVanish &aactivated"
-  desactivated: "[ACTION][CHAT]&fVanish &cdesactivated"
-teleport:
-  missargs: "&c/tp <player>"
-  confirmation: "&fTeleportation to #17A1B2&l%target%"
-teleporthere:
-  missargs: "&c/tph <player>"
-  confirmation: "&fTeleportation of #17A1B2&l%target% &fto you."
-sanctionset:
-  missargs: "&c/ss <player>"
-noclip:
-  activated: "&fNoClip &aactivated"
-  desactivated: "&fNoClip &cdesactivated"
-chatcolor:
-  activated: "&fChatColor &aactivated"
-  desactivated: "&fChatColor &cdesactivated"
-  color: "#2EE6D6"
-inventory:
-  missargs: "&c/invsee <player>"
-modlist:
-  format:
-    - "&8&l&m------------------------------"
-    - "#0E6F7D&l        Guard ModList"
-    - " "
-    - "&8- &f%target% %value%"
-    - "&8&l&m------------------------------"
-chatlock:
-  activated: "&fThe chat has been &clocked&f."
-  desactivated: "&fThe chat has been &aunlock&f."
-  lock_message: "&cSorry but the chat is currently locked."
-lookup:
-  message:
-    - "&8&l&m------------------------------"
-    - "#0E6F7D&l        Guard LookUP"
-    - ""
-    - "&fName&8: #2EE6D6%target%"
-    - "&fUUID&8: #2EE6D6%uuid%"
-    - "&fPremium&8: #2EE6D6%premium%"
-    - "&fCreate At&8: #2EE6D6%date%"
-    - "&fIP&8: #2EE6D6%ip%"
-    - "&fCountry&8: #2EE6D6%country%"
-    - "&fISP&8: #2EE6D6%isp%"
-    - ""
-    - "&8&l&m------------------------------"
+    freeze:
+      missargs: "&c/freeze <player>"
+      activated: "#17A1B2%target% was frozen."
+      desactivated: "#17A1B2%target% was unfreeze."
+      disconnect: "&c%player% disconnected in freeze."
+    vanish:
+      activated: "[ACTION][CHAT]&fVanish &aactivated"
+      desactivated: "[ACTION][CHAT]&fVanish &cdesactivated"
+    teleport:
+      missargs: "&c/tp <player>"
+      confirmation: "&fTeleportation to #17A1B2&l%target%"
+    teleporthere:
+      missargs: "&c/tph <player>"
+      confirmation: "&fTeleportation of #17A1B2&l%target% &fto you."
+    sanctionset:
+      missargs: "&c/ss <player>"
+    noclip:
+      activated: "&fNoClip &aactivated"
+      desactivated: "&fNoClip &cdesactivated"
+    chatcolor:
+      activated: "&fChatColor &aactivated"
+      desactivated: "&fChatColor &cdesactivated"
+      color: "#2EE6D6"
+    inventory:
+      missargs: "&c/invsee <player>"
+    modlist:
+      format:
+        - "&8&l&m------------------------------"
+        - "#0E6F7D&l        Guard ModList"
+        - " "
+        - "&8- &f%target% %value%"
+        - "&8&l&m------------------------------"
+    chatlock:
+      activated: "&fThe chat has been &clocked&f."
+      desactivated: "&fThe chat has been &aunlock&f."
+      lock_message: "&cSorry but the chat is currently locked."
+    lookup:
+      message:
+        - "&8&l&m------------------------------"
+        - "#0E6F7D&l        Guard LookUP"
+        - ""
+        - "&fName&8: #2EE6D6%target%"
+        - "&fUUID&8: #2EE6D6%uuid%"
+        - "&fPremium&8: #2EE6D6%premium%"
+        - "&fCreate At&8: #2EE6D6%date%"
+        - "&fIP&8: #2EE6D6%ip%"
+        - "&fCountry&8: #2EE6D6%country%"
+        - "&fISP&8: #2EE6D6%isp%"
+        - ""
+        - "&8&l&m------------------------------"
 #
 #▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 #
