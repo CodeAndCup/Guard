@@ -39,7 +39,8 @@ public class PageButton extends Button {
         if (this.hasNext(player)) {
             this.menu.modPage(player, this.mod);
             Button.playNeutral(player);
-            InventoryUpdate.updateInventory(Guard.getInstance(), player, menu.getTitle(player));
+            // pas d'InventoryUpdate (NMS) : modPage → openMenu rouvre déjà avec le titre à jour,
+            // et le scan du package craftbukkit versionné plante sur Paper ≥ 1.20.5
         }
     }
 
