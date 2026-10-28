@@ -6,7 +6,7 @@ main: "fr.perrier.guard.Guard"
 description: "Advanced Moderation plugin"
 api-version: "1.13"
 
-softdepend: ["LunarClient-API"]
+softdepend: ["LunarClient-API","ViaVersion","ProtocolLib"]
 
 commands:
   guard:
