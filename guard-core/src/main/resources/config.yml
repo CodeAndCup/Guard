@@ -1,0 +1,160 @@
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄#
+#                                                   #
+#      ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗     #
+#     ██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗    #
+#     ██║  ███╗██║   ██║███████║██████╔╝██║  ██║    #
+#     ██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║    #
+#     ╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝    #
+#      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝     #
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄#
+#
+# Message language:
+#   - en (100%)
+#   - fr (100%)
+#   - it (0%)
+#   - es (0%)
+#   - de (0%)
+#
+language: en
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+#Configuration to sync vanish with database
+#
+database:
+  enable: false
+  host: localhost # DB Host
+  port: 3306 # Mysql Port
+  name: minecraft # Table name
+  user: root # Username
+  password: root # Password
+# NB: les reports utilisent des id UUID (VARCHAR(36)) depuis la 1.1.
+# Sur une base existante créée par une version plus ancienne (id INT AUTO_INCREMENT) :
+#   ALTER TABLE reports MODIFY id VARCHAR(36), puis recréer les ids existants
+#   (ou TRUNCATE/repartir de zéro — les rapports déjà résolus n'ont pas d'historique à garder).
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄#
+#
+#Realtime sync between Guard instances behind a proxy (staffchat, reports, vanish)
+#
+network:
+  enable: true
+  server-name: "Serveur" # nom affiché dans le staffchat / les alertes inter-serveurs
+reports:
+  enable: true
+  cooldown-seconds: 60
+  # --- signalements v2 (flux de modération) ---
+  reason-mode: BOTH           # FREETEXT (raison tapée) | PREDEFINED (GUI obligatoire) | BOTH
+  max-open-per-reporter: 5    # plafond de rapports ouverts par signalant (-1 = illimité)
+  target-cooldown-seconds: 300 # un joueur ne peut pas être signalé 2 fois de suite avant ce délai
+  require-online-target: true # la cible doit être connectée
+  save-location: true         # sauvegarde la position du signalé (bouton de tp)
+  retention-days: 30          # /reports clear nettoie les rapports clos au-delà
+  delete-mode: TAG            # TAG (marque supprimé) | PURGE (supprime réellement)
+  notify-default: true        # état initial du toggle staff (/reports on|off)
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+#Edit for commands use in /ss
+#
+sanction:
+  mute: "ipmute %target% %duration% %reason%"
+  ban: "ipban %target% %duration% %reason%"
+  warn: "warn %target% %reason%"
+  duration_permanant: "-1"
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+#Edit commands name, aliases and activiation
+# (1st is the main name of the commands and other are aliases)
+#
+commands:
+  freeze:
+    active: true
+    name: ["freeze","fz","unfreeze","ufz","guard:freeze"]
+  cps:
+    active: true
+    name: ["cps","guard:cps"]
+  vanish:
+    active: true
+    name: ["vanish","mod","v","guard:vanish"]
+  staffchat:
+    active: true
+    name: ["staffchat","sc","guard:staffchat"]
+  teleport:
+    active: true
+    name: ["tp","teleport","guard:tp"]
+  teleporthere:
+    active: true
+    name: ["tph","teleporthere","tphere","guard:tph"]
+  sanctionset:
+    active: true
+    name: ["ss","sanction","sanctionset","guard:ss"]
+  noclip:
+    active: true
+    name: ["noclip","nc","guard:noclip"]
+  chatcolor:
+    active: true
+    name: ["chatcolor","cc","guard:chatcolor"]
+  inventory:
+    active: true
+    name: ["invsee","viewinv","viewinventory","inventorysee","guard:invsee"]
+  modlist:
+    active: true
+    name: ["modlist","vanishlist","guard:modlist"]
+  chatlock:
+    active: true
+    name: ["chatlock","cl","lock","clock","lockchat","guard:chatlock"]
+  xray:
+    active: true
+    name: ["xray","xraylookup","guard:xray"]
+    diamond-alert: 32 # alerte staff + flash cross quand un joueur a miné ce nombre de diamants (-1 = désactivé)
+  report:
+    active: true
+    name: ["report","guard:report"]
+  reports:
+    active: true
+    name: ["reports","guard:reports"]
+  lookup:
+    active: true
+    name: ["lookup","guard:lookup"]
+
+#
+# Number of basic cps checks. (Min: 10 / Max: 30)
+#
+cps_check: 10
+
+#
+# CPS scan (auto-clicker) : analyse continue de la fenêtre glissante de tous les joueurs.
+#   limit: pic (cps) déclenchant une alerte / floor: plancher anti faux positifs de la stabilité
+#   tolerance: variance max des cps sur la fenêtre pour "stable" / window: fenêtre en secondes
+#   cooldown: délai (s) entre deux alertes du même joueur
+#
+cps:
+  limit: 20
+  floor: 8
+  tolerance: 0.1
+  window: 5
+  cooldown: 30
+
+#
+# Instant Ban when a player disconnect in freeze.
+#
+freeze_ban:
+  active: true
+  reason: "Disconnect In Freeze"
+  duration: "7d"
+
+
+#
+# Chat Restriction (list of word that people can't say)
+#
+automod:
+  banned_word: ["gueule","pute","fdp","connard","tg","ez","nigger","salope","tgl","slp","tdc","pd","卐","hitler","adolf","batard","ntm","merde","negro","con","ftg","izi","cheh","stfu","fuck","porn","puta","dick","fck"]
+  number_warn: 3 #Number of warn before auto mute. (-1 = mute desactivate)
+
+#
+# AntiCheat Encryption (packet obfuscation) - requires ProtocolLib installed
+#
+anticheat_encryption:
+  enabled: false

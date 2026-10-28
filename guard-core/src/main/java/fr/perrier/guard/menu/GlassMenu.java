@@ -1,0 +1,34 @@
+package fr.perrier.guard.menu;
+
+import fr.perrier.guard.menu.buttons.*;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class GlassMenu extends Menu {
+
+    @Override
+    public Map<Integer, Button> getButtons(Player paramPlayer) {
+
+        final HashMap<Integer, Button> buttons = new HashMap<>(getAllButtons(paramPlayer));
+
+        // taille RÉELLE de l'inventaire : getSize() déclaré, sinon déduite des boutons
+        // (même formule que Menu.openMenu). Sans ça, un menu de 27 slots dont les boutons
+        // s'arrêtent en rangée 2 calcule size=18, et les bords size-10 / size-2 écrasent
+        // le contenu de la rangée du milieu — les tuiles disparaissent sous le glass.
+        int size = (getSize() == -1) ? size(buttons) : getSize();
+
+        for (int i : new int[]{0, 1, 7, 8, 9, 17, size - 18, size - 10, size - 9, size - 8, size - 2, size - 1}) {
+            buttons.put(i, new Glass(getGlassColor()));
+        }
+
+        return buttons;
+
+    }
+
+    public abstract int getGlassColor();
+
+    public abstract Map<Integer, Button> getAllButtons(Player player);
+
+}

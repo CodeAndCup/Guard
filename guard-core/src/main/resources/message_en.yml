@@ -1,0 +1,590 @@
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄#
+#                                                   #
+#      ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗     #
+#     ██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗    #
+#     ██║  ███╗██║   ██║███████║██████╔╝██║  ██║    #
+#     ██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║    #
+#     ╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝    #
+#      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝     #
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄#
+#
+#
+# Message Configuration [EN].
+# Some place holder are available on specific string.
+# - %v% -> ✓
+# - %x% -> ✗
+# - %target% -> Targeted Player
+# - %left% -> Left Click Value
+# - %right% -> Right Click Value
+# - %type% -> Type of the sanction (Ban / Warn / Mute)
+# - %reason% -> Reason of the sanction
+# - %duration% -> Duration of the sanction
+# - %value% -> For value like (On/Off)
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+# Main configuration message
+#
+prefix: "#0E6F7D&lGuard &8» "
+no_perm: "&cYou don't have permission."
+playernotfound: "&cPlayer not found."
+reloaded: "&aConfiguration have been reloaded successfully"
+commanddisable: "&cSorry but this command is disable."
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+# Item name configuration
+#
+items:
+  vanish_on: "&a&lVanish %v%"
+  vanish_off: "&c&lVanish %x%"
+  freeze: "#2EE6D6&lFreeze"
+  cps: "&7&lCPS"
+  random_tp: "&6&lRandom TP"
+  ss_book: "&c&lSS Book"
+  profile: "&f&lProfile"
+  parameters: "&4&lParameters"
+  teleporter: "#2EE6D6&lTeleporter"
+  knockback: "&2&lKnockBack"
+  chat_color: "#2EE6D6&lChatColor"
+  no_clip: "&7&lNoClip"
+  inventory_view: "&6&lInventory View"
+  go_page_1: "&ePage 1 &8&l<"
+  go_page_2_from_1: "&8&l> &ePage 2"
+  go_page_2_from_3: "&ePage 2 &8&l<"
+  go_page_3: "&8&l> &ePage 3"
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+# Commands message configuration
+#
+# Tips:
+#   You can add [ACTION] to put the message in the action bar.
+#   If you want to put in both (action bar and chat) you can put [CHAT][ACTION]
+#   If nothting or just [CHAT] is put this will send the message in the chat.
+#
+commands:
+    staffchat:
+      enabled: "&aStaff chat enabled."
+      disabled: "&cStaff chat disabled."
+      format: "&8[{server_name}] #2EE6D6{staff} &f: {message}"
+    report:
+      usage: "&c/report #2EE6D6<player> <reason>"
+      sent: "&aReport #%id% sent. A moderator will handle it."
+      failed: "&cFailed to send the report — check the server console."
+      cooldown: "&cWait %seconds% s before another report."
+      flash: "&f%text%"
+      xray-flash: "&f%text%"
+      cross-freeze: "&c%text% got frozen on another server."
+    cps:
+      missargs: "&c/cps <player>"
+      running: "&fCPS checker apply to #2EE6D6%target%"
+      format: "#17A1B2%target% &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
+      end: "&fAverage #2EE6D6%target% &fcps &8> #2EE6D6%left% &f| #2EE6D6%right% &fcps."
+      flash: "&f%text%"
+      alert:
+        peak: "#2EE6D6%target% &fpeaked at &2%cps% &fcps !"
+        stable: "#2EE6D6%target% &fat &2%cps% &fcps — unnaturally steady cadence !"
+freeze:
+  missargs: "&c/freeze <player>"
+  activated: "#17A1B2%target% was frozen."
+  desactivated: "#17A1B2%target% was unfreeze."
+  disconnect: "&c%player% disconnected in freeze."
+vanish:
+  activated: "[ACTION][CHAT]&fVanish &aactivated"
+  desactivated: "[ACTION][CHAT]&fVanish &cdesactivated"
+teleport:
+  missargs: "&c/tp <player>"
+  confirmation: "&fTeleportation to #17A1B2&l%target%"
+teleporthere:
+  missargs: "&c/tph <player>"
+  confirmation: "&fTeleportation of #17A1B2&l%target% &fto you."
+sanctionset:
+  missargs: "&c/ss <player>"
+noclip:
+  activated: "&fNoClip &aactivated"
+  desactivated: "&fNoClip &cdesactivated"
+chatcolor:
+  activated: "&fChatColor &aactivated"
+  desactivated: "&fChatColor &cdesactivated"
+  color: "#2EE6D6"
+inventory:
+  missargs: "&c/invsee <player>"
+modlist:
+  format:
+    - "&8&l&m------------------------------"
+    - "#0E6F7D&l        Guard ModList"
+    - " "
+    - "&8- &f%target% %value%"
+    - "&8&l&m------------------------------"
+chatlock:
+  activated: "&fThe chat has been &clocked&f."
+  desactivated: "&fThe chat has been &aunlock&f."
+  lock_message: "&cSorry but the chat is currently locked."
+lookup:
+  message:
+    - "&8&l&m------------------------------"
+    - "#0E6F7D&l        Guard LookUP"
+    - ""
+    - "&fName&8: #2EE6D6%target%"
+    - "&fUUID&8: #2EE6D6%uuid%"
+    - "&fPremium&8: #2EE6D6%premium%"
+    - "&fCreate At&8: #2EE6D6%date%"
+    - "&fIP&8: #2EE6D6%ip%"
+    - "&fCountry&8: #2EE6D6%country%"
+    - "&fISP&8: #2EE6D6%isp%"
+    - ""
+    - "&8&l&m------------------------------"
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+# Menu message configuration
+#
+reports:
+  refus:
+    self: "&cYou cannot report yourself."
+    immune: "&cThis player cannot be reported."
+    offline: "&cThis player must be online to be reported."
+    limit: "&cYou have too many pending reports."
+    cooldown: "&cWait %seconds% s before reporting again."
+    target-cooldown: "&cThis player was just reported, try again later."
+  reasons:
+    cheat:
+      name: "Cheating / Hacked Client"
+    toxic:
+      name: "Harassment"
+    grief:
+      name: "Griefing"
+    spam:
+      name: "Spam / Advertising"
+  notify-on: "&aReport notifications enabled."
+  notify-off: "&cReport notifications disabled."
+  search-set: "&fSearch: &b%value%"
+  usage: "&c/reports | search <user|id|reason|handler> <value> | sethandler <id> <player|none> | on|off | clear"
+  usage-sethandler: "&c/reports sethandler <id> <player|none>"
+  handler-set: "&aHandler assigned."
+  handler-cleared: "&eHandler cleared."
+  handler-offline: "&cThat moderator is not online."
+  not-found: "&cReport not found: %id%"
+  cleared: "&aCleared %count% report(s)."
+  clear-failed: "&cClear failed (store ?)."
+  no-perm: "&cMissing permission."
+
+menu:
+  reports:
+    reason:
+      title: "#0E6F7D&lReport &f%target%"
+      item:
+        name: "#2EE6D6&l%reason%"
+        lore:
+          - "&fReport %target% for: &b%reason%"
+          - ""
+          - "&8> &eClick to continue."
+      free:
+        name: "&eCustom reason"
+        hint: "&fType &b/report %target% <reason>"
+      confirm:
+        title: "#0E6F7D&lConfirm report of &f%target%"
+        info:
+          name: "#2EE6D6&l%target%"
+          lore:
+            - "&fReason: &b%reason%"
+        yes:
+          name: "#2EE6D6&lConfirm"
+        no:
+          name: "&c&lCancel"
+    filter:
+      name: "#2EE6D6&lFilter &f: %filter%"
+      all: "ALL"
+      lore:
+        - "&8> &eClick to cycle."
+    sort:
+      name: "#2EE6D6&lSort &f: %sort%"
+      lore:
+        - "&8> &eClick to cycle."
+    onlymine:
+      name: "#2EE6D6&lMy reports &f: %state%"
+    scope:
+      all: "all"
+      mine: "mine"
+    title: "#0E6F7D&lReports"
+    item:
+      name: "#2EE6D6&l#%id% %reported%"
+      lore:
+        - "#0E6F7D#%id% %status%"
+        - "&fFrom: %reporter%"
+        - "&fReason: %reason%"
+        - "&fServer: %server%"
+        - "&fAt: %date%"
+        - ""
+        - "&8> &eClick to handle."
+    detail:
+      title: "#0E6F7D&lReport &f#2EE6D6%id%"
+      info:
+        name: "#2EE6D6&l%reported%"
+      status:
+        name: "#2EE6D6&lStatus &f: %status%"
+        take: "&8> &eTake it (IN_PROGRESS)"
+      handler:
+        name: "#2EE6D6&lHandler &f: %handler%"
+        claim: "&8> &eAssign to me"
+      teleport:
+        name: "#2EE6D6&lTeleport"
+        lore: "&7Location: %world% %x% %y% %z%"
+        go: "&8> &eClick to go there"
+        wrong-world: "&cDifferent world than yours"
+      accept:
+        name: "#2EE6D6&lAccept"
+        lore:
+          - "&fTeleport to the reported player"
+          - "&fand resolve as accepted."
+      reject:
+        name: "&c&lReject"
+        lore:
+          - "&fResolve as rejected."
+    resolve-failed: "&cResolve failed (store ?) — check the server console."
+    write-failed: "&cWrite failed (store ?) — check the server console."
+    location-unavailable: "&cLocation unavailable (unloaded world ?)."
+    empty: "&fNo pending report."
+    store-error: "&cReport store unreachable — check the console."
+    accepted: "&aReport #%id% accepted."
+    rejected: "&cReport #%id% rejected."
+  dashboard:
+    title: "#0E6F7D&lGuard &fDashboard"
+    players:
+      name: "#2EE6D6&lPlayers"
+      lore:
+        - "&fConnected players."
+        - "&8> &eClick here."
+      item:
+        name: "#2EE6D6&l%player%"
+        lore:
+          - "&fPing: %ping%"
+          - "&8> &eClick here for the profile."
+      title: "#0E6F7D&lConnected players"
+    reports:
+      name: "#2EE6D6&lReports"
+      lore:
+        - "&fPending reports."
+        - "&8> &eClick here."
+    moderation:
+      title: "#0E6F7D&lModeration"
+      name: "#2EE6D6&lModeration"
+      lore:
+        - "&fVanish, chatlock, staffchat, noclip."
+        - "&8> &eClick here."
+      vanish:
+        name: "#2EE6D6&lVanish"
+        lore:
+          - "&8> &eClick to disappear/appear."
+      chatlock:
+        name: "#2EE6D6&lChatLock"
+        lore:
+          - "&8> &eClick to lock/unlock the chat."
+      staffchat:
+        name: "#2EE6D6&lStaffChat"
+        lore:
+          - "&8> &eClick to toggle."
+      noclip:
+        name: "#2EE6D6&lNoClip"
+        lore:
+          - "&8> &eClick to toggle."
+    tools:
+      name: "#2EE6D6&lTools"
+      lore:
+        - "&fX-Ray, LookUp, Settings."
+        - "&8> &eClick here."
+  tools:
+    title: "#0E6F7D&lTools"
+    xray:
+      name: "#2EE6D6&lX-Ray"
+      lore:
+        - "&fMining statistics."
+        - "&8> &eClick here."
+    lookup:
+      name: "#2EE6D6&lLookUp"
+      lore:
+        - "&fAccount history"
+        - "&fand player IP."
+      prompt: "&fPlayer name to scan &b?"
+    parameters:
+      name: "#2EE6D6&lSettings"
+      lore:
+        - "&fFlyspeed, preferences."
+        - "&8> &eClick here."
+  profile:
+    title: "#0E6F7D&lProfile &f%target%"
+    offline: "&cPlayer disconnected."
+    tab:
+      sanctions: "#2EE6D6&lSanctions"
+      inventory: "#2EE6D6&lInventory"
+      history: "#2EE6D6&lHistory"
+      info: "#2EE6D6&lInfo"
+    info:
+      name: "#2EE6D6&l%target%"
+      lore:
+        - "&fPing: %ping%"
+        - "&fVersion: &7%version%"
+        - "&fAddress: &7%address%"
+        - "&fClient: &7%brand%"
+        - "&fCPS: &7%left% / %right%"
+    history:
+      title: "#0E6F7D&lHistory &f%target%"
+  sanction:
+    title: "#0E6F7D&lSanctions &f%target%"
+    custom-duration: "&fDuration for &b%reason%&f ? (&7cancel &fto cancel)"
+    toggle:
+      on: "#2EE6D6&lCustom duration &f: ON"
+      off: "&fCustom duration &7: OFF"
+    category:
+      mute:
+        name: "&fMute"
+        selected: "#2EE6D6&lMute"
+      warn:
+        name: "&fWarn"
+        selected: "#2EE6D6&lWarn"
+      ban:
+        name: "&fBan"
+        selected: "#2EE6D6&lBan"
+  freeze:
+    title: "#0E6F7D&lFreeze"
+    lore:
+      - ""
+      - "&fYou are freeze."
+      - "&fPlease join the discord or you will get ban."
+      - ""
+      - "#0E6F7Ddiscord.gg/..."
+  sanctionset:
+    selector:
+      title: "#0E6F7DSelect a player"
+      player_lore:
+        - ""
+        - "&8> &eClick-Here to select this player."
+    main:
+      title: "#0E6F7D&lSS &f> #2EE6D6%target%"
+      ban: "#0E6F7D&lBan &c(MOD Only)"
+      ban_lore:
+        - ""
+        - "&8> &eClick-Here to access to this category."
+      warn: "#0E6F7D&lWarn"
+      warn_lore:
+        - ""
+        - "&8> &eClick-Here to access to this category."
+      mute: "#0E6F7D&lMute"
+      mute_lore:
+        - ""
+        - "&8> &eClick-Here to access to this category."
+    mute:
+      title: "#0E6F7D&lMute &f> #2EE6D6%target%"
+      lore:
+        - ""
+        - "#0E6F7DType&f: #2EE6D6%type%"
+        - "#0E6F7DReason&f: #2EE6D6%reason%"
+        - "#0E6F7DDuration&f: #2EE6D6%duration%"
+        - ""
+        - "&8> &eClick-Here to apply the sanction."
+    warn:
+      title: "#0E6F7D&lWarn &f> #2EE6D6%target%"
+      lore:
+        - ""
+        - "#0E6F7DType&f: #2EE6D6%type%"
+        - "#0E6F7DReason&f: #2EE6D6%reason%"
+        - "#0E6F7DDuration&f: #2EE6D6%duration%"
+        - ""
+        - "&8> &eClick-Here to apply the sanction."
+    ban:
+      title: "#0E6F7D&lBan &f> #2EE6D6%target%"
+      lore:
+        - ""
+        - "#0E6F7DType&f: #2EE6D6%type%"
+        - "#0E6F7DReason&f: #2EE6D6%reason%"
+        - "#0E6F7DDuration&f: #2EE6D6%duration%"
+        - ""
+        - "&8> &eClick-Here to apply the sanction."
+  parameters:
+    flyspeed:
+      title: "&f&lFlySpeed"
+      lore:
+        - ""
+        - "&fFlySpeed: #2EE6D6x%value%"
+        - ""
+        - "&8&l> &aLeft Click to increase"
+        - "&8&l> &cRight click to collapse"
+    godmode:
+      title: "&e&lGodMode"
+      lore:
+        - ""
+        - "&fGodMode: %value%"
+        - ""
+    nightvision:
+      title: "#17A1B2&lNight Vision"
+      lore:
+        - ""
+        - "&fNight Vision: %value%"
+        - ""
+  xray:
+    title: "#0E6F7D&lXRay"
+    player:
+      name: "&c&l%player%"
+      lore:
+        - ""
+        - "#2EE6D6Diamond&8: &f%diamond% &7(%pourcent_diamond%%)"
+        - "&aEmerald&8: &f%emerald% &7(%pourcent_emerald%%)"
+        - "&eGold&8: &f%gold% &7(%pourcent_gold%%)"
+        - "&7Iron&8: &f%iron% &7(%pourcent_iron%%)"
+        - "&cRedstone&8: &f%redstone% &7(%pourcent_redstone%%)"
+        - "#17A1B2Lapis&8: &f%lapis% &7(%pourcent_lapis%%)"
+        - "&8Coal: &f%coal% &7(%pourcent_coal%%)"
+        - "&7Stone&8: &f%stone%"
+        - ""
+        - "&8> &eClick-Here to teleport to player."
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+# Sanction name and duration configuration
+# Check config.yml for the command execution.
+#
+# Duration:
+# - s = seconds
+# - m = minutes
+# - h = hours
+# - mo = month
+# - y = years
+# - Perm = permanant (Check config.yml for editing the time of permanant)
+#
+# Information: You can add color to sanction name.
+#
+sanction:
+  mute:
+    spam:
+      name: "Spam"
+      duration: "15m"
+    flood:
+      name: "Flood"
+      duration: "15m"
+    provocation:
+      name: "Provocation"
+      duration: "30m"
+    insult:
+      name: "Insult"
+      duration: "3h"
+    abusive_capital_letter:
+      name: "Abusive Capital Letter"
+      duration: "15m"
+    bad_language:
+      name: "Bad Language"
+      duration: "30m"
+    harassment:
+      name: "Harassment"
+      duration: "30m"
+    defamation:
+      name: "Defamation"
+      duration: "30m"
+    no_respect:
+      name: "No respect"
+      duration: "40m"
+    racism:
+      name: "Racism, Xenophobia, Homophobia, etc."
+      duration: "4h"
+    its:
+      name: "Incitement to Suicide"
+      duration: "6h"
+    advertisement:
+      name: "Advertisement"
+      duration: "12h"
+    doxing:
+      name: "Dox Threat"
+      duration: "1d"
+    ip_leak:
+      name: "Leak IP"
+      duration: "Perm"
+    ItO:
+      name: "Incitement to the offense"
+      duration: "15m"
+    server_bashing:
+      name: "Server bashing"
+      duration: "1d"
+    staff_denigration:
+      name: "Staff denigration"
+      duration: "1d"
+    insolence_staff:
+      name: "Insolence Staff"
+      duration: "15m"
+    provocation_staff:
+      name: "Provocation Staff"
+      duration: "4h"
+    bad_language_staff:
+      name: "Bad Language towards Staff"
+      duration: "6h"
+    insult_staff:
+      name: "Insult Staff"
+      duration: "1d"
+  warn:
+    crossteam:
+      name: "Cross Team"
+      duration: "7d"
+    cps:
+      name: "High CPS"
+      duration: "7d"
+    game_abuse:
+      name: "Game Abuse"
+      duration: "7d"
+    inappropriate_skin:
+      name: "Inappropriate Skin"
+      duration: "7d"
+  ban:
+    killaura:
+      name: "Kill Aura"
+      duration: "30d"
+    velocity:
+      name: "Velocity"
+      duration: "30d"
+    reach:
+      name: "Reach"
+      duration: "30d"
+    fly:
+      name: "Fly"
+      duration: "30d"
+    bunny_up:
+      name: "Bunny Up"
+      duration: "30d"
+    speed_hack:
+      name: "Speed Hack"
+      duration: "30d"
+    jesus:
+      name: "Jesus"
+      duration: "30d"
+    auto_click:
+      name: "AutoClick / Macro"
+      duration: "30d"
+    usurpation:
+      name: "Usurpation"
+      duration: "Perm"
+    bot:
+      name: "Bot"
+      duration: "120d"
+
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+# AutoMod configuration
+#
+automod:
+  chat:
+    warning_message:
+      - "&8&l&m------------------------------"
+      - "#0E6F7D&l          Guard"
+      - ""
+      - "&f » #2EE6D6Your message has been blocked for the following reason:"
+      - "&f Prohibited character or words."
+      - ""
+      - "&8&l&m------------------------------"
+    moderator_alert: "&4Warning Guard blocked a message from: &c%target% \n&4Message: &c%message%"
+
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#
+# You can submit your translations on the support discord in order to add them to the official plugin.
+#
+# Discord Link: https://discord.gg/ddjgppCqga
+#
+#▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄

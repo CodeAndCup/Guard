@@ -1,0 +1,120 @@
+name: "Guard"
+author: "PerrierBottle"
+website: "https://cupcode.fr/"
+version: ${project.version}
+main: "fr.perrier.guard.Guard"
+description: "Advanced Moderation plugin"
+api-version: "1.13"
+
+softdepend: ["LunarClient-API","ViaVersion","ProtocolLib"]
+
+commands:
+  guard:
+    description: "Guard dashboard and admin commands"
+    usage: "/<command> [help|reload]"
+
+permissions:
+  guard.*:
+    children:
+      guard.admin: true
+  guard.admin:
+    description: "Access to all commands and utils"
+    children:
+      guard.freeze: true
+      guard.vanish: true
+      guard.chatcolor: true
+      guard.tphere: true
+      guard.tp: true
+      guard.inventory: true
+      guard.noclip: true
+      guard.help: true
+      guard.cps: true
+      guard.ss: true
+      guard.modlist: true
+      guard.chatlock: true
+      guard.staffchat: true
+  guard.mod:
+    description: "Recommanded permission for a moderator"
+    children:
+      guard.freeze: true
+      guard.vanish: true
+      guard.chatcolor: true
+      guard.tphere: true
+      guard.tp: true
+      guard.inventory: true
+      guard.noclip: true
+      guard.help: true
+      guard.cps: true
+      guard.ss: true
+      guard.modlist: true
+      guard.chatlock: true
+      guard.xray: true
+      guard.staffchat: true
+      guard.reports.view: true
+      guard.reports.manage: true
+      guard.reports.clear: true
+      guard.reports.notify: true
+  guard.helper:
+    description: "Recommanded permission for a helper"
+    children:
+      guard.freeze: true
+      guard.chatcolor: true
+      guard.tphere: true
+      guard.tp: true
+      guard.help: true
+      guard.cps: true
+      guard.ss: true
+      guard.modlist: true
+      guard.chatlock: true
+  guard.freeze:
+    description: "Access to freeze commands"
+  guard.vanish:
+    description: "Access to vanish commands"
+  guard.chatcolor:
+    description: "Access to chatcolor commands"
+  guard.tphere:
+    description: "Access to tphere commands"
+  guard.tp:
+    description: "Access to tp commands"
+  guard.inventory:
+    description: "Access to inventory commands"
+  guard.noclip:
+    description: "Access to noclip commands"
+  guard.help:
+    description: "Access to help commands"
+  guard.cps:
+    description: "Access to cps commands"
+  guard.ss:
+    description: "Access to sanctionset commands"
+  guard.ss_warn:
+    description: "Access to sanctionset warn category commands"
+  guard.ss_mute:
+    description: "Access to sanctionset mute category commands"
+  guard.ss_ban:
+    description: "Access to sanctionset ban category commands"
+  guard.modlist:
+    description: "Access to modlist commands"
+  guard.chatlock:
+    description: "Access to chatlock commands"
+  guard.staffchat:
+    description: "Access to staff chat commands"
+  guard.reports.view:
+    description: "Receive report alerts (flash + menu)"
+  guard.reports.manage:
+    description: "Assign report handlers (/reports sethandler)"
+  guard.reports.clear:
+    description: "Clean up old closed reports (/reports clear)"
+  guard.reports.notify:
+    description: "May mute report notifications (/reports on|off) — without it, alerts always arrive"
+  guard.reports.immune:
+    description: "Cannot be reported by players"
+  guard.xray:
+    description: "Access to XRay look up commands / panel"
+  guard.lookup:
+    description: "Access to LookUP commands"
+  guard.automod.bypass:
+    children:
+      guard.automod.mute.bypass: true
+    description: "Bypass all Guard AutoMod"
+  guard.automod.mute.bypass:
+    description: "Bypass Guard AutoMute / Blacklisted Word"
